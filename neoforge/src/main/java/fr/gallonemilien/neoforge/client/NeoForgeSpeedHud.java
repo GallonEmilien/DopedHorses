@@ -5,6 +5,7 @@ import fr.gallonemilien.network.SpeedPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
@@ -16,7 +17,7 @@ import java.util.Locale;
 import static fr.gallonemilien.DopedHorses.MOD_ID;
 
 
-@EventBusSubscriber(modid = MOD_ID)
+@EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class NeoForgeSpeedHud  {
     private static final Minecraft mc = Minecraft.getInstance();
     private static double speed = 0;
