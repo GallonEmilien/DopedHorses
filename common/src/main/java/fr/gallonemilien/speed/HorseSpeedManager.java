@@ -3,12 +3,16 @@ package fr.gallonemilien.speed;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.persistence.HorseDataHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
+
+import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
 
 /**
  * Manages the speed modifications of horses based on the block they are standing on.
@@ -17,13 +21,13 @@ public class HorseSpeedManager {
     private static final Set<UUID> modifiedHorses = new HashSet<>(); // Cache for already computed horses
     private static final double DEFAULT_SPEED_MODIFIER = 1.0;
     private static final double EXTRA_SPEED = 0.2;
-
     /**
      * Updates the horse's speed based on the block it is currently standing on.
      *
      * @param horse The horse whose speed is to be updated.
      */
     public static void updateHorseSpeed(AbstractHorse horse) {
+        updateHudSpeed(horse);
         BlockPos horsePosition = horse.getOnPos();
         Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
         Optional<BlockSpeed> blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse.getClass());
