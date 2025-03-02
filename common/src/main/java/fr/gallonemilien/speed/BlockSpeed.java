@@ -23,4 +23,5 @@ public enum BlockSpeed {
     public static Optional<BlockSpeed> getBlockSpeed(Class<? extends Block> blockClass) {
         return Arrays.stream(BlockSpeed.values()).filter(blockSpeed -> blockClass.equals(blockSpeed.blockClass)).findFirst();
     }
+
 }

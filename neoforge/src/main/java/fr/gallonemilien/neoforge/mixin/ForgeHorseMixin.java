@@ -1,6 +1,6 @@
 package fr.gallonemilien.neoforge.mixin;
 
-import fr.gallonemilien.speed.HorseSpeedHandler;
+import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,20 +32,26 @@ public class ForgeHorseMixin {
     @Inject(method="finalizeSpawn", at=@At("RETURN"))
     private void finalizeSpawn(ServerLevelAccessor arg, DifficultyInstance arg2, EntitySpawnReason arg3, SpawnGroupData arg4, CallbackInfoReturnable<SpawnGroupData> cir) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
-        HorseSpeedHandler.setHorseDefaultSpeed(horse);
+        HorseSpeedManager.initializeHorse(horse);
     }
 
     //Update speed when a player is riding
     @Inject(method="tickRidden", at=@At("HEAD"))
     private void tickRidden(Player arg, Vec3 arg2, CallbackInfo ci) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
-        HorseSpeedHandler.updateHorseSpeed(horse);
+        HorseSpeedManager.updateHorseSpeed(horse);
+    }
+
+    @Inject(method="doPlayerRide", at=@At("HEAD"))
+    private void doPlayerRide(Player arg, CallbackInfo ci) {
+        final AbstractHorse horse = (AbstractHorse)(Object) this;
+        HorseSpeedManager.initializeHorse(horse);
     }
 
     //Reverting the horse speed when nobody is riding
     @Inject(method="getDismountLocationForPassenger", at=@At("HEAD"))
     private void getDismountLocationForPassenger(LivingEntity arg, CallbackInfoReturnable<Vec3> cir) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
-        HorseSpeedHandler.revertHorseSpeed(horse);
+        HorseSpeedManager.restoreDefaultSpeed(horse);
     }
 }

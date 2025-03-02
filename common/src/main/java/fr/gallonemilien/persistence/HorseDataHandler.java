@@ -5,7 +5,6 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 public interface HorseDataHandler {
 
     enum HorseDataType {
-        SPEED_MODIFIER("modifier"),
         DEFAULT_SPEED("default");
 
         public final String dataName;
