@@ -1,7 +1,0 @@
-/fill 5 -61 246
-/fill 5 -61 246 97 -61 265 minecraft:dirt_path
-/kill @e[type=horse]
-/tick freeze
-/tick unfreeze
-/kill @e
-/time set 0
