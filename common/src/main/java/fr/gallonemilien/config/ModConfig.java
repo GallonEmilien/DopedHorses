@@ -16,6 +16,7 @@ public class ModConfig {
     }
 
     public void setFasterBlocks(@NotNull List<String> fasterBlocksList) {
+        System.out.println("SET FASTER BLOCKS");
         this.fasterBlocks = fasterBlocksList.stream()
             .map(entry -> entry.split(","))
             .filter(parts -> parts.length == 2)

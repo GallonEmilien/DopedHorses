@@ -53,7 +53,7 @@ public final class DopedHorsesNeoForge {
 
     public DopedHorsesNeoForge(ModContainer container) {
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
-        container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.SERVER_SPEC);
+        container.registerConfig(ModConfig.Type.SERVER, NeoForgeConfig.SERVER_SPEC);
         ATTACHMENT_TYPES.register(modBus);
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
         DopedHorses.init(new HorseDataHandlerNeoForge(), new SpeedPacketHandlerNeoForge(), NeoForgeConfig.config);
@@ -83,7 +83,7 @@ public final class DopedHorsesNeoForge {
 
     @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientProxy {
-        private static KeyMapping HUD_KEY = new KeyMapping(
+        private static final KeyMapping HUD_KEY = new KeyMapping(
                                                     KEY_HUD,
                                                     KeyConflictContext.IN_GAME,
                                                     InputConstants.Type.KEYSYM,

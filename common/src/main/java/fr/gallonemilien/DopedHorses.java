@@ -13,7 +13,7 @@ public final class DopedHorses {
 
     public static ModConfig MOD_CONFIG;
 
-    public static void init(HorseDataHandler horseData, CommonPacketHandler packetHandler, @NotNull ModConfig config) {
+    public static void init(@NotNull HorseDataHandler horseData,@NotNull CommonPacketHandler packetHandler, @NotNull ModConfig config) {
         DopedHorses.HORSE_DATA_HANDLER = horseData;
         DopedHorses.PACKET_HANDLER = packetHandler;
         DopedHorses.MOD_CONFIG = config;
