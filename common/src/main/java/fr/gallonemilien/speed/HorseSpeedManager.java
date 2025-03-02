@@ -1,14 +1,20 @@
 package fr.gallonemilien.speed;
 
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.persistence.HorseDataHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 
@@ -142,5 +148,17 @@ public class HorseSpeedManager {
      */
     public static Optional<AttributeInstance> getSpeedAttribute(AbstractHorse horse) {
         return Optional.ofNullable(horse.getAttribute(Attributes.MOVEMENT_SPEED));
+    }
+
+    public static void playerRiding(Player player) {
+        if(player instanceof ServerPlayer serverPlayer) {
+            DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(true));
+        }
+    }
+
+    public static void playerDismount(Player player) {
+        if(player instanceof ServerPlayer serverPlayer) {
+            DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(false));
+        }
     }
 }

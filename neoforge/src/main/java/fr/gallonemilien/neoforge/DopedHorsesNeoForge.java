@@ -4,11 +4,13 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.neoforge.client.NeoForgeSpeedHud;
-import fr.gallonemilien.neoforge.network.ClientNeoForgeSpeedPayloadHandler;
-import fr.gallonemilien.neoforge.network.ServerNeoForgeSpeedPayloadHandler;
+import fr.gallonemilien.neoforge.network.client.ClientNeoForgePayloadHandler;
 import fr.gallonemilien.neoforge.network.SpeedPacketHandlerNeoForge;
+import fr.gallonemilien.neoforge.network.server.ServerNeoForgePayloadHandler;
 import fr.gallonemilien.neoforge.persistence.HorseDataHandlerNeoForge;
+import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
+import fr.gallonemilien.utils.SpeedUtils;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -60,7 +62,7 @@ public final class DopedHorsesNeoForge {
 
     private static void onKeyInput(InputEvent.Key event) {
         if (HUD_KEY.consumeClick()) {
-
+            NeoForgeSpeedHud.toggle();
         }
     }
 
@@ -74,8 +76,17 @@ public final class DopedHorsesNeoForge {
                 SpeedPayload.TYPE,
                 SpeedPayload.STREAM_CODEC,
                 new DirectionalPayloadHandler<>(
-                        ClientNeoForgeSpeedPayloadHandler::handleDataOnMain,
-                        ServerNeoForgeSpeedPayloadHandler::handleDataOnMain
+                        ClientNeoForgePayloadHandler::handleDataOnMain,
+                        ServerNeoForgePayloadHandler::handleDataOnMain
+                )
+        );
+
+        registrar.playBidirectional(
+                RideHorsePayload.TYPE,
+                RideHorsePayload.STREAM_CODEC,
+                new DirectionalPayloadHandler<>(
+                        ClientNeoForgePayloadHandler::handleDataOnMain,
+                        ServerNeoForgePayloadHandler::handleDataOnMain
                 )
         );
     }

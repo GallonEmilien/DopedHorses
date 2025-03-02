@@ -1,6 +1,7 @@
 package fr.gallonemilien.neoforge.mixin;
 
 import fr.gallonemilien.speed.HorseSpeedManager;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -46,6 +47,7 @@ public class ForgeHorseMixin {
     private void doPlayerRide(Player arg, CallbackInfo ci) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.initializeHorse(horse);
+        HorseSpeedManager.playerRiding(arg);
     }
 
     //Reverting the horse speed when nobody is riding
@@ -53,5 +55,7 @@ public class ForgeHorseMixin {
     private void getDismountLocationForPassenger(LivingEntity arg, CallbackInfoReturnable<Vec3> cir) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.restoreDefaultSpeed(horse);
+        if(arg instanceof Player player) 
+            HorseSpeedManager.playerDismount(player);
     }
 }

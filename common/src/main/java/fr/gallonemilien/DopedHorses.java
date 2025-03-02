@@ -7,9 +7,9 @@ public final class DopedHorses {
     public static final String MOD_ID = "dopedhorses";
 
     public static HorseDataHandler HORSE_DATA_HANDLER;
-    public static CommonPacketHandler SPEED_PACKET_HANDLER;
-    public static void init(HorseDataHandler horseData, CommonPacketHandler speedPacketHandler) {
+    public static CommonPacketHandler PACKET_HANDLER;
+    public static void init(HorseDataHandler horseData, CommonPacketHandler packetHandler) {
         HORSE_DATA_HANDLER = horseData;
-        SPEED_PACKET_HANDLER = speedPacketHandler;
+        PACKET_HANDLER = packetHandler;
     }
 }

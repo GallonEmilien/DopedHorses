@@ -43,6 +43,6 @@ public class SpeedUtils {
     }
 
     private static void sendClientSpeed(ServerPlayer player, double speed) {
-        DopedHorses.SPEED_PACKET_HANDLER.sendToPlayer(player, new SpeedPayload(speed));
+        DopedHorses.PACKET_HANDLER.sendToPlayer(player, new SpeedPayload(speed));
     }
 }
