@@ -18,7 +18,7 @@ public class SpeedUtils {
     public static void updateHudSpeed(AbstractHorse horse) {
         Vec3 oldPos = speedMap.get(horse.getUUID());
         Vec3 newPos = horse.position();
-        double speed = 0.0;
+        double speed = 33.33;
         if (oldPos != null) {
             speed = computeSpeed(computeDistance(oldPos, newPos));
         }

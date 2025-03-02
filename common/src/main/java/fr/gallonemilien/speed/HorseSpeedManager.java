@@ -3,18 +3,13 @@ package fr.gallonemilien.speed;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.persistence.HorseDataHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Position;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.*;
 
@@ -24,9 +19,10 @@ import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
  * Manages the speed modifications of horses based on the block they are standing on.
  */
 public class HorseSpeedManager {
-    private static final Set<UUID> modifiedHorses = new HashSet<>(); // Cache for already computed horses
+    private static final HashMap<UUID,Double> horsesMultiplier = new HashMap<>(); // Cache for already computed horses
     private static final double DEFAULT_SPEED_MODIFIER = 1.0;
     private static final double EXTRA_SPEED = 0.2;
+
     /**
      * Updates the horse's speed based on the block it is currently standing on.
      *
@@ -36,17 +32,18 @@ public class HorseSpeedManager {
         updateHudSpeed(horse);
         BlockPos horsePosition = horse.getOnPos();
         Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
-        Optional<BlockSpeed> blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse.getClass());
-
+        Optional<Double> blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
         synchronized (horse) {
             blockSpeed.ifPresentOrElse(
                     speed -> {
-                        if (!isHorseModified(horse)) {
-                            applySpeedModifier(horse, speed.getSpeedModifier());
+                        if (isHorseModified(horse,speed)) {
+                            applySpeedModifier(horse, speed);
+                            System.out.println("APPLY SPEED");
                         }
                     },
                     () -> {
-                        if (isHorseModified(horse)) {
+                        if (isHorseModified(horse,DEFAULT_SPEED_MODIFIER)) {
+                            System.out.println("REMOVE SPEED");
                             restoreDefaultSpeed(horse);
                         }
                     }
@@ -73,8 +70,11 @@ public class HorseSpeedManager {
      * @param horse The horse to check.
      * @return True if the horse's speed has been modified, false otherwise.
      */
-    private static boolean isHorseModified(AbstractHorse horse) {
-        return modifiedHorses.contains(horse.getUUID());
+    private static boolean isHorseModified(AbstractHorse horse, double speed) {
+        if(horsesMultiplier.containsKey(horse.getUUID())) {
+            return !(horsesMultiplier.get(horse.getUUID()) == speed);
+        }
+        return true;
     }
 
     /**
@@ -86,7 +86,7 @@ public class HorseSpeedManager {
         getSpeedAttribute(horse).ifPresent(attribute ->
                 attribute.setBaseValue(getStoredDefaultSpeed(horse))
         );
-        modifiedHorses.remove(horse.getUUID());
+        horsesMultiplier.put(horse.getUUID(), DEFAULT_SPEED_MODIFIER);
     }
 
     /**
@@ -99,7 +99,7 @@ public class HorseSpeedManager {
         getSpeedAttribute(horse).ifPresent(attribute ->
                 attribute.setBaseValue(getStoredDefaultSpeed(horse) * speedMultiplier)
         );
-        modifiedHorses.add(horse.getUUID());
+        horsesMultiplier.put(horse.getUUID(),speedMultiplier);
     }
 
     /**

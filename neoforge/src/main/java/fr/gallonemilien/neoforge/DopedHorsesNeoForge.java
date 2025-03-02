@@ -4,19 +4,23 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.neoforge.client.NeoForgeSpeedHud;
+import fr.gallonemilien.neoforge.config.NeoForgeConfig;
+import fr.gallonemilien.neoforge.config.NeoForgeServerConfig;
 import fr.gallonemilien.neoforge.network.client.ClientNeoForgePayloadHandler;
 import fr.gallonemilien.neoforge.network.SpeedPacketHandlerNeoForge;
 import fr.gallonemilien.neoforge.network.server.ServerNeoForgePayloadHandler;
 import fr.gallonemilien.neoforge.persistence.HorseDataHandlerNeoForge;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
-import fr.gallonemilien.utils.SpeedUtils;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
@@ -52,12 +56,14 @@ public final class DopedHorsesNeoForge {
                     KEY_CATEGORY
             );
 
-    public DopedHorsesNeoForge(IEventBus modBus) {
+    public DopedHorsesNeoForge(ModContainer container) {
+        IEventBus modBus = container.getEventBus();
+        container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.SERVER_SPEC);
         ATTACHMENT_TYPES.register(modBus);
         NeoForge.EVENT_BUS.addListener(DopedHorsesNeoForge::onKeyInput);
         modBus.addListener(DopedHorsesNeoForge::onKeyRegister);
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
-        DopedHorses.init(new HorseDataHandlerNeoForge(), new SpeedPacketHandlerNeoForge());
+        DopedHorses.init(new HorseDataHandlerNeoForge(), new SpeedPacketHandlerNeoForge(), NeoForgeConfig.config);
     }
 
     private static void onKeyInput(InputEvent.Key event) {

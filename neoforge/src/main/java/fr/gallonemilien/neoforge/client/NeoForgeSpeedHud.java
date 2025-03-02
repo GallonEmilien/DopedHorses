@@ -17,7 +17,7 @@ import static fr.gallonemilien.DopedHorses.MOD_ID;
 
 
 @EventBusSubscriber(modid = MOD_ID)
-public class NeoForgeSpeedHud {
+public class NeoForgeSpeedHud  {
     private static final Minecraft mc = Minecraft.getInstance();
     private static double speed = 0;
     private static boolean rideHorse = false;

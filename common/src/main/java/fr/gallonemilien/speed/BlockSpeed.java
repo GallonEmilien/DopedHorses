@@ -1,27 +1,17 @@
 package fr.gallonemilien.speed;
 
 
+import fr.gallonemilien.DopedHorses;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DirtPathBlock;
 
-import java.util.Arrays;
 import java.util.Optional;
 
-public enum BlockSpeed {
-    DIRT_PATH(DirtPathBlock.class,1.5);
-
-    private final Class<? extends Block> blockClass;
-    private final double speedModifier;
-    BlockSpeed(Class<? extends Block> blockClass, double speedModifier) {
-        this.speedModifier = speedModifier;
-        this.blockClass = blockClass;
+public class BlockSpeed {
+    public static Optional<Double> getBlockSpeed(Block block) {
+        String descriptionId = block.getDescriptionId();
+        if(DopedHorses.MOD_CONFIG.getFasterBlocks().containsKey(descriptionId)) {
+            return Optional.of(DopedHorses.MOD_CONFIG.getFasterBlocks().get(descriptionId));
+        }
+        return Optional.empty();
     }
-    public double getSpeedModifier() {
-        return speedModifier;
-    }
-
-    public static Optional<BlockSpeed> getBlockSpeed(Class<? extends Block> blockClass) {
-        return Arrays.stream(BlockSpeed.values()).filter(blockSpeed -> blockClass.equals(blockSpeed.blockClass)).findFirst();
-    }
-
 }
