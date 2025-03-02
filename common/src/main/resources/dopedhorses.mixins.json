@@ -6,6 +6,7 @@
   "client": [
   ],
   "mixins": [
+    "AbstractHorseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

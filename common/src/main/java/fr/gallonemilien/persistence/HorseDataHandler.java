@@ -1,6 +1,6 @@
 package fr.gallonemilien.persistence;
 
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 
 public interface HorseDataHandler {
 
@@ -11,6 +11,6 @@ public interface HorseDataHandler {
         HorseDataType(String name) { this.dataName = name; }
     }
 
-    void writeData(AbstractHorse entity, HorseDataType type, Double value);
-    double readData(AbstractHorse entity, HorseDataType type);
+    void writeData(AbstractHorseEntity entity, HorseDataType type, Double value);
+    double readData(AbstractHorseEntity entity, HorseDataType type);
 }

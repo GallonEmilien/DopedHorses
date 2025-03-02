@@ -1,27 +1,31 @@
 package fr.gallonemilien.network;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import fr.gallonemilien.DopedHorses;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.codec.PacketCodec;
 
-import static fr.gallonemilien.DopedHorses.MOD_ID;
+public record RideHorsePayload(Boolean isRidingHorse) implements CustomPayload {
 
-public record RideHorsePayload(Boolean isRindingHorse) implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<RideHorsePayload> TYPE =
-            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MOD_ID, "ridehorse_payload"));
+    public static final Id<RideHorsePayload> ID = new Id<>(DopedHorses.id("ridehorse_payload"));
 
-    public static final StreamCodec<ByteBuf, RideHorsePayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.BOOL,
-            RideHorsePayload::isRindingHorse,
-            RideHorsePayload::new
-    );
+
+    public static PacketCodec<RegistryByteBuf, RideHorsePayload> PACKET_CODEC =
+        PacketCodec.of(RideHorsePayload::write, RideHorsePayload::read);
+
+    private void write(PacketByteBuf buf) {
+        buf.writeBoolean(isRidingHorse);
+    }
+
+    private static RideHorsePayload read(PacketByteBuf buf) {
+        return new RideHorsePayload(buf.readBoolean());
+    }
 
     @Override
-    public Type<? extends CustomPacketPayload> type() {
-        return TYPE;
+    public Id<? extends CustomPayload> getId() {
+        return ID;
     }
 }
 

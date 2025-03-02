@@ -3,10 +3,15 @@ package fr.gallonemilien;
 import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.network.CommonPacketHandler;
 import fr.gallonemilien.persistence.HorseDataHandler;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public final class DopedHorses {
     public static final String MOD_ID = "dopedhorses";
+
+    public static Identifier id(String path) {
+        return Identifier.of(MOD_ID, path);
+    }
 
     public static HorseDataHandler HORSE_DATA_HANDLER;
     public static CommonPacketHandler PACKET_HANDLER;

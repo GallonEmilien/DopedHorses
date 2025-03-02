@@ -1,6 +1,5 @@
 package fr.gallonemilien.neoforge;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.neoforge.client.NeoForgeSpeedHud;
@@ -11,7 +10,7 @@ import fr.gallonemilien.neoforge.network.server.ServerNeoForgePayloadHandler;
 import fr.gallonemilien.neoforge.persistence.HorseDataHandlerNeoForge;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
-import net.minecraft.client.KeyMapping;
+import net.minecraft.client.option.KeyBinding;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,7 +22,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
-import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
@@ -63,8 +61,8 @@ public final class DopedHorsesNeoForge {
     private static void registerPayload(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
         registrar.playBidirectional(
-                SpeedPayload.TYPE,
-                SpeedPayload.STREAM_CODEC,
+                SpeedPayload.ID,
+                SpeedPayload.PACKET_CODEC,
                 new DirectionalPayloadHandler<>(
                         ClientNeoForgePayloadHandler::handleDataOnMain,
                         ServerNeoForgePayloadHandler::handleDataOnMain
@@ -72,8 +70,8 @@ public final class DopedHorsesNeoForge {
         );
 
         registrar.playBidirectional(
-                RideHorsePayload.TYPE,
-                RideHorsePayload.STREAM_CODEC,
+                RideHorsePayload.ID,
+                RideHorsePayload.PACKET_CODEC,
                 new DirectionalPayloadHandler<>(
                         ClientNeoForgePayloadHandler::handleDataOnMain,
                         ServerNeoForgePayloadHandler::handleDataOnMain
@@ -83,10 +81,8 @@ public final class DopedHorsesNeoForge {
 
     @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientProxy {
-        private static final KeyMapping HUD_KEY = new KeyMapping(
+        private static final KeyBinding HUD_KEY = new KeyBinding(
                                                     KEY_HUD,
-                                                    KeyConflictContext.IN_GAME,
-                                                    InputConstants.Type.KEYSYM,
                                                     GLFW.GLFW_KEY_EQUAL,
                                                     KEY_CATEGORY
                                                 );
@@ -97,7 +93,7 @@ public final class DopedHorsesNeoForge {
         }
 
         private static void onKeyInput(InputEvent.Key event) {
-            if (HUD_KEY.consumeClick()) {
+            if (HUD_KEY.isPressed()) {
                 NeoForgeSpeedHud.toggle();
             }
         }

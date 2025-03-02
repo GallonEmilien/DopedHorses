@@ -3,13 +3,13 @@ package fr.gallonemilien.speed;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.persistence.HorseDataHandler;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.block.Block;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
@@ -28,10 +28,10 @@ public class HorseSpeedManager {
      *
      * @param horse The horse whose speed is to be updated.
      */
-    public static void updateHorseSpeed(AbstractHorse horse) {
+    public static void updateHorseSpeed(AbstractHorseEntity horse) {
         updateHudSpeed(horse);
-        BlockPos horsePosition = horse.getOnPos();
-        Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
+        BlockPos horsePosition = horse.getSteppingPos();
+        Block blockBeneathHorse = horse.getWorld().getBlockState(horsePosition).getBlock();
         Optional<Double> blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
         synchronized (horse) {
             blockSpeed.ifPresentOrElse(
@@ -56,7 +56,7 @@ public class HorseSpeedManager {
      *
      * @param horse The horse to initialize.
      */
-    public static void initializeHorse(AbstractHorse horse) {
+    public static void initializeHorse(AbstractHorseEntity horse) {
         if (DopedHorses.HORSE_DATA_HANDLER.readData(horse, HorseDataHandler.HorseDataType.DEFAULT_SPEED) == 0) {
             storeDefaultSpeed(horse);
         }
@@ -70,9 +70,9 @@ public class HorseSpeedManager {
      * @param horse The horse to check.
      * @return True if the horse's speed has been modified, false otherwise.
      */
-    private static boolean isHorseModified(AbstractHorse horse, double speed) {
-        if(horsesMultiplier.containsKey(horse.getUUID())) {
-            return !(horsesMultiplier.get(horse.getUUID()) == speed);
+    private static boolean isHorseModified(AbstractHorseEntity horse, double speed) {
+        if(horsesMultiplier.containsKey(horse.getUuid())) {
+            return !(horsesMultiplier.get(horse.getUuid()) == speed);
         }
         return true;
     }
@@ -82,11 +82,11 @@ public class HorseSpeedManager {
      *
      * @param horse The horse whose speed should be restored.
      */
-    public static void restoreDefaultSpeed(AbstractHorse horse) {
+    public static void restoreDefaultSpeed(AbstractHorseEntity horse) {
         getSpeedAttribute(horse).ifPresent(attribute ->
                 attribute.setBaseValue(getStoredDefaultSpeed(horse))
         );
-        horsesMultiplier.put(horse.getUUID(), DEFAULT_SPEED_MODIFIER);
+        horsesMultiplier.put(horse.getUuid(), DEFAULT_SPEED_MODIFIER);
     }
 
     /**
@@ -95,11 +95,11 @@ public class HorseSpeedManager {
      * @param horse The horse to modify.
      * @param speedMultiplier The multiplier to apply to the base speed.
      */
-    private static void applySpeedModifier(AbstractHorse horse, double speedMultiplier) {
+    private static void applySpeedModifier(AbstractHorseEntity horse, double speedMultiplier) {
         getSpeedAttribute(horse).ifPresent(attribute ->
                 attribute.setBaseValue(getStoredDefaultSpeed(horse) * speedMultiplier)
         );
-        horsesMultiplier.put(horse.getUUID(),speedMultiplier);
+        horsesMultiplier.put(horse.getUuid(),speedMultiplier);
     }
 
     /**
@@ -108,7 +108,7 @@ public class HorseSpeedManager {
      * @param horse The horse whose default speed is being stored.
      * @param defaultSpeed The default speed value.
      */
-    public static void storeDefaultSpeed(AbstractHorse horse, double defaultSpeed) {
+    public static void storeDefaultSpeed(AbstractHorseEntity horse, double defaultSpeed) {
         DopedHorses.HORSE_DATA_HANDLER.writeData(
                 horse,
                 HorseDataHandler.HorseDataType.DEFAULT_SPEED,
@@ -121,7 +121,7 @@ public class HorseSpeedManager {
      *
      * @param horse The horse whose current speed is being stored.
      */
-    public static void storeDefaultSpeed(AbstractHorse horse) {
+    public static void storeDefaultSpeed(AbstractHorseEntity horse) {
         getSpeedAttribute(horse).ifPresent(attribute ->
                 storeDefaultSpeed(horse, attribute.getValue())
         );
@@ -133,7 +133,7 @@ public class HorseSpeedManager {
      * @param horse The horse whose default speed is being retrieved.
      * @return The stored default speed plus any additional speed bonus.
      */
-    private static double getStoredDefaultSpeed(AbstractHorse horse) {
+    private static double getStoredDefaultSpeed(AbstractHorseEntity horse) {
         return DopedHorses.HORSE_DATA_HANDLER.readData(
                 horse,
                 HorseDataHandler.HorseDataType.DEFAULT_SPEED
@@ -146,19 +146,19 @@ public class HorseSpeedManager {
      * @param horse The horse whose speed attribute is being retrieved.
      * @return An optional containing the speed attribute if present.
      */
-    public static Optional<AttributeInstance> getSpeedAttribute(AbstractHorse horse) {
-        return Optional.ofNullable(horse.getAttribute(Attributes.MOVEMENT_SPEED));
+    public static Optional<EntityAttributeInstance> getSpeedAttribute(AbstractHorseEntity horse) {
+        return Optional.ofNullable(horse.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED));
     }
 
-    public static void playerRiding(Player player) {
-        if(player instanceof ServerPlayer serverPlayer) {
-            DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(true));
+    public static void playerRiding(PlayerEntity player) {
+        if(player instanceof ServerPlayerEntity serverPlayer) {
+            DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(Boolean.TRUE));
         }
     }
 
-    public static void playerDismount(Player player) {
-        if(player instanceof ServerPlayer serverPlayer) {
-            DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(false));
+    public static void playerDismount(PlayerEntity player) {
+        if(player instanceof ServerPlayerEntity serverPlayer) {
+            DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(Boolean.FALSE));
         }
     }
 }
