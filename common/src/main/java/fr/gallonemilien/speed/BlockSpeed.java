@@ -1,4 +1,4 @@
-package fr.gallonemilien;
+package fr.gallonemilien.speed;
 
 
 import net.minecraft.world.level.block.Block;
