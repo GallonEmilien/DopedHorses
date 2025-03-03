@@ -1,9 +1,8 @@
 package fr.gallonemilien.network;
 
-
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 
 public interface CommonPacketHandler {
-    void sendToPlayer(ServerPlayerEntity player, CustomPayload payload);
+    void sendToPlayer(ServerPlayer player, CustomPacketPayload payload);
 }

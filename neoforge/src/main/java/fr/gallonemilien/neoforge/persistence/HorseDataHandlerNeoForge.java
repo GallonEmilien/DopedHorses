@@ -1,7 +1,7 @@
 package fr.gallonemilien.neoforge.persistence;
 
 import fr.gallonemilien.persistence.HorseDataHandler;
-import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.neoforged.neoforge.attachment.AttachmentType;
 
 import java.util.Objects;
@@ -12,13 +12,13 @@ import static fr.gallonemilien.neoforge.DopedHorsesNeoForge.DEFAULT_SPEED_ATT;
 public class HorseDataHandlerNeoForge implements HorseDataHandler {
 
     @Override
-    public void writeData(AbstractHorseEntity horse, HorseDataType type, Double value) {
+    public void writeData(AbstractHorse horse, HorseDataType type, Double value) {
         Supplier<AttachmentType<Double>> att = getAttFromType(type);
         horse.setData(att, value);
     }
 
     @Override
-    public double readData(AbstractHorseEntity horse, HorseDataType type) {
+    public double readData(AbstractHorse horse, HorseDataType type) {
         Supplier<AttachmentType<Double>> att = getAttFromType(type);
         return horse.getData(att);
     }

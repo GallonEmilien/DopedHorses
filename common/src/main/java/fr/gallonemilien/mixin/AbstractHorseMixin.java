@@ -1,76 +1,94 @@
 package fr.gallonemilien.mixin;
 
 import fr.gallonemilien.speed.HorseSpeedManager;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 
-
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(AbstractHorseEntity.class)
-public class AbstractHorseMixin {
+
+@Mixin(AbstractHorse.class)
+public abstract class AbstractHorseMixin {
 
     /**
      * HORSE SHOES LOGIC
      */
+    @Shadow
+    SimpleContainer inventory;
 
 
-    
+    protected boolean hasArmor() {
+        final AbstractHorse horse = (AbstractHorse)(Object) this;
+        return false;
+    }
 
+    // 0 = selle
+    // 1 = armure si on peut en mettre une
+    protected int getShoesSlot() {
+        return hasArmor() ? 2 : 1;
+    }
+
+    protected boolean hasShoes() {
+        return !inventory.getItem(getShoesSlot()).isEmpty();
+    }
+
+    /*@Inject(method = "inventory", at=@At("HEAD"))
+    public void onInventoryChanged(CallbackInfo ci) {
+        final AbstractHorseEntity horse = (AbstractHorseEntity)(Object) this;
+        if(!horse.getWorld().isClient) {
+            if (hasShoes()) {
+                ItemStack stack = items.getStack(getShoesSlot());
+                horse.equipStack(EquipmentSlot.FEET, stack);
+                horse.setEquipmentDropChance(EquipmentSlot.FEET,1.0f);
+                addShoes(horse, stack);
+            }
+        }
+    }*/
 
     /**
      * SPEED MODIFIER, BLOCK ETC LOGIC
      */
 
     //Instant tame
-    @Inject(method ="interactMob", at=@At("HEAD"), cancellable = true)
-    private void mobInteract(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        final AbstractHorseEntity horse = (AbstractHorseEntity)(Object) this;
-        if(!horse.isTame() && player.isCreative()) {
-            horse.bondWithPlayer(player);
-            cir.setReturnValue(ActionResult.SUCCESS);
+    @Inject(method ="mobInteract", at=@At("HEAD"), cancellable = true)
+    private void mobInteract(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
+        final AbstractHorse horse = (AbstractHorse)(Object) this;
+        if(!horse.isTamed() && player.isCreative()) {
+            horse.tameWithName(player);
+            cir.setReturnValue(InteractionResult.SUCCESS);
         }
     }
 
-    @Inject(method="initialize", at=@At("RETURN"))
-    private void initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cir) {
-        final AbstractHorseEntity horse = (AbstractHorseEntity)(Object) this;
-        HorseSpeedManager.initializeHorse(horse);
-    }
-
     //Update speed when a player is riding
-    @Inject(method="tickControlled", at=@At("HEAD"))
-    private void tickRidden(PlayerEntity controllingPlayer, Vec3d movementInput, CallbackInfo ci) {
-        final AbstractHorseEntity horse = (AbstractHorseEntity)(Object) this;
+    @Inject(method="tickRidden", at=@At("HEAD"))
+    private void tickRidden(Player arg, Vec3 arg2, CallbackInfo ci) {
+        final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.updateHorseSpeed(horse);
     }
 
-    @Inject(method="putPlayerOnBack", at=@At("HEAD"))
-    private void doPlayerRide(PlayerEntity player, CallbackInfo ci) {
-        final AbstractHorseEntity horse = (AbstractHorseEntity)(Object) this;
-        HorseSpeedManager.initializeHorse(horse);
-        HorseSpeedManager.playerRiding(player);
+    @Inject(method="doPlayerRide", at=@At("HEAD"))
+    private void doPlayerRide(Player arg, CallbackInfo ci) {
+        final AbstractHorse horse = (AbstractHorse)(Object) this;
+        HorseSpeedManager.playerRiding(arg);
     }
 
     //Reverting the horse speed when nobody is riding
-    @Inject(method="updatePassengerForDismount", at=@At("HEAD"))
-    private void getDismountLocationForPassenger(LivingEntity passenger, CallbackInfoReturnable<Vec3d> cir) {
-        final AbstractHorseEntity horse = (AbstractHorseEntity)(Object) this;
+    @Inject(method="getDismountLocationForPassenger", at=@At("HEAD"))
+    private void getDismountLocationForPassenger(LivingEntity livingEntity, CallbackInfoReturnable<Vec3> cir) {
+        final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.restoreDefaultSpeed(horse);
-        if(passenger instanceof PlayerEntity player)
+        if(livingEntity instanceof Player player)
             HorseSpeedManager.playerDismount(player);
     }
 }

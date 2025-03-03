@@ -2,9 +2,9 @@ package fr.gallonemilien.neoforge.client;
 
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -19,7 +19,7 @@ import static fr.gallonemilien.DopedHorses.MOD_ID;
 
 @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class NeoForgeSpeedHud  {
-    private static final MinecraftClient mc = MinecraftClient.getInstance();
+    private static final Minecraft mc = Minecraft.getInstance();
     private static double speed = 0;
     private static boolean rideHorse = false;
     private static boolean showHud = false;
@@ -30,13 +30,13 @@ public class NeoForgeSpeedHud  {
     @SubscribeEvent
     public static void onRenderGui(RenderGuiEvent.Post event) {
         if (mc.player != null && rideHorse && showHud) {
-            DrawContext graphics = event.getGuiGraphics();
+            GuiGraphics graphics = event.getGuiGraphics();
             String message = speed+" km/h";
-            graphics.drawString(mc.textRenderer, message, textX, textY, 0xFFFFFF, false);
+            graphics.drawString(mc.font, message, textX, textY, 0xFFFFFF, false);
         }
     }
 
-    public static void networkEntry(CustomPayload payload) {
+    public static void networkEntry(CustomPacketPayload payload) {
         if(payload instanceof SpeedPayload(double speedPayload)) {
             DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
             DecimalFormat df = new DecimalFormat("0.0", symbols);

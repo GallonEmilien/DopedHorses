@@ -1,30 +1,27 @@
 package fr.gallonemilien.network;
 
 import fr.gallonemilien.DopedHorses;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-public record SpeedPayload(double speed) implements CustomPayload {
+import static fr.gallonemilien.DopedHorses.MOD_ID;
 
-    public static final Id<SpeedPayload> ID = new Id<>(DopedHorses.id("speed_payload"));
+public record SpeedPayload(double speed) implements CustomPacketPayload {
 
-    public static PacketCodec<RegistryByteBuf, SpeedPayload> PACKET_CODEC =
-            PacketCodec.of(SpeedPayload::write, SpeedPayload::read);
+    public static final CustomPacketPayload.Type<SpeedPayload> TYPE =
+            new CustomPacketPayload.Type<>(DopedHorses.id("speed_payload"));
 
-
-    private void write(PacketByteBuf buf) {
-        buf.writeDouble(speed);
-    }
-
-    private static SpeedPayload read(PacketByteBuf buf) {
-        return new SpeedPayload(buf.readDouble());
-    }
+    public static final StreamCodec<ByteBuf, SpeedPayload> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.DOUBLE,
+            SpeedPayload::speed,
+            SpeedPayload::new
+    );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
-        return ID;
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }
-
