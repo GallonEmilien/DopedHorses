@@ -6,6 +6,7 @@ MOD STILL IN DEV
 - No need to get off the horse and go back on it when disconnecting to show de HUD
 - Modify the HUD position by dragging it
 - Adding an easier way to configure settings
+- Fabric client 
 
 # DopedHorse
 
@@ -21,16 +22,16 @@ MOD STILL IN DEV
   - Diamond
   - Netherite
 
-## Installation
+## Dependencies
 
-1. Download the latest version of **DopedHorse** from the "Releases" section on GitHub.
-2. Place the `.jar` file into your Minecraft `mods` folder.
-3. Launch Minecraft with Forge to enjoy the new features.
+This mods depends on architectury, builded with version (15.0.1)[https://www.curseforge.com/minecraft/mc-mods/architectury-api/files/5959950]
 
 ## Usage
 
-- **Custom Speed**: Adjust the horse speed directly in the mod's configuration file or with a command.
+- **Custom Speed**: Adjust the horse speed directly in the mod's configuration file.
 - **Horse Shoes**: Craft and equip horse shoes to increase speed and jumping ability based on the tier of the shoes.
+
+## Configuration
 
 ## Contributing
 
