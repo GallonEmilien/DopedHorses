@@ -34,8 +34,7 @@ public class NeoForgeServerConfig {
                 .push("DopedHorses");
         this.fasterBlocks = builder
                 .comment("You need to get the translation key of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a = separation for the multiplier! speedmultiplier is a number that compute new speed = Horse_default_speed + Horse_default_speed * multiplier" +
-                        "Another point, sorry but for the moment if you want to add concrete, you need to add all its variants, it'll implemented in a next release." +
-                        "Last point, you can get in game the name of the block by typing the command /horsegetblock")
+                        "Another point, sorry but for the moment if you want to add concrete, you need to add all its variants, it'll implemented in a next release." )
                 .define("faster_blocks",
                     List.of(
               "block.minecraft.dirt_path=0.7",

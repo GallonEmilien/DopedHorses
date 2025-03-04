@@ -15,16 +15,15 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
-
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 
 
 @Mixin(AbstractHorse.class)
@@ -33,8 +32,6 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
     /**
      * HORSE SHOES LOGIC
      */
-    @Shadow
-    SimpleContainer inventory;
 
     SimpleContainer shoeContainer = new SimpleContainer(1);
 
@@ -43,23 +40,24 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         return this.shoeContainer;
     }
 
+
+
+    @Shadow public abstract boolean isSaddleable();
+
     protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
     }
 
-
-    protected boolean hasArmor() {
-        final AbstractHorse horse = (AbstractHorse)(Object) this;
-        return false;
-    }
-
-    protected boolean hasShoes() {
-        return !(shoeContainer.getItem(0).isEmpty()) && shoeContainer.getItem(0).getItem() instanceof ShoeItem;
+    protected boolean hasShoes(AbstractHorse horse) {
+        return !shoeContainer.isEmpty()
+                && !this.shoeContainer.getItem(0).isEmpty()
+                && this.shoeContainer.getItem(0).getItem() instanceof ShoeItem;
     }
 
     @Inject(method = "addAdditionalSaveData", at=@At("TAIL"))
     public void saveData(CompoundTag compoundTag, CallbackInfo ci) {
-        if(hasShoes()) {
+        AbstractHorse horse = (AbstractHorse) (Object) this;
+        if(hasShoes(horse)) {
             compoundTag.put("ShoeItem", this.shoeContainer.getItem(0).save(this.registryAccess()));
         }
     }
@@ -97,7 +95,6 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
 
     @Inject(method="doPlayerRide", at=@At("HEAD"))
     private void doPlayerRide(Player arg, CallbackInfo ci) {
-        final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.playerRiding(arg);
     }
 

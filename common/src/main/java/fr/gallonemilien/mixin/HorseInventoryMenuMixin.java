@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+
 @Mixin(HorseInventoryMenu.class)
 public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
 
@@ -40,7 +41,7 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
                 @Override
                 public void setChanged() {
                     super.container.setChanged();
-                    HorseSpeedManager.updateHorseShoes(abstractHorse, shoeContainer);
+                    HorseSpeedManager.updateHorseShoes(abstractHorse, shoeContainer.getShoeContainer().getItem(0).getItem());
                 }
 
                 @Override

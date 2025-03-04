@@ -4,7 +4,8 @@
   "package": "fr.gallonemilien.mixin",
   "mixins": [
     "AbstractHorseMixin",
-    "HorseInventoryMenuMixin"
+    "HorseInventoryMenuMixin",
+    "EnchantmentMixin"
   ],
   "client": [
     "HorseInventoryScreenMixin"

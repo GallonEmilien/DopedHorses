@@ -3,7 +3,6 @@ package fr.gallonemilien.speed;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.network.RideHorsePayload;
-import fr.gallonemilien.persistence.ShoeContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.util.*;
@@ -53,10 +53,10 @@ public class HorseSpeedManager {
     /**
      * Updates the horse's attributes based on equipped shoes.
      */
-    public static void updateHorseShoes(AbstractHorse horse, ShoeContainer container) {
-        applyShoeModifier(horse, container, getSpeedAttribute(horse), HORSE_SHOES_BOOST_ID, ShoeItem::getSpeedModifier);
-        applyShoeModifier(horse, container, getJumpAttribute(horse), HORSE_SHOES_JUMP_ID, ShoeItem::getJumpModifier);
-        applyShoeModifier(horse, container, getArmorAttribute(horse), HORSE_SHOES_ARMOR_ID, ShoeItem::getArmorModifier);
+    public static void updateHorseShoes(AbstractHorse horse, Item item) {
+        applyShoeModifier(horse, item, getSpeedAttribute(horse), HORSE_SHOES_BOOST_ID, ShoeItem::getSpeedModifier);
+        applyShoeModifier(horse, item, getJumpAttribute(horse), HORSE_SHOES_JUMP_ID, ShoeItem::getJumpModifier);
+        applyShoeModifier(horse, item, getArmorAttribute(horse), HORSE_SHOES_ARMOR_ID, ShoeItem::getArmorModifier);
     }
 
     /**
@@ -76,12 +76,13 @@ public class HorseSpeedManager {
     /**
      * Applies a modifier to a horse's attribute based on the equipped shoes.
      */
-    private static void applyShoeModifier(AbstractHorse horse, ShoeContainer container,
+    private static void applyShoeModifier(AbstractHorse horse,
+                                          Item item,
                                           AttributeInstance attribute,
                                           ResourceLocation modifierId,
                                           java.util.function.Function<ShoeItem, Double> modifierFunction) {
         attribute.removeModifier(modifierId);
-        if (container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem shoes) {
+        if (item instanceof ShoeItem shoes) {
             attribute.addTransientModifier(new AttributeModifier(modifierId, modifierFunction.apply(shoes), AttributeModifier.Operation.ADD_VALUE));
         };
     }

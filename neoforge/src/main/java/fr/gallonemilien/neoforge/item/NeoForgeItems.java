@@ -2,6 +2,7 @@ package fr.gallonemilien.neoforge.item;
 
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.items.ShoeType;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -31,7 +32,11 @@ public class NeoForgeItems {
         return ITEMS.registerItem(
                 shoeType.name,
                 properties -> new ShoeItem(properties, shoeType, shoeType.name),
-                new Item.Properties().stacksTo(1).setId(getResourceKey(shoeType))
+                new Item.Properties()
+                        .stacksTo(1)
+                        .setId(getResourceKey(shoeType))
+                        .enchantable(20)
+
         );
     }
 
