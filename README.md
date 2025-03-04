@@ -8,6 +8,8 @@ MOD STILL IN DEV
 - Adding an easier way to configure settings
 - Fabric client
 - Adding item in the creative tab
+- Add to lootables
+- Craftable ?
 
 # DopedHorse
 
