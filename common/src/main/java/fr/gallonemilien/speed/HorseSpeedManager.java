@@ -23,7 +23,7 @@ import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
  */
 public class HorseSpeedManager {
     private static final HashMap<UUID, Double> horsesMultiplier = new HashMap<>();
-    private static final double DEFAULT_SPEED_MODIFIER = 1.0;
+    private static final double DEFAULT_SPEED_MODIFIER = 0.0; //!!!!
     private static final ResourceLocation HORSE_SPEED_BOOST_ID = DopedHorses.id("horse_speed_boost_modifier");
     private static final ResourceLocation HORSE_SHOES_BOOST_ID = DopedHorses.id("horse_shoes_boost_modifier");
     private static final ResourceLocation HORSE_SHOES_ARMOR_ID = DopedHorses.id("horse_shoes_armor_modifier");
@@ -68,7 +68,9 @@ public class HorseSpeedManager {
         Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
         Optional<Double> blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
         double speed = blockSpeed.orElse(DEFAULT_SPEED_MODIFIER);
+        System.out.println("isHorseModified " + isHorseModified(horse, speed));
         if (isHorseModified(horse, speed)) {
+            System.out.println("applySpeedModifier ");
             applySpeedModifier(horse, speed);
         }
     }
@@ -97,7 +99,9 @@ public class HorseSpeedManager {
      * Applies a speed modifier to the horse.
      */
     private static void applySpeedModifier(AbstractHorse horse, double speedMultiplier) {
+        System.out.println("applySpeedModifier " + speedMultiplier);
         getSpeedAttribute(horse).removeModifier(HORSE_SPEED_BOOST_ID);
+        //ADD_MULTIPLIED_BASE = Base_Value + Base_Value * speedMultiplier !
         getSpeedAttribute(horse).addTransientModifier(new AttributeModifier(HORSE_SPEED_BOOST_ID, speedMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         horsesMultiplier.put(horse.getUUID(), speedMultiplier);
     }

@@ -60,6 +60,7 @@ public final class DopedHorsesNeoForge {
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
         EVENT_BUS = modBus;
         container.registerConfig(ModConfig.Type.SERVER, NeoForgeConfig.SERVER_SPEC);
+        container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.CLIENT_SPEC);
         ATTACHMENT_TYPES.register(modBus);
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
 
@@ -67,7 +68,7 @@ public final class DopedHorsesNeoForge {
         DopedHorses.init(
                 new HorseDataHandlerNeoForge(),
                 new SpeedPacketHandlerNeoForge(),
-                NeoForgeConfig.config
+                NeoForgeConfig.serverConfig
         );
     }
 

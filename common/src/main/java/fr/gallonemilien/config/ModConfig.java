@@ -14,6 +14,7 @@ public class ModConfig {
     private final Map<Pair<ConfigDataType, ConfigMaterialType>, Double> modifiers = new HashMap<>();
 
 
+
     public @NotNull Map<String, Double> getFasterBlocks() {
         return fasterBlocks;
     }
@@ -21,7 +22,6 @@ public class ModConfig {
     public void setModifier(Pair<ConfigDataType, ConfigMaterialType> key, double value) {
         modifiers.put(key, value);
     }
-
 
     public Double getModifier(Pair<ConfigDataType, ConfigMaterialType> key) {
         return modifiers.get(key);

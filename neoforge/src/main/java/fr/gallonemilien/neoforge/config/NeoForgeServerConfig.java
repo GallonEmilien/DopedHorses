@@ -23,37 +23,39 @@ public class NeoForgeServerConfig {
     public final ModConfigSpec.ConfigValue<Double> diamondShoeArmorModifier;
     public final ModConfigSpec.ConfigValue<Double> netheriteShoeArmorModifier;
 
-    private static final String JUMP_MODIFIER_COMMENT = "Jump Modifier";
+    public final ModConfigSpec.ConfigValue<Integer> userUnit;
+
+    private static final String JUMP_MODIFIER_COMMENT = "Horse's jump strength ranges from 0.4–1.0, with an average of 0.7. A jump strength of 0.5 is enough to clear 1 9⁄16 blocks, while 1.0 is enough to clear 5 1⁄4 blocks.";
     private static final String SHOE_MODIFIER_COMMENT = "A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.";
     private static final String ARMOR_MODIFIER_COMMENT = "round to .5 the value";
 
     public NeoForgeServerConfig(ModConfigSpec.Builder builder) {
-        builder.comment("Faster blocks configuration")
+        builder.comment("Doped Horses Server Configuration")
                 .push("DopedHorses");
         this.fasterBlocks = builder
-                .comment("You need to get the translation key of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a COMA separation for the multiplier! speedmultiplier is a number, x<1: slower horses, x=1, same speed, x>1 faster. Try a negative value if you are a real challenger," +
+                .comment("You need to get the translation key of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a COMA separation for the multiplier! speedmultiplier is a number that compute new speed = Horse_default_speed + Horse_default_speed * multiplier" +
                         "Another point, sorry but for the moment if you want to add concrete, you need to add all its variants, it'll implemented in a next release." +
                         "Last point, you can get in game the name of the block by typing the command /horsegetblock")
                 .define("faster_blocks",
                     List.of(
-              "block.minecraft.dirt_path,1.5",
-                        "block.minecraft.white_concrete,1.8",
-                        "block.minecraft.orange_concrete,1.8",
-                        "block.minecraft.magenta_concrete,1.8",
-                        "block.minecraft.light_blue_concrete,1.8",
-                        "block.minecraft.yellow_concrete,1.8",
-                        "block.minecraft.lime_concrete,1.8",
-                        "block.minecraft.pink_concrete,1.8",
-                        "block.minecraft.light_gray_concrete,1.8",
-                        "block.minecraft.gray_concrete,1.8",
-                        "block.minecraft.light_gray_concrete,1.8",
-                        "block.minecraft.cyan_concrete,1.8",
-                        "block.minecraft.purple_concrete,1.8",
-                        "block.minecraft.blue_concrete,1.8",
-                        "block.minecraft.brown_concrete,1.8",
-                        "block.minecraft.green_concrete,1.8",
-                        "block.minecraft.red_concrete,1.8",
-                        "block.minecraft.black_concrete,1.8"
+              "block.minecraft.dirt_path,0.7",
+                        "block.minecraft.white_concrete,1.2",
+                        "block.minecraft.orange_concrete,1.2",
+                        "block.minecraft.magenta_concrete,1.2",
+                        "block.minecraft.light_blue_concrete,1.2",
+                        "block.minecraft.yellow_concrete,1.2",
+                        "block.minecraft.lime_concrete,1.2",
+                        "block.minecraft.pink_concrete,1.2",
+                        "block.minecraft.light_gray_concrete,1.2",
+                        "block.minecraft.gray_concrete,1.2",
+                        "block.minecraft.light_gray_concrete,1.2",
+                        "block.minecraft.cyan_concrete,1.2",
+                        "block.minecraft.purple_concrete,1.2",
+                        "block.minecraft.blue_concrete,1.2",
+                        "block.minecraft.brown_concrete,1.2",
+                        "block.minecraft.green_concrete,1.2",
+                        "block.minecraft.red_concrete,1.2",
+                        "block.minecraft.black_concrete,1.2"
                     )
                 );
 
@@ -84,16 +86,20 @@ public class NeoForgeServerConfig {
                 .define("netherite_shoe_armor_modifier",10.0);
         this.ironShoeJumpModifier = builder
                 .comment(JUMP_MODIFIER_COMMENT)
-                .define("iron_shoe_jump_modifier",0.05);
+                .define("iron_shoe_jump_modifier",0.2);
         this.goldShoeJumpModifier = builder
                 .comment(JUMP_MODIFIER_COMMENT)
-                .define("gold_shoe_jump_modifier",0.08);
+                .define("gold_shoe_jump_modifier",0.4);
         this.diamondShoeJumpModifier = builder
                 .comment(JUMP_MODIFIER_COMMENT)
-                .define("diamond_shoe_jump_modifier",0.13);
+                .define("diamond_shoe_jump_modifier",0.6);
         this.netheriteShoeJumpModifier = builder
                 .comment(JUMP_MODIFIER_COMMENT)
-                .define("netherite_shoe_jump_modifier",0.17);
+                .define("netherite_shoe_jump_modifier",0.8);
+
+        this.userUnit = builder
+                .comment("0=km/h, 1=block/s, 2=mph")
+                .define("user_speed_unit",0);
 
         builder.pop();
     }

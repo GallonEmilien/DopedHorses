@@ -18,13 +18,11 @@ public class SpeedUtils {
     public static void updateHudSpeed(AbstractHorse horse) {
         Vec3 oldPos = speedMap.get(horse.getUUID());
         Vec3 newPos = horse.position();
-        double speed = 33.33;
+        double speed = 0;
         if (oldPos != null) {
             speed = computeSpeed(computeDistance(oldPos, newPos));
         }
         speedMap.put(horse.getUUID(), newPos);
-
-
         LivingEntity entity = horse.getControllingPassenger();
         if(entity instanceof ServerPlayer player) {
             sendClientSpeed(player, speed);
@@ -32,7 +30,7 @@ public class SpeedUtils {
     }
 
     private static double computeSpeed(double distance) {
-        return (distance / (1 / TICK_PER_SECOND)) * 3.6;
+        return (distance / (1 / TICK_PER_SECOND)); //Block per second
     }
 
     private static double computeDistance(Vec3 oldPos, Vec3 newPos) {
