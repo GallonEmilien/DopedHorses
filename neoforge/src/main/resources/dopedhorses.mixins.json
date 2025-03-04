@@ -4,10 +4,10 @@
   "package": "fr.gallonemilien.mixin",
   "mixins": [
     "AbstractHorseMixin",
-    "HorseInventoryMenuMixin",
-    "HorseInventoryScreenMixin"
+    "HorseInventoryMenuMixin"
   ],
   "client": [
+    "HorseInventoryScreenMixin"
   ],
   "server": [
   ],

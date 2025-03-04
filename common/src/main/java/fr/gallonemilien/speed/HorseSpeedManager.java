@@ -68,9 +68,7 @@ public class HorseSpeedManager {
         Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
         Optional<Double> blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
         double speed = blockSpeed.orElse(DEFAULT_SPEED_MODIFIER);
-        System.out.println("isHorseModified " + isHorseModified(horse, speed));
         if (isHorseModified(horse, speed)) {
-            System.out.println("applySpeedModifier ");
             applySpeedModifier(horse, speed);
         }
     }
@@ -99,7 +97,6 @@ public class HorseSpeedManager {
      * Applies a speed modifier to the horse.
      */
     private static void applySpeedModifier(AbstractHorse horse, double speedMultiplier) {
-        System.out.println("applySpeedModifier " + speedMultiplier);
         getSpeedAttribute(horse).removeModifier(HORSE_SPEED_BOOST_ID);
         //ADD_MULTIPLIED_BASE = Base_Value + Base_Value * speedMultiplier !
         getSpeedAttribute(horse).addTransientModifier(new AttributeModifier(HORSE_SPEED_BOOST_ID, speedMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
