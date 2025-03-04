@@ -39,7 +39,17 @@ in .minecraft/config (launch the game a first time to auto generate the default 
 #### Server Config
 dopedhorses-server.toml
 
-For the `faster_blocks` field : You need to get the translation key of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a = separation for the multiplier! speedmultiplier is a number that compute new speed = Horse_default_speed + Horse_default_speed * multiplierAnother point, sorry but for the moment if you want to add concrete, you need to add all its variants, it'll implemented in a next release.
+Instructions for the `faster_blocks` field.
+1. Visit the [Minecraft block category page](https://minecraft.fandom.com/wiki/Category:Blocks) to find the block you want to use.
+2. After selecting a block, go to 'datavalues > ID' to find the translation key.
+3. The translation key needs to be separated by an equals sign (`=`) for the multiplier!
+
+The `speedmultiplier` is a number that calculates the new speed as follows:  
+**New speed = Horse_default_speed + Horse_default_speed * multiplier**
+
+One more thing:  
+Currently, if you want to add concrete or any block with variants, you need to include all of its variants. This feature will be implemented in a future release.
+
 
 ```
 [DopedHorses]
