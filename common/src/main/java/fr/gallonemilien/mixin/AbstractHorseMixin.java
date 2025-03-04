@@ -1,7 +1,9 @@
 package fr.gallonemilien.mixin;
 
+import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.persistence.ShoeContainer;
 import fr.gallonemilien.speed.HorseSpeedManager;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -12,6 +14,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -49,28 +53,28 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         return false;
     }
 
-    // 0 = selle
-    // 1 = armure si on peut en mettre une
-    protected int getShoesSlot() {
-        return hasArmor() ? 2 : 1;
-    }
 
     protected boolean hasShoes() {
-        return !inventory.getItem(getShoesSlot()).isEmpty();
+        System.out.println(shoeContainer.getItem(0).getItem().getName());
+        return !(shoeContainer.getItem(0).isEmpty()) && shoeContainer.getItem(0).getItem() instanceof ShoeItem;
     }
 
-    /*@Inject(method = "inventory", at=@At("HEAD"))
-    public void onInventoryChanged(CallbackInfo ci) {
-        final AbstractHorseEntity horse = (AbstractHorseEntity)(Object) this;
-        if(!horse.getWorld().isClient) {
-            if (hasShoes()) {
-                ItemStack stack = items.getStack(getShoesSlot());
-                horse.equipStack(EquipmentSlot.FEET, stack);
-                horse.setEquipmentDropChance(EquipmentSlot.FEET,1.0f);
-                addShoes(horse, stack);
+    @Inject(method = "addAdditionalSaveData", at=@At("TAIL"))
+    public void saveData(CompoundTag compoundTag, CallbackInfo ci) {
+        if(hasShoes()) {
+            compoundTag.put("ShoeItem", this.shoeContainer.getItem(0).save(this.registryAccess()));
+        }
+    }
+
+    @Inject(method = "readAdditionalSaveData", at= @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;contains(Ljava/lang/String;I)Z"))
+    public void readData(CompoundTag compoundTag, CallbackInfo ci) {
+        if (compoundTag.contains("ShoeItem", 10)) {
+            ItemStack itemStack = ItemStack.parse(this.registryAccess(), compoundTag.getCompound("ShoeItem")).orElse(ItemStack.EMPTY);
+            if (itemStack.getItem() instanceof ShoeItem) {
+                this.shoeContainer.setItem(0, itemStack);
             }
         }
-    }*/
+    }
 
     /**
      * SPEED MODIFIER, BLOCK ETC LOGIC
@@ -89,6 +93,7 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
     //Update speed when a player is riding
     @Inject(method="tickRidden", at=@At("HEAD"))
     private void tickRidden(Player arg, Vec3 arg2, CallbackInfo ci) {
+        System.out.println(hasShoes());
         final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.updateHorseSpeed(horse);
     }
