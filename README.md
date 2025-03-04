@@ -10,6 +10,7 @@ MOD STILL IN DEV
 - Adding item in the creative tab
 - Add to lootables
 - Craftable ?
+- dynamic config with a screen
 
 # DopedHorse
 
