@@ -16,7 +16,7 @@ MOD STILL IN DEV
 ## Features
 
 - **Customizable Speed**: Easily increase the base speed of horses.
-- **Terrain Effect**: Horse speed is modified based on the block beneath them (dirt, sand, snow, etc.).
+- **Terrain Effect**: Horse speed is modified based on the block beneath them (dirt, sand, snow, etc.). (needs configuration!)
 - **Horse Shoes**: New items (horse shoes) that improve horse performance (speed and jump) based on the tier:
   - Iron
   - Gold
