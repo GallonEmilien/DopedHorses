@@ -30,7 +30,7 @@ public class ModConfig {
 
     public void setFasterBlocks(@NotNull List<String> fasterBlocksList) {
         this.fasterBlocks = fasterBlocksList.stream()
-            .map(entry -> entry.split(","))
+            .map(entry -> entry.split("="))
             .filter(parts -> parts.length == 2)
             .collect(Collectors.toMap(
                 parts -> parts[0],

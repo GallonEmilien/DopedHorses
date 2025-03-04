@@ -59,6 +59,8 @@ public final class DopedHorsesNeoForge {
     public DopedHorsesNeoForge(ModContainer container) {
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
         EVENT_BUS = modBus;
+
+
         container.registerConfig(ModConfig.Type.SERVER, NeoForgeConfig.SERVER_SPEC);
         container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.CLIENT_SPEC);
         ATTACHMENT_TYPES.register(modBus);
