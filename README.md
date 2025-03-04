@@ -6,7 +6,8 @@ MOD STILL IN DEV
 - No need to get off the horse and go back on it when disconnecting to show de HUD
 - Modify the HUD position by dragging it
 - Adding an easier way to configure settings
-- Fabric client 
+- Fabric client
+- Adding item in the creative tab
 
 # DopedHorse
 
@@ -24,7 +25,7 @@ MOD STILL IN DEV
 
 ## Dependencies
 
-This mods depends on architectury, builded with version (15.0.1)[https://www.curseforge.com/minecraft/mc-mods/architectury-api/files/5959950]
+This mods depends on architectury, builded with [version 15.0.1](https://www.curseforge.com/minecraft/mc-mods/architectury-api/files/5959950)
 
 ## Usage
 
