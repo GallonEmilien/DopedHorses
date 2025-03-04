@@ -6,10 +6,11 @@ import net.minecraft.resources.ResourceKey;
 
 public enum ShoeType {
 
-    IRON("iron_horse_shoes",0),
-    GOLD("gold_horse_shoes",0),
-    DIAMOND("diamond_horse_shoes",0),
-    NETHERITE("netherite_horse_shoes",0);
+    //Speed Modifier = HORSE_SPEED + speedModifier, a horse by default ~= 0.2
+    IRON("iron_horse_shoes",0.05),
+    GOLD("gold_horse_shoes",0.1),
+    DIAMOND("diamond_horse_shoes",0.15),
+    NETHERITE("netherite_horse_shoes",0.20);
 
     public final Double speedModifier;
     public final String name;

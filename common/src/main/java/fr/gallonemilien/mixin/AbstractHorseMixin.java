@@ -53,9 +53,7 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         return false;
     }
 
-
     protected boolean hasShoes() {
-        System.out.println(shoeContainer.getItem(0).getItem().getName());
         return !(shoeContainer.getItem(0).isEmpty()) && shoeContainer.getItem(0).getItem() instanceof ShoeItem;
     }
 
@@ -108,7 +106,7 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
     @Inject(method="getDismountLocationForPassenger", at=@At("HEAD"))
     private void getDismountLocationForPassenger(LivingEntity livingEntity, CallbackInfoReturnable<Vec3> cir) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
-        HorseSpeedManager.restoreDefaultSpeed(horse);
+        HorseSpeedManager.updateHorseSpeed(horse);
         if(livingEntity instanceof Player player)
             HorseSpeedManager.playerDismount(player);
     }

@@ -1,7 +1,9 @@
 package fr.gallonemilien.speed;
 
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.network.RideHorsePayload;
+import fr.gallonemilien.persistence.ShoeContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +29,29 @@ public class HorseSpeedManager {
 
 
     private static final ResourceLocation HORSE_SPEED_BOOST_ID = DopedHorses.id("horse_speed_boost_modifier");
+    private static final ResourceLocation HORSE_SHOES_BOOST_ID = DopedHorses.id("horse_shoes_boost_modifier");
 
+
+    public static void updateHorseShoes(AbstractHorse horse) {
+        if(horse instanceof ShoeContainer container) {
+            getSpeedAttribute(horse).ifPresent(attribute -> {
+                        if(attribute.hasModifier(HORSE_SHOES_BOOST_ID)) {
+                            attribute.removeModifier(HORSE_SHOES_BOOST_ID);
+                        }
+                        //On remet un modifier que si on a des shoes équipées
+                        if(container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem shoes) {
+                            attribute.addTransientModifier(
+                                new AttributeModifier(
+                                        HORSE_SHOES_BOOST_ID,
+                                        shoes.getSpeedModifier(),
+                                        AttributeModifier.Operation.ADD_VALUE
+                                )
+                            );
+                        }
+                    }
+            );
+        }
+    }
     /**
      * Updates the horse's speed based on the block it is currently standing on.
      *
@@ -43,20 +67,16 @@ public class HorseSpeedManager {
                     speed -> {
                         if (isHorseModified(horse,speed)) {
                             applySpeedModifier(horse, speed);
-                            System.out.println("APPLY SPEED");
                         }
                     },
                     () -> {
                         if (isHorseModified(horse,DEFAULT_SPEED_MODIFIER)) {
-                            System.out.println("REMOVE SPEED");
-                            restoreDefaultSpeed(horse);
+                            applySpeedModifier(horse,DEFAULT_SPEED_MODIFIER);
                         }
                     }
             );
         }
     }
-
-
 
     public static void addShoes(AbstractHorse horse, ItemStack itemStack) {
 
@@ -76,18 +96,6 @@ public class HorseSpeedManager {
     }
 
     /**
-     * Restores the horse's default speed.
-     *
-     * @param horse The horse whose speed should be restored.
-     */
-    public static void restoreDefaultSpeed(AbstractHorse horse) {
-        getSpeedAttribute(horse).ifPresent(attribute ->
-                attribute.removeModifier(HORSE_SPEED_BOOST_ID)
-        );
-        horsesMultiplier.put(horse.getUUID(), DEFAULT_SPEED_MODIFIER);
-    }
-
-    /**
      * Applies a speed modifier to the horse.
      *
      * @param horse The horse to modify.
@@ -98,6 +106,8 @@ public class HorseSpeedManager {
                     if(attribute.hasModifier(HORSE_SPEED_BOOST_ID)) {
                         attribute.removeModifier(HORSE_SPEED_BOOST_ID);
                     }
+
+
                     attribute.addTransientModifier(
                             new AttributeModifier(
                                     HORSE_SPEED_BOOST_ID,

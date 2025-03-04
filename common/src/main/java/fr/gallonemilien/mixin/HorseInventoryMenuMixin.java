@@ -3,6 +3,7 @@ package fr.gallonemilien.mixin;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.persistence.ShoeContainer;
+import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -35,6 +36,12 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
                     return (itemStack.getItem() instanceof ShoeItem);
+                }
+
+                @Override
+                public void setChanged() {
+                    super.container.setChanged();
+                    HorseSpeedManager.updateHorseShoes(abstractHorse);
                 }
 
                 @Override
