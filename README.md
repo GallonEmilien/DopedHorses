@@ -38,9 +38,11 @@ in .minecraft/config (launch the game a first time to auto generate the default 
 
 #### Server Config
 dopedhorses-server.toml
+
+For the `faster_blocks` field : You need to get the translation key of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a = separation for the multiplier! speedmultiplier is a number that compute new speed = Horse_default_speed + Horse_default_speed * multiplierAnother point, sorry but for the moment if you want to add concrete, you need to add all its variants, it'll implemented in a next release.
+
 ```
 [DopedHorses]
-	#You need to get the translation key of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a = separation for the multiplier! speedmultiplier is a number that compute new speed = Horse_default_speed + Horse_default_speed * multiplierAnother point, sorry but for the moment if you want to add concrete, you need to add all its variants, it'll implemented in a next release.Last point, you can get in game the name of the block by typing the command /horsegetblock
 	faster_blocks = ["block.minecraft.dirt_path=0.7", "block.minecraft.white_concrete=1.2", "block.minecraft.orange_concrete=1.2", "block.minecraft.magenta_concrete=1.2", "block.minecraft.light_blue_concrete=1.2", "block.minecraft.yellow_concrete=1.2", "block.minecraft.lime_concrete=1.2", "block.minecraft.pink_concrete=1.2", "block.minecraft.light_gray_concrete=1.2", "block.minecraft.gray_concrete=1.2", "block.minecraft.light_gray_concrete=1.2", "block.minecraft.cyan_concrete=1.2", "block.minecraft.purple_concrete=1.2", "block.minecraft.blue_concrete=1.2", "block.minecraft.brown_concrete=1.2", "block.minecraft.green_concrete=1.2", "block.minecraft.red_concrete=1.2", "block.minecraft.black_concrete=1.2"]
 
 #A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.
