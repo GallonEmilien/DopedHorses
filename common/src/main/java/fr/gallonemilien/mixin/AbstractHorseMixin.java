@@ -1,13 +1,18 @@
 package fr.gallonemilien.mixin;
 
+import fr.gallonemilien.persistence.ShoeContainer;
 import fr.gallonemilien.speed.HorseSpeedManager;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -19,13 +24,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(AbstractHorse.class)
-public abstract class AbstractHorseMixin {
+public abstract class AbstractHorseMixin extends Animal implements ShoeContainer {
 
     /**
      * HORSE SHOES LOGIC
      */
     @Shadow
     SimpleContainer inventory;
+
+    SimpleContainer shoeContainer = new SimpleContainer(1);
+
+    @Override
+    public Container getShoeContainer() {
+        return this.shoeContainer;
+    }
+
+    protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
+        super(entityType, level);
+    }
 
 
     protected boolean hasArmor() {

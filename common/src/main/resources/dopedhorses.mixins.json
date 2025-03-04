@@ -6,7 +6,9 @@
   "client": [
   ],
   "mixins": [
-    "AbstractHorseMixin"
+    "AbstractHorseMixin",
+    "HorseInventoryMenuMixin",
+    "HorseInventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

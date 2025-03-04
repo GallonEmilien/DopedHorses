@@ -3,7 +3,9 @@
   "compatibilityLevel": "JAVA_21",
   "package": "fr.gallonemilien.mixin",
   "mixins": [
-    "AbstractHorseMixin"
+    "AbstractHorseMixin",
+    "HorseInventoryMenuMixin",
+    "HorseInventoryScreenMixin"
   ],
   "client": [
   ],
