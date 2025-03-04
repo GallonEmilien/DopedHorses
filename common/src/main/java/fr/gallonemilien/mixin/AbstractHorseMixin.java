@@ -91,7 +91,6 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
     //Update speed when a player is riding
     @Inject(method="tickRidden", at=@At("HEAD"))
     private void tickRidden(Player arg, Vec3 arg2, CallbackInfo ci) {
-        System.out.println(hasShoes());
         final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.updateHorseSpeed(horse);
     }

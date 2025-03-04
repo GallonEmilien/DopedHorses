@@ -28,7 +28,6 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
     @Unique
     private static final ResourceLocation SHOE_LOCATION = DopedHorses.id("horse_shoe");
 
-
     @Inject(method = "<init>", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/HorseInventoryMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;"))
     public void constructor(int i, Inventory inventory, Container container, AbstractHorse abstractHorse, int j, CallbackInfo ci) {
         if(abstractHorse instanceof ShoeContainer shoeContainer) {
@@ -41,7 +40,7 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
                 @Override
                 public void setChanged() {
                     super.container.setChanged();
-                    HorseSpeedManager.updateHorseShoes(abstractHorse);
+                    HorseSpeedManager.updateHorseShoes(abstractHorse, shoeContainer);
                 }
 
                 @Override

@@ -4,17 +4,26 @@ import net.minecraft.world.item.Item;
 
 public class ShoeItem extends Item {
 
-    private final double speedModifier;
-    private final String name;
 
-    public ShoeItem(Properties properties, double speedModifier, String name) {
+    private final String name;
+    private final ShoeType type;
+
+    public ShoeItem(Properties properties, ShoeType type, String name) {
         super(properties);
         this.name = name;
-        this.speedModifier = speedModifier;
+        this.type = type;
     }
 
     public double getSpeedModifier() {
-        return this.speedModifier;
+        return type.getSpeedModifier();
+    }
+
+    public double getArmorModifier() {
+        return type.getArmorModifier();
+    }
+
+    public double getJumpModifier() {
+        return type.getJumpModifier();
     }
 
     public String getShoeName() {

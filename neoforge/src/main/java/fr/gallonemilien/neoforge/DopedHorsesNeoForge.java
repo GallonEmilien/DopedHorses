@@ -3,6 +3,7 @@ package fr.gallonemilien.neoforge;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.serialization.Codec;
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.neoforge.client.NeoForgeSpeedHud;
 import fr.gallonemilien.neoforge.config.NeoForgeConfig;
 import fr.gallonemilien.neoforge.item.NeoForgeItems;
@@ -53,14 +54,16 @@ public final class DopedHorsesNeoForge {
             DEFAULT_SPEED.dataName, () -> AttachmentType.builder(() -> 0.0).serialize(Codec.DOUBLE).build()
     );
 
+    public static IEventBus EVENT_BUS = null;
+
     public DopedHorsesNeoForge(ModContainer container) {
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
+        EVENT_BUS = modBus;
         container.registerConfig(ModConfig.Type.SERVER, NeoForgeConfig.SERVER_SPEC);
         ATTACHMENT_TYPES.register(modBus);
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
 
         NeoForgeItems.register(modBus);
-
         DopedHorses.init(
                 new HorseDataHandlerNeoForge(),
                 new SpeedPacketHandlerNeoForge(),
