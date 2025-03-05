@@ -3,14 +3,12 @@ MOD STILL IN DEV
 # TODO
 
 - Render shoes on the horse
-- No need to get off the horse and go back on it when disconnecting to show de HUD
+- No need to get off the horse and go back on it when disconnecting to show the HUD
 - Modify the HUD position by dragging it
-- Adding an easier way to configure settings
-- Fabric client
-- Adding item in the creative tab
+- fix to have working enchantments
+
 - Add to lootables
 - Craftable ?
-- dynamic config with a screen
 
 # DopedHorse
 

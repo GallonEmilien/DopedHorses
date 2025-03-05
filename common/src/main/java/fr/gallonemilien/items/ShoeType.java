@@ -6,6 +6,8 @@ import fr.gallonemilien.config.ConfigMaterialType;
 import fr.gallonemilien.config.ModConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import org.apache.commons.lang3.tuple.Pair;
@@ -26,6 +28,19 @@ public enum ShoeType {
     ShoeType(String name, ArmorMaterial material) {
         this.name = name;
         this.material = material;
+    }
+
+    public ShoeItem getItem() {
+        return new ShoeItem(
+            new Item.Properties()
+                .stacksTo(1)
+                .setId(getResourceKey(this))
+                .enchantable(20)
+                .arch$tab(CreativeModeTabs.COMBAT)
+                .arch$tab(DopedHorses.TAB),
+        this,
+             this.name
+        );
     }
 
     public static void initializeModifiers(ModConfig config) {

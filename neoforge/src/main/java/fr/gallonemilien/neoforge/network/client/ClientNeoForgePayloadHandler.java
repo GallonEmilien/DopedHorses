@@ -6,6 +6,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public interface ClientNeoForgePayloadHandler {
     static void handleDataOnMain(final CustomPacketPayload data, final IPayloadContext context) {
-        NeoForgeSpeedHud.networkEntry(data);
+        NeoForgeSpeedHud.getInstance().networkEntry(data);
     }
 }

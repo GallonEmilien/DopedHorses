@@ -4,9 +4,7 @@ import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.config.ConfigMaterialType;
 import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.items.ShoeType;
-import fr.gallonemilien.neoforge.DopedHorsesNeoForge;
-import fr.gallonemilien.neoforge.client.ClientModConfig;
-import fr.gallonemilien.neoforge.item.NeoForgeItems;
+import fr.gallonemilien.config.ClientModConfig;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
@@ -40,7 +38,6 @@ public class NeoForgeConfig {
     public static void onModConfigEvent(ModConfigEvent event) {
         if(event.getConfig().getSpec() == SERVER_SPEC) {
             NeoForgeConfig.bakeServerConfig();
-            ShoeType.initializeModifiers(serverConfig);
         }
         if(event.getConfig().getSpec() == CLIENT_SPEC) {
             NeoForgeConfig.bakeClientConfig();

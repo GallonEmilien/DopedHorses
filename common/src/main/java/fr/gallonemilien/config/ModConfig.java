@@ -10,9 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ModConfig {
-    private @NotNull Map<String, Double> fasterBlocks;
+    private @NotNull Map<String, Double> fasterBlocks = new HashMap<>();
     private final Map<Pair<ConfigDataType, ConfigMaterialType>, Double> modifiers = new HashMap<>();
-
 
 
     public @NotNull Map<String, Double> getFasterBlocks() {
@@ -20,6 +19,7 @@ public class ModConfig {
     }
 
     public void setModifier(Pair<ConfigDataType, ConfigMaterialType> key, double value) {
+        System.out.println("Modifier " + key.getLeft() + " " + key.getRight() + " " + value);
         modifiers.put(key, value);
     }
 

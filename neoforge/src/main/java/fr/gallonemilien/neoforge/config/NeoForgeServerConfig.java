@@ -69,7 +69,7 @@ public class NeoForgeServerConfig {
                 .define("diamond_shoe_speed_modifier",0.13);
         this.netheriteShoeSpeedModifier = builder
                 .comment(SHOE_MODIFIER_COMMENT)
-                .define("netherite_shoe_speed_modifier",0.17);
+                .define("netherite_shoe_speed_modifier",5.0);
 
         this.ironShoeArmorModifier = builder
                 .comment(ARMOR_MODIFIER_COMMENT)
@@ -94,7 +94,7 @@ public class NeoForgeServerConfig {
                 .define("diamond_shoe_jump_modifier",0.6);
         this.netheriteShoeJumpModifier = builder
                 .comment(JUMP_MODIFIER_COMMENT)
-                .define("netherite_shoe_jump_modifier",0.8);
+                .define("netherite_shoe_jump_modifier",15.0);
 
         this.userUnit = builder
                 .comment("0=km/h, 1=block/s, 2=mph")

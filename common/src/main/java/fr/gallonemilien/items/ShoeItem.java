@@ -1,14 +1,14 @@
 package fr.gallonemilien.items;
 
-import net.minecraft.world.item.AnimalArmorItem;
+import net.minecraft.world.item.Item;
 
-public class ShoeItem extends AnimalArmorItem {
+public class ShoeItem extends Item {
 
     private final String name;
     private final ShoeType type;
 
     public ShoeItem(Properties properties, ShoeType type, String name) {
-        super(type.getMaterial(), BodyType.EQUESTRIAN,properties);
+        super(properties);
         this.name = name;
         this.type = type;
     }
