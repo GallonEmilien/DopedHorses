@@ -13,7 +13,6 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.List;
 
@@ -44,7 +43,6 @@ public class ItemLoot {
     }
 
     public static void registerLootTable() {
-        System.out.println("Registering LootTable");
         LootEvent.MODIFY_LOOT_TABLE.register((lootTableId, context, builtin) -> {
             // Liste des loot tables des coffres du Nether
             List<String> netherLootTables = List.of(
@@ -57,7 +55,6 @@ public class ItemLoot {
             if(builtin) {
                 netherLootTables.forEach(netherLootTable -> {
                     if(lootTableId.toString().contains(netherLootTable)) {
-                        System.out.println(lootTableId);
                         LootPool.Builder pool = LootPool.lootPool()
                                 .add(LootItem.lootTableItem(DopedHorsesItems.IRON_HORSE_SHOES.get())
                                         .when(LootItemRandomChanceCondition.randomChance(DopedHorses.MOD_CONFIG.getShoeLoot(ShoeType.IRON))))

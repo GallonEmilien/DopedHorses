@@ -91,7 +91,7 @@ public class HorseSpeedManager {
      * Checks if the horse's speed has been modified.
      */
     private static boolean isHorseModified(AbstractHorse horse, double speed) {
-        return !Objects.equals(horsesMultiplier.get(horse.getUUID()), speed);
+        return !horsesMultiplier.containsKey(horse.getUUID()) || !Objects.equals(horsesMultiplier.get(horse.getUUID()), speed);
     }
 
     /**
@@ -99,10 +99,10 @@ public class HorseSpeedManager {
      */
     private static void applySpeedModifier(AbstractHorse horse, double speedMultiplier) {
         getSpeedAttribute(horse).removeModifier(HORSE_SPEED_BOOST_ID);
-        //ADD_MULTIPLIED_BASE = Base_Value + Base_Value * speedMultiplier !
         getSpeedAttribute(horse).addTransientModifier(new AttributeModifier(HORSE_SPEED_BOOST_ID, speedMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
         horsesMultiplier.put(horse.getUUID(), speedMultiplier);
     }
+
 
     /**
      * Sends a packet to indicate the player is riding a horse.
