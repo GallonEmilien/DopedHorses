@@ -3,6 +3,7 @@ package fr.gallonemilien.fabric.config;
 import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.config.ConfigMaterialType;
 import fr.gallonemilien.config.ModConfig;
+import fr.gallonemilien.items.ShoeType;
 import org.apache.commons.lang3.tuple.Pair;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
@@ -49,6 +50,11 @@ public class FabricServerConfig implements ConfigData {
     public double diamondShoeJumpModifier = 0.6;
     public double netheriteShoeJumpModifier = 0.8;
 
+    public double ironShoeLootChance = 0.15;
+    public double goldShoeLootChance = 0.10;
+    public double diamondShoeLootChance = 0.06;
+    public double netheriteShoeLootChance = 0.03;
+
     public static ModConfig registerAndGet() {
         AutoConfig.register(FabricServerConfig.class, GsonConfigSerializer::new);
         FabricServerConfig notParsed = AutoConfig.getConfigHolder(FabricServerConfig.class).getConfig();
@@ -70,6 +76,11 @@ public class FabricServerConfig implements ConfigData {
         serverConfig.setModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.GOLD), notParsed.goldShoeArmorModifier);
         serverConfig.setModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.DIAMOND), notParsed.diamondShoeArmorModifier);
         serverConfig.setModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.NETHERITE), notParsed.netheriteShoeArmorModifier);
+
+        serverConfig.setShoeLoot(ShoeType.IRON, notParsed.ironShoeLootChance);
+        serverConfig.setShoeLoot(ShoeType.GOLD, notParsed.goldShoeLootChance);
+        serverConfig.setShoeLoot(ShoeType.DIAMOND, notParsed.diamondShoeLootChance);
+        serverConfig.setShoeLoot(ShoeType.NETHERITE, notParsed.netheriteShoeLootChance);
 
         return serverConfig;
     }

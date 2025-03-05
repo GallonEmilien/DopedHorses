@@ -45,6 +45,5 @@ public class EnchantmentMixin {
 
     @Inject(method = "getEnchantmentLevel",at = @At("HEAD"),cancellable = true)
     private static void checkHorse(Holder<Enchantment> holder, LivingEntity livingEntity, CallbackInfoReturnable<Integer> cir){
-        System.out.println(holder.value());
     }
 }

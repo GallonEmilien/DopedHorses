@@ -1,5 +1,6 @@
 package fr.gallonemilien.config;
 
+import fr.gallonemilien.items.ShoeType;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,12 +15,13 @@ public class ModConfig {
     private final Map<Pair<ConfigDataType, ConfigMaterialType>, Double> modifiers = new HashMap<>();
 
 
+    private final Map<ShoeType, Double> shoeLoot = new HashMap<>();
+
     public @NotNull Map<String, Double> getFasterBlocks() {
         return fasterBlocks;
     }
 
     public void setModifier(Pair<ConfigDataType, ConfigMaterialType> key, double value) {
-        System.out.println("Modifier " + key.getLeft() + " " + key.getRight() + " " + value);
         modifiers.put(key, value);
     }
 
@@ -27,6 +29,13 @@ public class ModConfig {
         return modifiers.get(key);
     }
 
+    public float getShoeLoot(ShoeType key) {
+        return (float)shoeLoot.get(key).doubleValue();
+    }
+
+    public void setShoeLoot(ShoeType key, double value) {
+        this.shoeLoot.put(key, value);
+    }
 
     public void setFasterBlocks(@NotNull List<String> fasterBlocksList) {
         this.fasterBlocks = fasterBlocksList.stream()

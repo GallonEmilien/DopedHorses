@@ -23,11 +23,15 @@ public class NeoForgeServerConfig {
     public final ModConfigSpec.ConfigValue<Double> diamondShoeArmorModifier;
     public final ModConfigSpec.ConfigValue<Double> netheriteShoeArmorModifier;
 
-    public final ModConfigSpec.ConfigValue<Integer> userUnit;
+    public final ModConfigSpec.ConfigValue<Double> ironShoeLootChance;
+    public final ModConfigSpec.ConfigValue<Double> goldShoeLootChance;
+    public final ModConfigSpec.ConfigValue<Double> diamondShoeLootChance;
+    public final ModConfigSpec.ConfigValue<Double> netheriteShoeLootChance;
 
     private static final String JUMP_MODIFIER_COMMENT = "Horse's jump strength ranges from 0.4–1.0, with an average of 0.7. A jump strength of 0.5 is enough to clear 1 9⁄16 blocks, while 1.0 is enough to clear 5 1⁄4 blocks.";
     private static final String SHOE_MODIFIER_COMMENT = "A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.";
     private static final String ARMOR_MODIFIER_COMMENT = "round to .5 the value";
+    private static final String LOOT_MODIFIER_COMMENT = "A value between 0 and 1 (0.1 = 10%, 0.2=20% etc....), those items loots in chest in the nether / portal ruins";
 
     public NeoForgeServerConfig(ModConfigSpec.Builder builder) {
         builder.comment("Doped Horses Server Configuration")
@@ -96,10 +100,18 @@ public class NeoForgeServerConfig {
                 .comment(JUMP_MODIFIER_COMMENT)
                 .define("netherite_shoe_jump_modifier",15.0);
 
-        this.userUnit = builder
-                .comment("0=km/h, 1=block/s, 2=mph")
-                .define("user_speed_unit",0);
-
+        this.ironShoeLootChance = builder
+                .comment(LOOT_MODIFIER_COMMENT)
+                .define("iron_shoe_loot_chance",0.15);
+        this.goldShoeLootChance = builder
+                .comment(LOOT_MODIFIER_COMMENT)
+                .define("gold_shoe_loot_chance",0.10);
+        this.diamondShoeLootChance = builder
+                .comment(LOOT_MODIFIER_COMMENT)
+                .define("diamond_shoe_loot_chance",0.06);
+        this.netheriteShoeLootChance = builder
+                .comment(LOOT_MODIFIER_COMMENT)
+                .define("netherite_shoe_loot_chance",0.03);
         builder.pop();
     }
 }

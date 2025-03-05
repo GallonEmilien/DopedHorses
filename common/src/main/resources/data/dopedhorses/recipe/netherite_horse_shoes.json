@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "dopedhorses:diamond_horse_shoes",
+  "addition": "minecraft:netherite_ingot",
+  "template": "minecraft:netherite_upgrade_smithing_template",
+  "result": {
+    "id": "dopedhorses:netherite_horse_shoes"
+  }
+}

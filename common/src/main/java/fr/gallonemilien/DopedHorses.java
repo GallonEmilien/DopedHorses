@@ -4,6 +4,7 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.items.DopedHorsesItems;
+import fr.gallonemilien.items.ItemLoot;
 import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.network.CommonPacketHandler;
 import net.minecraft.network.chat.Component;
@@ -34,8 +35,7 @@ public final class DopedHorses {
         DopedHorsesItems.TABS.register();
         DopedHorsesItems.getAll(); //Pour enclencher le register
         DopedHorsesItems.ITEM.register();
-
-
+        ItemLoot.register();
         DopedHorses.PACKET_HANDLER = packetHandler;
         DopedHorses.MOD_CONFIG = config;
     }
