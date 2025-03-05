@@ -7,9 +7,6 @@ MOD STILL IN DEV
 - Modify the HUD position by dragging it
 - fix to have working enchantments
 
-- Add to lootables
-- Craftable ?
-
 # DopedHorse
 
 **DopedHorse** is an open-source Minecraft mod that allows you to customize horse speed and performance based on the terrain they are traveling on. This mod provides simple options to increase base horse speed, apply terrain effects, and introduce new items such as horse shoes that improve the horse's speed and jumping ability depending on the tier (iron, gold, diamond, netherite).
