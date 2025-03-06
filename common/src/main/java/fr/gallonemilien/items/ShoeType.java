@@ -4,6 +4,7 @@ import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.config.ConfigMaterialType;
 import fr.gallonemilien.config.ModConfig;
+import lombok.Getter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -20,9 +21,13 @@ public enum ShoeType {
     NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE);
 
     public final String name;
+    @Getter
     public double speedModifier;
-    public double jumpHeight;
-    public double additionnalArmor;
+    @Getter
+    public double jumpModifier;
+    @Getter
+    public double armorModifier;
+    @Getter
     private ArmorMaterial material;
 
     ShoeType(String name, ArmorMaterial material) {
@@ -46,25 +51,9 @@ public enum ShoeType {
     public static void initializeModifiers(ModConfig config) {
         for (ShoeType type : values()) {
             type.speedModifier = config.getModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.valueOf(type.name().toUpperCase())));
-            type.jumpHeight = config.getModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.valueOf(type.name().toUpperCase())));
-            type.additionnalArmor = config.getModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.valueOf(type.name().toUpperCase())));
+            type.jumpModifier = config.getModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.valueOf(type.name().toUpperCase())));
+            type.armorModifier = config.getModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.valueOf(type.name().toUpperCase())));
         }
-    }
-
-    public ArmorMaterial getMaterial() {
-        return material;
-    }
-
-    public double getSpeedModifier() {
-        return speedModifier;
-    }
-
-    public double getArmorModifier() {
-        return additionnalArmor;
-    }
-
-    public double getJumpModifier() {
-        return jumpHeight;
     }
 
     public static ResourceKey getResourceKey(ShoeType type) {

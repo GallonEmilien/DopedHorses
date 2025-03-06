@@ -2,6 +2,7 @@ package fr.gallonemilien.items;
 
 import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.registry.level.entity.trade.TradeRegistry;
+import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.DopedHorses;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
@@ -27,22 +28,22 @@ public class ItemLoot {
     }
 
     private static void registerIron() {
-        registerVillager(VillagerProfession.ARMORER,1,12, DopedHorsesItems.IRON_HORSE_SHOES.get(), 12, 5, 0.05f);
+        registerVillager(VillagerProfession.ARMORER,1,12, DopedHorsesItems.IRON_HORSE_SHOES, 12, 5, 0.05f);
     }
 
     private static void registerGold() {
-        registerVillager(VillagerProfession.ARMORER,3,19, DopedHorsesItems.GOLD_HORSE_SHOES.get(), 12, 8, 0.05f);
+        registerVillager(VillagerProfession.ARMORER,3,19, DopedHorsesItems.GOLD_HORSE_SHOES, 12, 8, 0.05f);
     }
 
     private static void registerDiamond() {
-        registerVillager(VillagerProfession.ARMORER,4,31, DopedHorsesItems.GOLD_HORSE_SHOES.get(), 12, 10, 0.05f);
+        registerVillager(VillagerProfession.ARMORER,4,31, DopedHorsesItems.GOLD_HORSE_SHOES, 12, 10, 0.05f);
     }
 
     private static void registerNetherite() {
 
     }
 
-    public static void registerLootTable() {
+    private static void registerLootTable() {
         LootEvent.MODIFY_LOOT_TABLE.register((lootTableId, context, builtin) -> {
             // Liste des loot tables des coffres du Nether
             List<String> netherLootTables = List.of(
@@ -57,13 +58,13 @@ public class ItemLoot {
                     if(lootTableId.toString().contains(netherLootTable)) {
                         LootPool.Builder pool = LootPool.lootPool()
                                 .add(LootItem.lootTableItem(DopedHorsesItems.IRON_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(DopedHorses.MOD_CONFIG.getShoeLoot(ShoeType.IRON))))
+                                        .when(LootItemRandomChanceCondition.randomChance(0.15f)))
                                 .add(LootItem.lootTableItem(DopedHorsesItems.GOLD_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(DopedHorses.MOD_CONFIG.getShoeLoot(ShoeType.GOLD))))
+                                        .when(LootItemRandomChanceCondition.randomChance(0.10f)))
                                 .add(LootItem.lootTableItem(DopedHorsesItems.DIAMOND_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(DopedHorses.MOD_CONFIG.getShoeLoot(ShoeType.DIAMOND))))
+                                        .when(LootItemRandomChanceCondition.randomChance(0.06f)))
                                 .add(LootItem.lootTableItem(DopedHorsesItems.NETHERITE_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(DopedHorses.MOD_CONFIG.getShoeLoot(ShoeType.NETHERITE))))
+                                        .when(LootItemRandomChanceCondition.randomChance(0.03f)))
                                 .setRolls(ConstantValue.exactly(1)) // 1 seul tirage
                                 .setBonusRolls(ConstantValue.exactly(0)); // Pas de tirage supplémentaire
 
@@ -74,14 +75,15 @@ public class ItemLoot {
         });
     }
 
-    public static void registerVillager(VillagerProfession profession, int lvl, int price, Item item, int maxUses, int experience, float multiplier) {
+    private static void registerVillager(VillagerProfession profession, int lvl, int price,
+                                         RegistrySupplier<ShoeItem> item, int maxUses, int experience, float multiplier) {
         TradeRegistry.registerVillagerTrade(
                 profession,
                 lvl,
                 (entity, randomSource) ->
              new MerchantOffer(
                 new ItemCost(Items.EMERALD, price),
-                new ItemStack(item, 1),
+                item.get().getDefaultInstance(),
                 maxUses,
                 experience,
                 multiplier

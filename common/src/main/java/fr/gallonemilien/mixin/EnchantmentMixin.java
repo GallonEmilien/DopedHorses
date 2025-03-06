@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 
-@Mixin(targets = {"net.minecraft.world.item.enchantment.EnchantmentHelper"})
+@Mixin(EnchantmentHelper.class)
 public class EnchantmentMixin {
 
    @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)

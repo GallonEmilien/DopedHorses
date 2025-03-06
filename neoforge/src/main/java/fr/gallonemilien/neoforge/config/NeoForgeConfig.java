@@ -1,8 +1,10 @@
 package fr.gallonemilien.neoforge.config;
 
+import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.config.ConfigMaterialType;
 import fr.gallonemilien.config.ModConfig;
+import fr.gallonemilien.items.ItemLoot;
 import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.config.ClientModConfig;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -38,6 +40,8 @@ public class NeoForgeConfig {
     public static void onModConfigEvent(ModConfigEvent event) {
         if(event.getConfig().getSpec() == SERVER_SPEC) {
             NeoForgeConfig.bakeServerConfig();
+            ShoeType.initializeModifiers(serverConfig);
+            ItemLoot.register();
         }
         if(event.getConfig().getSpec() == CLIENT_SPEC) {
             NeoForgeConfig.bakeClientConfig();
@@ -65,5 +69,10 @@ public class NeoForgeConfig {
         serverConfig.setModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.GOLD), SERVER.goldShoeArmorModifier.get());
         serverConfig.setModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.DIAMOND), SERVER.diamondShoeArmorModifier.get());
         serverConfig.setModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.NETHERITE), SERVER.netheriteShoeArmorModifier.get());
+
+        serverConfig.setShoeLoot(ShoeType.IRON, SERVER.ironShoeLootChance.get());
+        serverConfig.setShoeLoot(ShoeType.GOLD, SERVER.goldShoeLootChance.get());
+        serverConfig.setShoeLoot(ShoeType.DIAMOND, SERVER.diamondShoeLootChance.get());
+        serverConfig.setShoeLoot(ShoeType.NETHERITE, SERVER.netheriteShoeLootChance.get());
     }
 }
