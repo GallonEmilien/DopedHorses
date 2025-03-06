@@ -35,7 +35,7 @@ public enum ShoeType {
             new Item.Properties()
                 .stacksTo(1)
                 .setId(getResourceKey(this))
-                .enchantable(20)
+                .enchantable(1)
                 .arch$tab(CreativeModeTabs.COMBAT)
                 .arch$tab(DopedHorses.TAB),
         this,

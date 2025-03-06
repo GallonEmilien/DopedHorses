@@ -2,7 +2,7 @@ package fr.gallonemilien.items;
 
 import net.minecraft.world.item.Item;
 
-public class ShoeItem extends Item {
+public class ShoeItem extends Item{
 
     private final String name;
     private final ShoeType type;

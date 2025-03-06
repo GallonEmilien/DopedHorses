@@ -2,6 +2,7 @@ package fr.gallonemilien.mixin;
 
 
 import fr.gallonemilien.items.ShoeItem;
+import fr.gallonemilien.persistence.ShoeContainer;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,8 +11,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -20,10 +23,10 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 
-@Mixin(EnchantmentHelper.class)
+@Mixin(targets = {"net.minecraft.world.item.enchantment.EnchantmentHelper"})
 public class EnchantmentMixin {
 
-    @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
+   @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
     private static void getAvailableEnchantmentResults(int i, ItemStack itemStack, Stream<Holder<Enchantment>> stream, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         if (itemStack.getItem() instanceof ShoeItem) {
             List<EnchantmentInstance> enchantmentList = new ArrayList<>(stream
@@ -43,9 +46,17 @@ public class EnchantmentMixin {
         }
     }
 
-    @Inject(method = "getEnchantmentLevel",at = @At("HEAD"),cancellable = true)
-    private static void checkHorse(Holder<Enchantment> holder, LivingEntity livingEntity, CallbackInfoReturnable<Integer> cir){
-        for(int i=0; i<100; i++)
-            System.out.println(holder.value());
+    @Shadow
+    private static void runIterationOnItem(
+            ItemStack itemStack,
+            EquipmentSlot equipmentSlot,
+            LivingEntity livingEntity,
+            EnchantmentHelper.EnchantmentInSlotVisitor enchantmentInSlotVisitor
+    ) {}
+    @Inject(method="runIterationOnEquipment", at=@At("HEAD"))
+    private static void runIterationOnEquipment(LivingEntity livingEntity, EnchantmentHelper.EnchantmentInSlotVisitor enchantmentInSlotVisitor, CallbackInfo ci) {
+        if(livingEntity instanceof ShoeContainer shoeContainer) {
+            runIterationOnItem(shoeContainer.getShoeContainer().getItem(0), EquipmentSlot.FEET, livingEntity, enchantmentInSlotVisitor);
+        }
     }
 }

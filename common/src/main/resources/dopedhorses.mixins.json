@@ -9,7 +9,8 @@
   "mixins": [
     "AbstractHorseMixin",
     "HorseInventoryMenuMixin",
-    "EnchantmentMixin"
+    "EnchantmentMixin",
+    "ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1
