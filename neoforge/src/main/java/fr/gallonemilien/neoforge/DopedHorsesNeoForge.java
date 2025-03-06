@@ -44,7 +44,6 @@ public final class DopedHorsesNeoForge {
     public DopedHorsesNeoForge(ModContainer container) {
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
         EVENT_BUS = modBus;
-        registerEvents();
         container.registerConfig(ModConfig.Type.SERVER, NeoForgeConfig.SERVER_SPEC);
         container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.CLIENT_SPEC);
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
@@ -75,10 +74,6 @@ public final class DopedHorsesNeoForge {
         );
     }
 
-    private void registerEvents() {
-        NeoForge.EVENT_BUS.register(NeoForgeSpeedHud.getInstance());
-    }
-
     @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
     public static class ClientProxy {
         private static final KeyMapping HUD_KEY = new KeyMapping(
@@ -92,6 +87,7 @@ public final class DopedHorsesNeoForge {
         @SubscribeEvent
         public static void setupClient(FMLClientSetupEvent evt) {
             NeoForge.EVENT_BUS.addListener(ClientProxy::onKeyInput);
+            NeoForge.EVENT_BUS.register(NeoForgeSpeedHud.getInstance());
         }
 
         private static void onKeyInput(InputEvent.Key event) {
