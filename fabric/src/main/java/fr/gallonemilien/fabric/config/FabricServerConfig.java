@@ -16,23 +16,8 @@ import java.util.List;
 public class FabricServerConfig implements ConfigData {
 
     public List<String> fasterBlocks = List.of(
-            "block.minecraft.dirt_path=0.7",
-            "block.minecraft.white_concrete=1.2",
-            "block.minecraft.orange_concrete=1.2",
-            "block.minecraft.magenta_concrete=1.2",
-            "block.minecraft.light_blue_concrete=1.2",
-            "block.minecraft.yellow_concrete=1.2",
-            "block.minecraft.lime_concrete=1.2",
-            "block.minecraft.pink_concrete=1.2",
-            "block.minecraft.light_gray_concrete=1.2",
-            "block.minecraft.gray_concrete=1.2",
-            "block.minecraft.cyan_concrete=1.2",
-            "block.minecraft.purple_concrete=1.2",
-            "block.minecraft.blue_concrete=1.2",
-            "block.minecraft.brown_concrete=1.2",
-            "block.minecraft.green_concrete=1.2",
-            "block.minecraft.red_concrete=1.2",
-            "block.minecraft.black_concrete=1.2"
+            "dirt_path=0.7",
+            ".*concrete=1.2"
     );
 
     public double ironShoeSpeedModifier = 0.05;

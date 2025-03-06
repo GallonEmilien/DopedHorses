@@ -1,5 +1,6 @@
 package fr.gallonemilien;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.config.ModConfig;

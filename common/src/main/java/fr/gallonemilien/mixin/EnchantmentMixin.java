@@ -38,12 +38,14 @@ public class EnchantmentMixin {
                         return null;
                     })
                     .filter(Objects::nonNull)
-                    .toList()); // Convertir en liste modifiable
+                    .toList());
             cir.setReturnValue(enchantmentList);
         }
     }
 
     @Inject(method = "getEnchantmentLevel",at = @At("HEAD"),cancellable = true)
     private static void checkHorse(Holder<Enchantment> holder, LivingEntity livingEntity, CallbackInfoReturnable<Integer> cir){
+        for(int i=0; i<100; i++)
+            System.out.println(holder.value());
     }
 }

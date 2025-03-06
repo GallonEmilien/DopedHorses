@@ -1,7 +1,6 @@
 package fr.gallonemilien.mixin;
 
 import fr.gallonemilien.items.ShoeItem;
-import fr.gallonemilien.persistence.ShoeContainer;
 import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
@@ -23,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
+import fr.gallonemilien.persistence.ShoeContainer;
 
 
 @Mixin(AbstractHorse.class)
@@ -32,15 +31,11 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
     /**
      * HORSE SHOES LOGIC
      */
-
     SimpleContainer shoeContainer = new SimpleContainer(1);
 
-    @Override
     public Container getShoeContainer() {
-        return this.shoeContainer;
+        return shoeContainer;
     }
-
-
 
     @Shadow public abstract boolean isSaddleable();
 
@@ -48,16 +43,17 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         super(entityType, level);
     }
 
-    protected boolean hasShoes(AbstractHorse horse) {
+    protected boolean hasShoes() {
         return !shoeContainer.isEmpty()
                 && !this.shoeContainer.getItem(0).isEmpty()
                 && this.shoeContainer.getItem(0).getItem() instanceof ShoeItem;
     }
 
+
+
     @Inject(method = "addAdditionalSaveData", at=@At("TAIL"))
     public void saveData(CompoundTag compoundTag, CallbackInfo ci) {
-        AbstractHorse horse = (AbstractHorse) (Object) this;
-        if(hasShoes(horse)) {
+        if(hasShoes()) {
             compoundTag.put("ShoeItem", this.shoeContainer.getItem(0).save(this.registryAccess()));
         }
     }

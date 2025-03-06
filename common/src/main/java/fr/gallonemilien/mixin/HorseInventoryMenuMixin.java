@@ -5,6 +5,7 @@ import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.persistence.ShoeContainer;
 import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
@@ -35,7 +36,11 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
             this.addSlot(new Slot(shoeContainer.getShoeContainer(),0, 8, 54) {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
-                    return (itemStack.getItem() instanceof ShoeItem);
+                    if(itemStack.getItem() instanceof ShoeItem) {
+                        abstractHorse.playSound(SoundEvents.HORSE_ARMOR.value(), 0.5F, 1.0F);
+                        return true;
+                    }
+                    return false;
                 }
 
                 @Override

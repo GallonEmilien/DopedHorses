@@ -37,28 +37,12 @@ public class NeoForgeServerConfig {
         builder.comment("Doped Horses Server Configuration")
                 .push("DopedHorses");
         this.fasterBlocks = builder
-                .comment("You need to get the translation key of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a = separation for the multiplier! speedmultiplier is a number that compute new speed = Horse_default_speed + Horse_default_speed * multiplier" +
-                        "Another point, sorry but for the moment if you want to add concrete, you need to add all its variants, it'll implemented in a next release." )
+                .comment("You need to get the identifier of the block you want to use with https://minecraft.fandom.com/wiki/Category:Blocks then when you have selected a block navigate to 'datavalues > ID', it needs a = separation for the multiplier! speedmultiplier is a number that compute new speed = Horse_default_speed + Horse_default_speed * multiplier" +
+                        "The mods look at your entries (they are Regex, read ). So if you want to check for all concrete variants, you can type *concrete, and if you want to include concrete powder, you need to write *concrete*" )
                 .define("faster_blocks",
                     List.of(
-              "block.minecraft.dirt_path=0.7",
-                        "block.minecraft.white_concrete=1.2",
-                        "block.minecraft.orange_concrete=1.2",
-                        "block.minecraft.magenta_concrete=1.2",
-                        "block.minecraft.light_blue_concrete=1.2",
-                        "block.minecraft.yellow_concrete=1.2",
-                        "block.minecraft.lime_concrete=1.2",
-                        "block.minecraft.pink_concrete=1.2",
-                        "block.minecraft.light_gray_concrete=1.2",
-                        "block.minecraft.gray_concrete=1.2",
-                        "block.minecraft.light_gray_concrete=1.2",
-                        "block.minecraft.cyan_concrete=1.2",
-                        "block.minecraft.purple_concrete=1.2",
-                        "block.minecraft.blue_concrete=1.2",
-                        "block.minecraft.brown_concrete=1.2",
-                        "block.minecraft.green_concrete=1.2",
-                        "block.minecraft.red_concrete=1.2",
-                        "block.minecraft.black_concrete=1.2"
+                        "dirt_path=0.7",
+                        ".*concrete=1.2"
                     )
                 );
 

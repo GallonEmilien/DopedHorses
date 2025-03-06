@@ -23,7 +23,7 @@ import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
  */
 public class HorseSpeedManager {
     private static final HashMap<UUID, Double> horsesMultiplier = new HashMap<>();
-    private static final double DEFAULT_SPEED_MODIFIER = 0.0; //!!!!
+    public static final double DEFAULT_SPEED_MODIFIER = 0.0; //!!!!
     private static final ResourceLocation HORSE_SPEED_BOOST_ID = DopedHorses.id("horse_speed_boost_modifier");
     private static final ResourceLocation HORSE_SHOES_BOOST_ID = DopedHorses.id("horse_shoes_boost_modifier");
     private static final ResourceLocation HORSE_SHOES_ARMOR_ID = DopedHorses.id("horse_shoes_armor_modifier");
@@ -66,10 +66,9 @@ public class HorseSpeedManager {
         updateHudSpeed(horse);
         BlockPos horsePosition = horse.getOnPos();
         Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
-        Optional<Double> blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
-        double speed = blockSpeed.orElse(DEFAULT_SPEED_MODIFIER);
-        if (isHorseModified(horse, speed)) {
-            applySpeedModifier(horse, speed);
+        Double blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
+        if (isHorseModified(horse, blockSpeed)) {
+            applySpeedModifier(horse, blockSpeed);
         }
     }
 

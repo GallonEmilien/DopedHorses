@@ -15,8 +15,6 @@ public abstract class AbstractSpeedHud implements ModPacketListener {
     private boolean rideHorse = false;
     private final Minecraft mc = Minecraft.getInstance();
     private boolean showHud = true;
-    private int textX = 185;
-    private int textY = 190;
 
     public void networkEntry(CustomPacketPayload payload) {
         if (payload instanceof SpeedPayload(double speed1)) {
@@ -36,8 +34,15 @@ public abstract class AbstractSpeedHud implements ModPacketListener {
     }
 
     protected void renderGui(GuiGraphics g, ClientModConfig clientConfig) {
-        if(shouldRender()) {
+        if (shouldRender()) {
             String message = SpeedEnum.getDisplaySpeed(clientConfig.getUserUnit(), speed);
+
+            // Récupère la largeur et la hauteur de l'écran
+            int screenWidth = mc.getWindow().getGuiScaledWidth();
+            
+            int textX = screenWidth / 2 - mc.font.width(message) / 2; 
+            int textY = 10;
+
             g.drawString(mc.font, message, textX, textY, 0xFFFFFF, false);
         }
     }
