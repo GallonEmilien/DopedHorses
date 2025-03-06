@@ -4,8 +4,8 @@ MOD STILL IN DEV
 
 - Render shoes on the horse
 - No need to get off the horse and go back on it when disconnecting to show the HUD
-- fix forge
-- showcase
+- fix speed in multiplier
+- fix config file forge that is always sets to default
 
 # DopedHorse
 
