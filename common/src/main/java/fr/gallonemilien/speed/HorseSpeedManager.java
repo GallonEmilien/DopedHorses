@@ -3,6 +3,7 @@ package fr.gallonemilien.speed;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.network.RideHorsePayload;
+import fr.gallonemilien.persistence.ShoeContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +23,6 @@ import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
  * Manages the speed modifications of horses based on the block they are standing on.
  */
 public class HorseSpeedManager {
-    private static final HashMap<UUID, Double> horsesMultiplier = new HashMap<>();
     public static final double DEFAULT_SPEED_MODIFIER = 0.0; //!!!!
     private static final ResourceLocation HORSE_SPEED_BOOST_ID = DopedHorses.id("horse_speed_boost_modifier");
     private static final ResourceLocation HORSE_SHOES_BOOST_ID = DopedHorses.id("horse_shoes_boost_modifier");
@@ -59,11 +59,25 @@ public class HorseSpeedManager {
         applyShoeModifier(horse, item, getArmorAttribute(horse), HORSE_SHOES_ARMOR_ID, ShoeItem::getArmorModifier);
     }
 
+
+     // Working only if server restart / client restart
+    private static final HashMap<UUID, Double> horsesMultiplier = new HashMap<>();
+    private static HashMap<UUID, Boolean> initializedHorsesCache = new HashMap<>();
+
     /**
      * Updates the horse's speed based on the block it is standing on.
      */
     public static void updateHorseSpeed(AbstractHorse horse) {
         updateHudSpeed(horse);
+        // Check if the horse has shoes equipped, avoid from having to
+        // remove the shoe and settings back again on load,
+        // Maybe in a future update try to check with a one call function only
+        // at server startup
+        if(!initializedHorsesCache.containsKey(horse.getUUID()) && horse instanceof ShoeContainer container) {
+            initializedHorsesCache.put(horse.getUUID(), true);
+            if(container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem item)
+                updateHorseShoes(horse,item);
+        }
         BlockPos horsePosition = horse.getOnPos();
         Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
         Double blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
