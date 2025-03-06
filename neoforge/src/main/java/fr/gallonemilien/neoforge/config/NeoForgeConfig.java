@@ -56,9 +56,6 @@ public class NeoForgeConfig {
     }
 
     public static void bakeServerConfig() {
-        System.out.println(SERVER.fasterBlocks.get().size());
-        System.out.println(SERVER.fasterBlocks.get().size());
-        System.out.println(SERVER.fasterBlocks.get().size());
         List<String> fasterBlocksList = SERVER.fasterBlocks.get().stream()
                 .map(String::valueOf)
                 .toList();
