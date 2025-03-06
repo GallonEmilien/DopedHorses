@@ -13,6 +13,9 @@ import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static fr.gallonemilien.DopedHorses.MOD_ID;
 
 @EventBusSubscriber(modid = MOD_ID, bus=EventBusSubscriber.Bus.MOD)
@@ -53,7 +56,15 @@ public class NeoForgeConfig {
     }
 
     public static void bakeServerConfig() {
-        serverConfig.setFasterBlocks(SERVER.fasterBlocks.get());
+        System.out.println(SERVER.fasterBlocks.get().size());
+        System.out.println(SERVER.fasterBlocks.get().size());
+        System.out.println(SERVER.fasterBlocks.get().size());
+        List<String> fasterBlocksList = SERVER.fasterBlocks.get().stream()
+                .map(String::valueOf)
+                .toList();
+
+
+        serverConfig.setFasterBlocks(fasterBlocksList);
 
         serverConfig.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.IRON), SERVER.ironShoeSpeedModifier.get());
         serverConfig.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.GOLD), SERVER.goldShoeSpeedModifier.get());
@@ -74,5 +85,6 @@ public class NeoForgeConfig {
         serverConfig.setShoeLoot(ShoeType.GOLD, SERVER.goldShoeLootChance.get());
         serverConfig.setShoeLoot(ShoeType.DIAMOND, SERVER.diamondShoeLootChance.get());
         serverConfig.setShoeLoot(ShoeType.NETHERITE, SERVER.netheriteShoeLootChance.get());
+
     }
 }
