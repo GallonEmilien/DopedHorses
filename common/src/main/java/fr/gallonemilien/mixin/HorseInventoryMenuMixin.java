@@ -36,7 +36,7 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
             this.addSlot(new Slot(shoeContainer.getShoeContainer(),0, 8, 54) {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
-                    if(itemStack.getItem() instanceof ShoeItem) {
+                    if(itemStack.getItem() instanceof ShoeItem && shoeContainer.getShoeContainer().isEmpty()) {
                         abstractHorse.playSound(SoundEvents.HORSE_ARMOR.value(), 0.5F, 1.0F);
                         return true;
                     }

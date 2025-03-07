@@ -43,9 +43,6 @@ public final class DopedHorsesFabricClient implements ClientModInitializer {
     }
 
     private static void registerPayloads() {
-        PayloadTypeRegistry.playS2C().register(SpeedPayload.TYPE, SpeedPayload.STREAM_CODEC);
-        PayloadTypeRegistry.playS2C().register(RideHorsePayload.TYPE, RideHorsePayload.STREAM_CODEC);
-
         ClientPlayNetworking.registerGlobalReceiver(SpeedPayload.TYPE, (payload, ctx) -> {
             FabricSpeedHud.getInstance().networkEntry(payload);
         });
