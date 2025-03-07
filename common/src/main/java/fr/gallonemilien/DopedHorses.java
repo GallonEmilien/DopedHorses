@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.items.DopedHorsesItems;
 import fr.gallonemilien.items.ItemLoot;
+import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.network.CommonPacketHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -29,7 +30,8 @@ public final class DopedHorses {
 
     public static void init(
             @NotNull CommonPacketHandler packetHandler,
-            @NotNull ModConfig config
+            @NotNull ModConfig config,
+            boolean isFabric
     ) {
         DopedHorses.PACKET_HANDLER = packetHandler;
         DopedHorses.MOD_CONFIG = config;
@@ -37,5 +39,7 @@ public final class DopedHorses {
         DopedHorsesItems.getAll(); //Pour enclencher le register
         DopedHorsesItems.ITEM.register();
         ItemLoot.register();
+        if(isFabric)
+            ShoeType.initializeModifiers(config);
     }
 }

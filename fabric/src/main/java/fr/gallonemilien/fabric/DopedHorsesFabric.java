@@ -16,7 +16,8 @@ public final class DopedHorsesFabric implements ModInitializer {
         ModConfig config = registerAndGet();
         DopedHorses.init(
                 new SpeedPacketHandlerFabric(),
-                config
+                config,
+                true
         );
         PayloadTypeRegistry.playS2C().register(SpeedPayload.TYPE, SpeedPayload.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(RideHorsePayload.TYPE, RideHorsePayload.STREAM_CODEC);

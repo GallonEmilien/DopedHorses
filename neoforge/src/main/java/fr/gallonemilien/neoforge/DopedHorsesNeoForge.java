@@ -49,7 +49,8 @@ public final class DopedHorsesNeoForge {
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
         DopedHorses.init(
                 new SpeedPacketHandlerNeoForge(),
-                serverConfig
+                serverConfig,
+                false
         );
     }
 
