@@ -11,26 +11,26 @@ authors = "GallonEmilien"
 description = '''
 A mod that add doped horses ! Horses speed now depends on the block they are walking on and if they are wearing some shoes
 '''
-#logoFile = ""
+logoFile = "logo.png"
 
 [[dependencies.dopedhorses]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.4,)"
+versionRange = "[21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dopedhorses]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.4,)"
+versionRange = "[1.21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dopedhorses]]
 modId = "architectury"
 type = "required"
-versionRange = "[15.0.1,)"
+versionRange = "[13.0.8,)"
 ordering = "AFTER"
 side = "BOTH"
 

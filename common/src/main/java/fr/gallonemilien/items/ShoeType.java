@@ -7,18 +7,18 @@ import fr.gallonemilien.config.ModConfig;
 import lombok.Getter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.equipment.ArmorMaterial;
-import net.minecraft.world.item.equipment.ArmorMaterials;
 import org.apache.commons.lang3.tuple.Pair;
 
 public enum ShoeType {
 
-    IRON("iron_horse_shoes", ArmorMaterials.IRON),
-    GOLD("gold_horse_shoes", ArmorMaterials.GOLD),
-    DIAMOND("diamond_horse_shoes", ArmorMaterials.DIAMOND),
-    NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE);
+    IRON("iron_horse_shoes", ArmorMaterials.IRON.value()),
+    GOLD("gold_horse_shoes", ArmorMaterials.GOLD.value()),
+    DIAMOND("diamond_horse_shoes", ArmorMaterials.DIAMOND.value()),
+    NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE.value());
 
     public final String name;
     @Getter
@@ -39,8 +39,6 @@ public enum ShoeType {
         return new ShoeItem(
             new Item.Properties()
                 .stacksTo(1)
-                .setId(getResourceKey(this))
-                .enchantable(1)
                 .arch$tab(CreativeModeTabs.COMBAT)
                 .arch$tab(DopedHorses.TAB),
         this,
