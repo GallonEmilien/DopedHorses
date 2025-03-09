@@ -3,6 +3,7 @@
 
 - Render shoes on the horse
 - No need to get off the horse and go back on it when disconnecting to show the HUD
+- Configurable from the game (load values in cache & save them at the end)
 
 # DopedHorse
 
