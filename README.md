@@ -1,11 +1,8 @@
-MOD STILL IN DEV
 
 # TODO
 
 - Render shoes on the horse
 - No need to get off the horse and go back on it when disconnecting to show the HUD
-- fix speed in multiplier
-- fix config file forge that is always sets to default
 
 # DopedHorse
 
@@ -25,6 +22,8 @@ MOD STILL IN DEV
 
 This mods depends on architectury, builded with [version 15.0.1](https://www.curseforge.com/minecraft/mc-mods/architectury-api/files/5959950)
 
+e fabric version of this mods depends on cloth-config, it has been tested with version [17.0.144](https://www.curseforge.com/minecraft/mc-mods/cloth-config/files/5987042)
+
 ## Usage
 
 - **Custom Speed**: Adjust the horse speed directly in the mod's configuration file.
@@ -39,8 +38,13 @@ dopedhorses-server.toml
 
 Instructions for the `faster_blocks` field.
 1. Visit the [Minecraft block category page](https://minecraft.fandom.com/wiki/Category:Blocks) to find the block you want to use.
-2. After selecting a block, go to 'datavalues > ID' to find the translation key.
-3. The translation key needs to be separated by an equals sign (`=`) for the multiplier!
+2. After selecting a block, go to 'datavalues > ID' to find the name, it mostly something like dirt_path, stone, stonebricks etc...
+3. Then you need to complete the line with an equal to set the value of the modifier
+4. You can also use a regex to compile multiples block at once, for example, this will take all the blocks with "stone" in their name, such as cobblestone, stone, sandstone etc...
+  
+```
+faster_blocks=[".*stone.*"] 
+```
 
 The `speedmultiplier` is a number that calculates the new speed as follows:  
 **New speed = Horse_default_speed + Horse_default_speed * multiplier**
@@ -51,7 +55,7 @@ Currently, if you want to add concrete or any block with variants, you need to i
 
 ```
 [DopedHorses]
-	faster_blocks = ["block.minecraft.dirt_path=0.7", "block.minecraft.white_concrete=1.2", "block.minecraft.orange_concrete=1.2", "block.minecraft.magenta_concrete=1.2", "block.minecraft.light_blue_concrete=1.2", "block.minecraft.yellow_concrete=1.2", "block.minecraft.lime_concrete=1.2", "block.minecraft.pink_concrete=1.2", "block.minecraft.light_gray_concrete=1.2", "block.minecraft.gray_concrete=1.2", "block.minecraft.light_gray_concrete=1.2", "block.minecraft.cyan_concrete=1.2", "block.minecraft.purple_concrete=1.2", "block.minecraft.blue_concrete=1.2", "block.minecraft.brown_concrete=1.2", "block.minecraft.green_concrete=1.2", "block.minecraft.red_concrete=1.2", "block.minecraft.black_concrete=1.2"]
+	faster_blocks = ["dirt_path=0.7", ".*concrete.*=1.2"]
 
 #A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.
 	iron_shoe_speed_modifier = 0.05
@@ -80,19 +84,11 @@ dopedhorses-client.toml
 	#0=km/h, 1=block/s, 2=mph
   # the unit used for the speed HUD
 	user_speed_unit = 0
-
 ```
-
 
 ## Contributing
 
-This project is open-source and contributions are welcome! If you want to improve the mod, feel free to fork the repository, make changes, and submit a pull request.
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with clear messages.
-4. Push your changes and create a pull request.
-
+This project is open-source and contributions are welcome! If you want to improve the mod (optimizations, factorisation, debug or features), feel free to fork the repository, make changes, and submit a pull request.
 all contributions are welcome 
 
 ## License
