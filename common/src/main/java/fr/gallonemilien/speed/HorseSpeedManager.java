@@ -81,9 +81,7 @@ public class HorseSpeedManager {
         BlockPos horsePosition = horse.getOnPos();
         Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
         Double blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
-        if (isHorseModified(horse, blockSpeed)) {
-            applySpeedModifier(horse, blockSpeed);
-        }
+        applySpeedModifier(horse, blockSpeed);
     }
 
     /**
@@ -100,12 +98,6 @@ public class HorseSpeedManager {
         };
     }
 
-    /**
-     * Checks if the horse's speed has been modified.
-     */
-    private static boolean isHorseModified(AbstractHorse horse, double speed) {
-        return !horsesMultiplier.containsKey(horse.getUUID()) || !Objects.equals(horsesMultiplier.get(horse.getUUID()), speed);
-    }
 
     /**
      * Applies a speed modifier to the horse.
