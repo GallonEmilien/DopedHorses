@@ -1,11 +1,9 @@
-MOD STILL IN DEV
 
 # TODO
 
 - Render shoes on the horse
 - No need to get off the horse and go back on it when disconnecting to show the HUD
-- fix speed in multiplier
-- fix config file forge that is always sets to default
+- Configurable from the game (load values in cache & save them at the end)
 
 # DopedHorse
 
@@ -25,6 +23,8 @@ MOD STILL IN DEV
 
 This mods depends on architectury, builded with [version 15.0.1](https://www.curseforge.com/minecraft/mc-mods/architectury-api/files/5959950)
 
+e fabric version of this mods depends on cloth-config, it has been tested with version [17.0.144](https://www.curseforge.com/minecraft/mc-mods/cloth-config/files/5987042)
+
 ## Usage
 
 - **Custom Speed**: Adjust the horse speed directly in the mod's configuration file.
@@ -32,67 +32,42 @@ This mods depends on architectury, builded with [version 15.0.1](https://www.cur
 
 ## Configuration
 
-in .minecraft/config (launch the game a first time to auto generate the default values)
 
-#### Server Config
-dopedhorses-server.toml
+FABRIC : 
+
+Escape > Options > The top right icon > Doped Horse Settings
+
+FORGE : 
+
+Escape > Mods > Doped Horses > Configuration
+
+
+If you want to configure your server, go first in a solo world, find the best settings.
+
+Then, go in your .minecraft/config. Copy the dopedhorses.json file and copy it to your server/config folder.
+
+Enjoy the new settings !
+
+
 
 Instructions for the `faster_blocks` field.
 1. Visit the [Minecraft block category page](https://minecraft.fandom.com/wiki/Category:Blocks) to find the block you want to use.
-2. After selecting a block, go to 'datavalues > ID' to find the translation key.
-3. The translation key needs to be separated by an equals sign (`=`) for the multiplier!
+2. After selecting a block, go to 'datavalues > ID' to find the name, it mostly something like dirt_path, stone, stonebricks etc...
+3. Then you need to complete the line with an equal to set the value of the modifier
+4. You can also use a regex to compile multiples block at once, for example, this will take all the blocks with "stone" in their name, such as cobblestone, stone, sandstone etc...
+  
+```
+".*stone.*"
+```
 
 The `speedmultiplier` is a number that calculates the new speed as follows:  
 **New speed = Horse_default_speed + Horse_default_speed * multiplier**
 
-One more thing:  
-Currently, if you want to add concrete or any block with variants, you need to include all of its variants. This feature will be implemented in a future release.
-
-
-```
-[DopedHorses]
-	faster_blocks = ["block.minecraft.dirt_path=0.7", "block.minecraft.white_concrete=1.2", "block.minecraft.orange_concrete=1.2", "block.minecraft.magenta_concrete=1.2", "block.minecraft.light_blue_concrete=1.2", "block.minecraft.yellow_concrete=1.2", "block.minecraft.lime_concrete=1.2", "block.minecraft.pink_concrete=1.2", "block.minecraft.light_gray_concrete=1.2", "block.minecraft.gray_concrete=1.2", "block.minecraft.light_gray_concrete=1.2", "block.minecraft.cyan_concrete=1.2", "block.minecraft.purple_concrete=1.2", "block.minecraft.blue_concrete=1.2", "block.minecraft.brown_concrete=1.2", "block.minecraft.green_concrete=1.2", "block.minecraft.red_concrete=1.2", "block.minecraft.black_concrete=1.2"]
-
-#A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.
-	iron_shoe_speed_modifier = 0.05
-	gold_shoe_speed_modifier = 0.08
-	diamond_shoe_speed_modifier = 0.13
-	netherite_shoe_speed_modifier = 5.0
-
-	#The armor added to the horse when the shoes are on, needs to be rounded .5
-	iron_shoe_armor_modifier = 5.0
-	gold_shoe_armor_modifier = 2.5
-	diamond_shoe_armor_modifier = 7.0
-	netherite_shoe_armor_modifier = 10.0
-
-	#Horse's jump strength ranges from 0.4–1.0, with an average of 0.7. A jump strength of 0.5 is enough to clear 1 9⁄16 blocks, while 1.0 is enough to clear 5 1⁄4 blocks.
-	iron_shoe_jump_modifier = 0.2
-	gold_shoe_jump_modifier = 0.4
-	diamond_shoe_jump_modifier = 0.6
-	netherite_shoe_jump_modifier = 10.8
-```
-
-#### Client Config
-dopedhorses-client.toml
-```
-#DopedHorse Client Configuration 
-[DopedHorses]
-	#0=km/h, 1=block/s, 2=mph
-  # the unit used for the speed HUD
-	user_speed_unit = 0
-
-```
 
 
 ## Contributing
 
-This project is open-source and contributions are welcome! If you want to improve the mod, feel free to fork the repository, make changes, and submit a pull request.
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and commit them with clear messages.
-4. Push your changes and create a pull request.
-
+This project is open-source and contributions are welcome! If you want to improve the mod (optimizations, factorisation, debug or features), feel free to fork the repository, make changes, and submit a pull request.
 all contributions are welcome 
 
 ## License
