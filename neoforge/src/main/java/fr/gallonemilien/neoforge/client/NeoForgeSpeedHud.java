@@ -18,6 +18,6 @@ public class NeoForgeSpeedHud extends AbstractSpeedHud {
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent.Post event) {
-        renderGui(event.getGuiGraphics(), DopedHorses.getConfig());
+        renderGui(event.getGuiGraphics());
     }
 }

@@ -29,7 +29,7 @@ public final class DopedHorsesFabricClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        FabricSpeedHud.getInstance().register(DopedHorses.getConfig());
+        FabricSpeedHud.getInstance().register();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if(keyBinding.consumeClick()) {
                 FabricSpeedHud.getInstance().toggle();

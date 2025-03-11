@@ -17,9 +17,9 @@ public class FabricSpeedHud extends AbstractSpeedHud {
         return FabricSpeedHud.INSTANCE;
     }
 
-    public void register(ModConfig config) {
+    public void register() {
         HudRenderCallback.EVENT.register((guiGraphics, deltaTracker) -> {
-            renderGui(guiGraphics,config);
+            renderGui(guiGraphics);
         });
     }
 }

@@ -32,10 +32,23 @@ e fabric version of this mods depends on cloth-config, it has been tested with v
 
 ## Configuration
 
-in .minecraft/config (launch the game a first time to auto generate the default values)
 
-#### Server Config
-dopedhorses-server.toml
+FABRIC : 
+
+Escape > Options > The top right icon > Doped Horse Settings
+
+FORGE : 
+
+Escape > Mods > Doped Horses > Configuration
+
+
+If you want to configure your server, go first in a solo world, find the best settings.
+
+Then, go in your .minecraft/config. Copy the dopedhorses.json file and copy it to your server/config folder.
+
+Enjoy the new settings !
+
+
 
 Instructions for the `faster_blocks` field.
 1. Visit the [Minecraft block category page](https://minecraft.fandom.com/wiki/Category:Blocks) to find the block you want to use.
@@ -44,48 +57,13 @@ Instructions for the `faster_blocks` field.
 4. You can also use a regex to compile multiples block at once, for example, this will take all the blocks with "stone" in their name, such as cobblestone, stone, sandstone etc...
   
 ```
-faster_blocks=[".*stone.*"] 
+".*stone.*"
 ```
 
 The `speedmultiplier` is a number that calculates the new speed as follows:  
 **New speed = Horse_default_speed + Horse_default_speed * multiplier**
 
-One more thing:  
-Currently, if you want to add concrete or any block with variants, you need to include all of its variants. This feature will be implemented in a future release.
 
-
-```
-[DopedHorses]
-	faster_blocks = ["dirt_path=0.7", ".*concrete.*=1.2"]
-
-#A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.
-	iron_shoe_speed_modifier = 0.05
-	gold_shoe_speed_modifier = 0.08
-	diamond_shoe_speed_modifier = 0.13
-	netherite_shoe_speed_modifier = 5.0
-
-	#The armor added to the horse when the shoes are on, needs to be rounded .5
-	iron_shoe_armor_modifier = 5.0
-	gold_shoe_armor_modifier = 2.5
-	diamond_shoe_armor_modifier = 7.0
-	netherite_shoe_armor_modifier = 10.0
-
-	#Horse's jump strength ranges from 0.4–1.0, with an average of 0.7. A jump strength of 0.5 is enough to clear 1 9⁄16 blocks, while 1.0 is enough to clear 5 1⁄4 blocks.
-	iron_shoe_jump_modifier = 0.2
-	gold_shoe_jump_modifier = 0.4
-	diamond_shoe_jump_modifier = 0.6
-	netherite_shoe_jump_modifier = 10.8
-```
-
-#### Client Config
-dopedhorses-client.toml
-```
-#DopedHorse Client Configuration 
-[DopedHorses]
-	#0=km/h, 1=block/s, 2=mph
-  # the unit used for the speed HUD
-	user_speed_unit = 0
-```
 
 ## Contributing
 
