@@ -19,7 +19,7 @@ public final class DopedHorses {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
     public static CommonPacketHandler PACKET_HANDLER;
-    public static ModConfig MOD_CONFIG;
+    private static ModConfig MOD_CONFIG;
     public static final RegistrySupplier<CreativeModeTab> TAB = DopedHorsesItems.TABS.register(
             "tab",
             () -> CreativeTabRegistry.create(
@@ -28,10 +28,14 @@ public final class DopedHorses {
             )
     );
 
+    public static ModConfig getConfig() {
+        MOD_CONFIG.refresh();
+        return MOD_CONFIG;
+    }
+
     public static void init(
             @NotNull CommonPacketHandler packetHandler,
-            @NotNull ModConfig config,
-            boolean isFabric
+            @NotNull ModConfig config
     ) {
         DopedHorses.PACKET_HANDLER = packetHandler;
         DopedHorses.MOD_CONFIG = config;
@@ -39,7 +43,6 @@ public final class DopedHorses {
         DopedHorsesItems.getAll(); //Pour enclencher le register
         DopedHorsesItems.ITEM.register();
         ItemLoot.register();
-        if(isFabric)
-            ShoeType.initializeModifiers(config);
+        ShoeType.refreshValues(config);
     }
 }

@@ -1,6 +1,6 @@
 package fr.gallonemilien.client;
 
-import fr.gallonemilien.config.ClientModConfig;
+import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.network.ModPacketListener;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
@@ -33,9 +33,9 @@ public abstract class AbstractSpeedHud implements ModPacketListener {
         this.showHud = !this.showHud;
     }
 
-    protected void renderGui(GuiGraphics g, ClientModConfig clientConfig) {
+    protected void renderGui(GuiGraphics g) {
         if (shouldRender()) {
-            String message = SpeedEnum.getDisplaySpeed(clientConfig.getUserUnit(), speed);
+            String message = SpeedEnum.getDisplaySpeed(DopedHorses.getConfig().getUserUnit(), speed);
 
             // Récupère la largeur et la hauteur de l'écran
             int screenWidth = mc.getWindow().getGuiScaledWidth();

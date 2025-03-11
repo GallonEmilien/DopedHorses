@@ -1,7 +1,6 @@
 package fr.gallonemilien.neoforge.client;
 
 import fr.gallonemilien.client.AbstractSpeedHud;
-import fr.gallonemilien.neoforge.config.NeoForgeConfig;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
@@ -18,6 +17,6 @@ public class NeoForgeSpeedHud extends AbstractSpeedHud {
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent.Post event) {
-        renderGui(event.getGuiGraphics(),NeoForgeConfig.clientConfig);
+        renderGui(event.getGuiGraphics());
     }
 }

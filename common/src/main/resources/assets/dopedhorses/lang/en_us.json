@@ -5,5 +5,44 @@
   "item.dopedhorses.gold_horse_shoes" : "Gold horse shoes",
   "item.dopedhorses.netherite_horse_shoes" : "Netherite horse shoes",
   "item.dopedhorses.iron_horse_shoes" : "Iron horse shoes",
-  "itemGroup.dopedhorses.tab" : "Doped Horses"
+  "itemGroup.dopedhorses.tab" : "Doped Horses",
+
+  "dopedhorses.midnightconfig.userUnitComment" : "0=km/h, 1=block/s, 2=mph",
+  "dopedhorses.midnightconfig.userUnit": "Choose your speed unit",
+
+  "dopedhorses.midnightconfig.title": "Doped Horses Configuration",
+  "dopedhorses.midnightconfig.shoeModifierComment": "A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.",
+  "dopedhorses.midnightconfig.ironShoeSpeedModifier": "Iron Shoe Speed Modifier",
+  "dopedhorses.midnightconfig.goldShoeSpeedModifier": "Gold Shoe Speed Modifier",
+  "dopedhorses.midnightconfig.diamondShoeSpeedModifier": "Diamond Shoe Speed Modifier",
+  "dopedhorses.midnightconfig.netheriteShoeSpeedModifier": "Netherite Shoe Speed Modifier",
+
+  "dopedhorses.midnightconfig.armorModifierComment": "round to .5 the value",
+  "dopedhorses.midnightconfig.ironShoeArmorModifier": "Iron Shoe Armor Modifier",
+  "dopedhorses.midnightconfig.goldShoeArmorModifier": "Gold Shoe Armor Modifier",
+  "dopedhorses.midnightconfig.diamondShoeArmorModifier": "Diamond Shoe Armor Modifier",
+  "dopedhorses.midnightconfig.netheriteShoeArmorModifier": "Netherite Shoe Armor Modifier",
+
+  "dopedhorses.midnightconfig.jumpModifierComment": "Horse's jump strength ranges from 0.4–1.0, with an average of 0.7. A jump strength of 0.5 is enough to clear 1 9⁄16 blocks, while 1.0 is enough to clear 5 1⁄4 blocks.",
+  "dopedhorses.midnightconfig.ironShoeJumpModifier": "Iron Shoe Jump Modifier",
+  "dopedhorses.midnightconfig.goldShoeJumpModifier": "Gold Shoe Jump Modifier",
+  "dopedhorses.midnightconfig.diamondShoeJumpModifier": "Diamond Shoe Jump Modifier",
+  "dopedhorses.midnightconfig.netheriteShoeJumpModifier": "Netherite Shoe Jump Modifier",
+
+  "dopedhorses.midnightconfig.shoeLootComment": "[Need a restart] A value between 0 and 1 (0.1 = 10%, 0.2=20% etc....), those items loots in chest in the nether / portal ruins",
+  "dopedhorses.midnightconfig.ironShoeLootChance": "Iron Shoe Loot Chance",
+  "dopedhorses.midnightconfig.goldShoeLootChance": "Gold Shoe Loot Chance",
+  "dopedhorses.midnightconfig.diamondShoeLootChance": "Diamond Shoe Loot Chance",
+  "dopedhorses.midnightconfig.netheriteShoeLootChance": "Netherite Shoe Loot Chance",
+
+  "dopedhorses.midnightconfig.fasterBlocks": "Faster Blocks",
+  "dopedhorses.midnightconfig.fasterBlocks.tooltip": "Faster blocks Format: <regex bloc>=<multiplier>. Look at the default examples :) it's not mandatory to include a regex. You can simply write the block you want such as : sand=0.2",
+
+  "dopedhorses.midnightconfig.category.Client": "Client Config",
+  "dopedhorses.midnightconfig.category.Server": "Server Config",
+
+  "dopedhorses.midnightconfig.explainComment1": "The server config will only work in a self hosted world. In order to get it working on your server, what you can do is going in solo world and finding the best settings. Then, you go in your .minecraft/config and you copy paste the doped_horses.json file into your server config file ",
+  "dopedhorses.midnightconfig.explainComment2": "",
+  "dopedhorses.midnightconfig.explainComment3": "",
+  "dopedhorses.midnightconfig.explainComment4": ""
 }

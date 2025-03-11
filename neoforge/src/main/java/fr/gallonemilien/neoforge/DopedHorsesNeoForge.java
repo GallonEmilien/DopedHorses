@@ -1,10 +1,11 @@
 package fr.gallonemilien.neoforge;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import eu.midnightdust.lib.config.MidnightConfig;
 import fr.gallonemilien.DopedHorses;
-import fr.gallonemilien.items.ItemLoot;
-import fr.gallonemilien.items.ShoeType;
+import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.neoforge.client.NeoForgeSpeedHud;
+import fr.gallonemilien.neoforge.config.ModConfigImpl;
 import fr.gallonemilien.neoforge.config.NeoForgeConfig;
 import fr.gallonemilien.neoforge.network.client.ClientNeoForgePayloadHandler;
 import fr.gallonemilien.neoforge.network.SpeedPacketHandlerNeoForge;
@@ -18,7 +19,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -32,7 +32,6 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.Objects;
 import static fr.gallonemilien.DopedHorses.MOD_ID;
-import static fr.gallonemilien.neoforge.config.NeoForgeConfig.serverConfig;
 import static fr.gallonemilien.utils.KeyBindingMod.KEY_CATEGORY;
 import static fr.gallonemilien.utils.KeyBindingMod.KEY_HUD;
 
@@ -42,16 +41,21 @@ public final class DopedHorsesNeoForge {
     public static IEventBus EVENT_BUS = null;
 
     public DopedHorsesNeoForge(ModContainer container) {
+        MidnightConfig.init(DopedHorses.MOD_ID, NeoForgeConfig.class);
+        ModConfig config = register();
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
         EVENT_BUS = modBus;
-        container.registerConfig(ModConfig.Type.SERVER, NeoForgeConfig.SERVER_SPEC);
-        container.registerConfig(ModConfig.Type.CLIENT, NeoForgeConfig.CLIENT_SPEC);
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
         DopedHorses.init(
                 new SpeedPacketHandlerNeoForge(),
-                serverConfig,
-                false
+                config
         );
+    }
+
+    public static ModConfig register() {
+        ModConfig config = new ModConfigImpl();
+        config.refresh();
+        return config;
     }
 
     private static void registerPayload(final RegisterPayloadHandlersEvent event) {

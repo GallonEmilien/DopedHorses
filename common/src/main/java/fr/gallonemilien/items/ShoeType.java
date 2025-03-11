@@ -46,7 +46,7 @@ public enum ShoeType {
         );
     }
 
-    public static void initializeModifiers(ModConfig config) {
+    public static void refreshValues(ModConfig config) {
         for (ShoeType type : values()) {
             type.speedModifier = config.getModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.valueOf(type.name().toUpperCase())));
             type.jumpModifier = config.getModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.valueOf(type.name().toUpperCase())));
