@@ -1,6 +1,6 @@
 package fr.gallonemilien.client;
 
-import fr.gallonemilien.config.ClientModConfig;
+import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.network.ModPacketListener;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
@@ -33,7 +33,7 @@ public abstract class AbstractSpeedHud implements ModPacketListener {
         this.showHud = !this.showHud;
     }
 
-    protected void renderGui(GuiGraphics g, ClientModConfig clientConfig) {
+    protected void renderGui(GuiGraphics g, ModConfig clientConfig) {
         if (shouldRender()) {
             String message = SpeedEnum.getDisplaySpeed(clientConfig.getUserUnit(), speed);
 

@@ -12,22 +12,25 @@ import static fr.gallonemilien.speed.HorseSpeedManager.DEFAULT_SPEED_MODIFIER;
 
 public class BlockSpeed {
 
-    private static final HashMap<String, Double> blockSpeedCache = new HashMap<>();
+    private static final HashMap<String, String> blockSpeedCache = new HashMap<>();
 
     public static Double getBlockSpeed(Block block) {
         String descriptionId = block.getDescriptionId();
         //Evite d'aller tout recalculer si on a déjà fait le calcul avant
+        String parsedBlock;
         if(blockSpeedCache.containsKey(descriptionId)) {
-            return blockSpeedCache.get(descriptionId);
+            parsedBlock = blockSpeedCache.get(descriptionId);
+        } else {
+            String[] split = block.getDescriptionId().split("\\.");
+            parsedBlock = split[split.length - 1];
         }
-        String[] split = block.getDescriptionId().split("\\.");
-        String blockValue = split[split.length - 1];
         AtomicReference<Double> speedModifier = new AtomicReference<>(DEFAULT_SPEED_MODIFIER);
-        DopedHorses.MOD_CONFIG.getFasterBlocks().keySet().stream()
-                .filter(key -> matchesWithRegex(key, blockValue))
+        DopedHorses.getConfig().getFasterBlocks().keySet().stream()
+                .filter(key -> matchesWithRegex(key, parsedBlock))
                 .findFirst()
-                .ifPresent(key -> speedModifier.set(DopedHorses.MOD_CONFIG.getFasterBlocks().get(key)));
-        blockSpeedCache.put(descriptionId, speedModifier.get());
+                .ifPresent(key -> speedModifier.set(DopedHorses.getConfig().getFasterBlocks().get(key)));
+
+        blockSpeedCache.put(descriptionId, parsedBlock);
         return speedModifier.get();
     }
 

@@ -1,7 +1,9 @@
 package fr.gallonemilien.speed;
 
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.items.ShoeItem;
+import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.persistence.ShoeContainer;
 import net.minecraft.core.BlockPos;
@@ -54,6 +56,7 @@ public class HorseSpeedManager {
      * Updates the horse's attributes based on equipped shoes.
      */
     public static void updateHorseShoes(AbstractHorse horse, Item item) {
+        ShoeType.refreshValues(DopedHorses.getConfig());
         applyShoeModifier(horse, item, getSpeedAttribute(horse), HORSE_SHOES_BOOST_ID, ShoeItem::getSpeedModifier);
         applyShoeModifier(horse, item, getJumpAttribute(horse), HORSE_SHOES_JUMP_ID, ShoeItem::getJumpModifier);
         applyShoeModifier(horse, item, getArmorAttribute(horse), HORSE_SHOES_ARMOR_ID, ShoeItem::getArmorModifier);

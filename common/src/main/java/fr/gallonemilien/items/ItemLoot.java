@@ -4,6 +4,7 @@ import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.registry.level.entity.trade.TradeRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.config.ModConfig;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -54,17 +55,18 @@ public class ItemLoot {
                     "minecraft:chests/ruined_portal"
             );
             if(builtin) {
+                ModConfig config = DopedHorses.getConfig();
                 netherLootTables.forEach(netherLootTable -> {
                     if(lootTableId.toString().contains(netherLootTable)) {
                         LootPool.Builder pool = LootPool.lootPool()
                                 .add(LootItem.lootTableItem(DopedHorsesItems.IRON_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(0.15f)))
+                                        .when(LootItemRandomChanceCondition.randomChance(config.getShoeLoot(ShoeType.IRON))))
                                 .add(LootItem.lootTableItem(DopedHorsesItems.GOLD_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(0.10f)))
+                                        .when(LootItemRandomChanceCondition.randomChance(config.getShoeLoot(ShoeType.GOLD))))
                                 .add(LootItem.lootTableItem(DopedHorsesItems.DIAMOND_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(0.06f)))
+                                        .when(LootItemRandomChanceCondition.randomChance(config.getShoeLoot(ShoeType.DIAMOND))))
                                 .add(LootItem.lootTableItem(DopedHorsesItems.NETHERITE_HORSE_SHOES.get())
-                                        .when(LootItemRandomChanceCondition.randomChance(0.03f)))
+                                        .when(LootItemRandomChanceCondition.randomChance(config.getShoeLoot(ShoeType.NETHERITE))))
                                 .setRolls(ConstantValue.exactly(1)) // 1 seul tirage
                                 .setBonusRolls(ConstantValue.exactly(0)); // Pas de tirage supplémentaire
 

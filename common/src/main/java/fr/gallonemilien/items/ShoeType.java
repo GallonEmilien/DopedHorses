@@ -1,5 +1,6 @@
 package fr.gallonemilien.items;
 
+import dev.architectury.platform.Mod;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.config.ConfigMaterialType;
@@ -30,6 +31,7 @@ public enum ShoeType {
     @Getter
     private ArmorMaterial material;
 
+
     ShoeType(String name, ArmorMaterial material) {
         this.name = name;
         this.material = material;
@@ -48,7 +50,7 @@ public enum ShoeType {
         );
     }
 
-    public static void initializeModifiers(ModConfig config) {
+    public static void refreshValues(ModConfig config) {
         for (ShoeType type : values()) {
             type.speedModifier = config.getModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.valueOf(type.name().toUpperCase())));
             type.jumpModifier = config.getModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.valueOf(type.name().toUpperCase())));

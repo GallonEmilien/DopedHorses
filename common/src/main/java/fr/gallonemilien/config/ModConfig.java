@@ -1,6 +1,7 @@
 package fr.gallonemilien.config;
 
 import fr.gallonemilien.items.ShoeType;
+import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,10 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ModConfig {
+public abstract class ModConfig implements ModConfigLoader {
     private @NotNull Map<String, Double> fasterBlocks = new HashMap<>();
     private final Map<Pair<ConfigDataType, ConfigMaterialType>, Double> modifiers = new HashMap<>();
+    @Getter
+    private int userUnit = 0;
 
+    public void setUserUnit(int userUnit) {
+        this.userUnit = (userUnit >= 0 && userUnit <= 2) ? userUnit : 0;
+    }
 
     private final Map<ShoeType, Double> shoeLoot = new HashMap<>();
 

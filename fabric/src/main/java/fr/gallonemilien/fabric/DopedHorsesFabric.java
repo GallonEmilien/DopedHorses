@@ -1,19 +1,21 @@
 package fr.gallonemilien.fabric;
 
+import eu.midnightdust.lib.config.MidnightConfig;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.config.ModConfig;
+import fr.gallonemilien.fabric.config.FabricConfig;
+import fr.gallonemilien.fabric.config.ModConfigImpl;
 import fr.gallonemilien.fabric.network.SpeedPacketHandlerFabric;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 
-import static fr.gallonemilien.fabric.config.FabricServerConfig.registerAndGet;
-
 public final class DopedHorsesFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        ModConfig config = registerAndGet();
+        MidnightConfig.init(DopedHorses.MOD_ID, FabricConfig.class);
+        ModConfig config = register();
         DopedHorses.init(
                 new SpeedPacketHandlerFabric(),
                 config,
@@ -21,5 +23,11 @@ public final class DopedHorsesFabric implements ModInitializer {
         );
         PayloadTypeRegistry.playS2C().register(SpeedPayload.TYPE, SpeedPayload.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(RideHorsePayload.TYPE, RideHorsePayload.STREAM_CODEC);
+    }
+
+    public static ModConfig register() {
+        ModConfig config = new ModConfigImpl();
+        config.refresh();
+        return config;
     }
 }

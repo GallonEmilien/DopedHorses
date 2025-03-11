@@ -30,8 +30,12 @@ repositories {
         name = 'NeoForged'
         url = 'https://maven.neoforged.net/releases'
     }
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
     mavenCentral()
 }
+
 
 dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
@@ -42,6 +46,8 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    modImplementation include ("maven.modrinth:midnightlib:${rootProject.midnightlib_version_neoforge}")
 }
 
 processResources {

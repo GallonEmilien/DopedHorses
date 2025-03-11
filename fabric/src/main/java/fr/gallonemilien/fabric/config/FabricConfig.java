@@ -1,11 +1,11 @@
-package fr.gallonemilien.neoforge.config;
+package fr.gallonemilien.fabric.config;
 
 import eu.midnightdust.lib.config.MidnightConfig;
 
 import java.util.List;
 
 
-public class NeoForgeConfig extends MidnightConfig {
+public class FabricConfig extends MidnightConfig {
 
     public static final String CLIENT = "Client";
     public static final String SERVER = "Server";

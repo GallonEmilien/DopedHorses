@@ -1,7 +1,7 @@
 package fr.gallonemilien.fabric.client;
 
 import fr.gallonemilien.client.AbstractSpeedHud;
-import fr.gallonemilien.config.ClientModConfig;
+import fr.gallonemilien.config.ModConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -17,7 +17,7 @@ public class FabricSpeedHud extends AbstractSpeedHud {
         return FabricSpeedHud.INSTANCE;
     }
 
-    public void register(ClientModConfig config) {
+    public void register(ModConfig config) {
         HudRenderCallback.EVENT.register((guiGraphics, deltaTracker) -> {
             renderGui(guiGraphics,config);
         });
