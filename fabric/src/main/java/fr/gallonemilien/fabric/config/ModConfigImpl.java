@@ -18,6 +18,12 @@ public class ModConfigImpl extends ModConfig {
         this.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.DIAMOND), FabricConfig.diamondShoeSpeedModifier);
         this.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.NETHERITE), FabricConfig.netheriteShoeSpeedModifier);
 
+        this.setModifier(Pair.of(ConfigDataType.STEP_HEIGHT, ConfigMaterialType.IRON), FabricConfig.ironShoeStepHeightModifier);
+        this.setModifier(Pair.of(ConfigDataType.STEP_HEIGHT, ConfigMaterialType.GOLD), FabricConfig.goldShoeStepHeightModifier);
+        this.setModifier(Pair.of(ConfigDataType.STEP_HEIGHT, ConfigMaterialType.DIAMOND), FabricConfig.diamondShoeStepHeightModifier);
+        this.setModifier(Pair.of(ConfigDataType.STEP_HEIGHT, ConfigMaterialType.NETHERITE), FabricConfig.netheriteShoeStepHeightModifier);
+
+
         this.setModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.IRON), FabricConfig.ironShoeJumpModifier);
         this.setModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.GOLD), FabricConfig.goldShoeJumpModifier);
         this.setModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.DIAMOND), FabricConfig.diamondShoeJumpModifier);

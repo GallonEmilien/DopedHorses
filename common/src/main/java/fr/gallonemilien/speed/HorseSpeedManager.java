@@ -1,6 +1,7 @@
 package fr.gallonemilien.speed;
 
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.network.RideHorsePayload;
@@ -25,12 +26,16 @@ import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
  * Manages the speed modifications of horses based on the block they are standing on.
  */
 public class HorseSpeedManager {
-    public static final double DEFAULT_SPEED_MODIFIER = 0.0; //!!!!
+    public static final double DEFAULT_SPEED_MODIFIER = 0.0; //It's used to get horses faster or slower or no modif
+                                                            // Default_Horse_Speed + DEFAULT_SPEED_MODIFIER * Default_speed
     private static final ResourceLocation HORSE_SPEED_BOOST_ID = DopedHorses.id("horse_speed_boost_modifier");
     private static final ResourceLocation HORSE_SHOES_BOOST_ID = DopedHorses.id("horse_shoes_boost_modifier");
     private static final ResourceLocation HORSE_SHOES_ARMOR_ID = DopedHorses.id("horse_shoes_armor_modifier");
     private static final ResourceLocation HORSE_SHOES_JUMP_ID = DopedHorses.id("horse_shoes_jump_modifier");
+    private static final ResourceLocation HORSE_SHOES_STEP_HEIGHT_ID = DopedHorses.id("horse_shoes_step_height_modifier");
 
+    private static final CacheManager cacheManager = CacheManager.getInstance(); //Call to get the instance only one time
+    private static final BlockSpeed blockSpeedManager = BlockSpeed.getInstance();
 
     private static boolean serverMiddleware(LivingEntity entity) {
         return !entity.level().isClientSide;
@@ -41,6 +46,13 @@ public class HorseSpeedManager {
      */
     public static AttributeInstance getSpeedAttribute(AbstractHorse horse) {
         return horse.getAttribute(Attributes.MOVEMENT_SPEED);
+    }
+
+    /**
+     * Retrieves the step height attribute of the horse.
+     */
+    public static AttributeInstance getStepHeight(AbstractHorse horse) {
+        return horse.getAttribute(Attributes.STEP_HEIGHT);
     }
 
     /**
@@ -64,15 +76,12 @@ public class HorseSpeedManager {
         if(serverMiddleware(horse)) {
             ShoeType.refreshValues(DopedHorses.getConfig());
             applyShoeModifier(horse, item, getSpeedAttribute(horse), HORSE_SHOES_BOOST_ID, ShoeItem::getSpeedModifier);
+            applyShoeModifier(horse, item, getStepHeight(horse), HORSE_SHOES_STEP_HEIGHT_ID, ShoeItem::getStepHeightModifier);
             applyShoeModifier(horse, item, getJumpAttribute(horse), HORSE_SHOES_JUMP_ID, ShoeItem::getJumpModifier);
             applyShoeModifier(horse, item, getArmorAttribute(horse), HORSE_SHOES_ARMOR_ID, ShoeItem::getArmorModifier);
         }
     }
 
-
-     // Working only if server restart / client restart
-    private static final HashMap<UUID, Double> horsesMultiplier = new HashMap<>();
-    private static HashMap<UUID, Boolean> initializedHorsesCache = new HashMap<>();
 
     /**
      * Updates the horse's speed based on the block it is standing on.
@@ -80,22 +89,32 @@ public class HorseSpeedManager {
     public static void updateHorseSpeed(AbstractHorse horse) {
         if (serverMiddleware(horse)) {
             updateHudSpeed(horse);
-            // Check if the horse has shoes equipped, avoid from having to
-            // remove the shoe and settings back again on load,
-            // Maybe in a future update try to check with a one call function only
-            // at server startup
-            if (!initializedHorsesCache.containsKey(horse.getUUID()) && horse instanceof ShoeContainer container) {
-                initializedHorsesCache.put(horse.getUUID(), true);
+            // Check if the horse has been initialized since the last server startup
+            // This cache prevents having to manually remove and reapply shoes to update them
+            // Cache access is O(1)
+            // First condition checks the cache manager first, as the instance check is expensive
+            if (!cacheManager.getInitializedHorse(horse.getUUID()) && horse instanceof ShoeContainer container) {
+                cacheManager.putInitializedHorse(horse.getUUID(), true);
                 if (container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem item)
                     updateHorseShoes(horse, item);
             }
             BlockPos horsePosition = horse.getOnPos();
             Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
-            Double blockSpeed = BlockSpeed.getBlockSpeed(blockBeneathHorse);
-            applySpeedModifier(horse, blockSpeed);
-        } else {
 
+            //Check if the last computed block was the same... So we don't compute another time
+            if (!isLastBlockComputedTheSame(horse, blockBeneathHorse)) {
+                cacheManager.putLastWalkedOnBlockId(horse.getUUID(),blockBeneathHorse.getDescriptionId());
+                Double blockSpeed = blockSpeedManager.getBlockSpeed(blockBeneathHorse);
+                if(cacheManager.getHorseMultiplier(horse.getUUID()) != blockSpeed) {
+                    applySpeedModifier(horse, blockSpeed);
+                }
+            }
+        } else {
         }
+    }
+
+    private static boolean isLastBlockComputedTheSame(AbstractHorse horse, Block block) {
+        return cacheManager.getLastWalkedOnBlockId(horse.getUUID()).equals(block.getDescriptionId());
     }
 
     /**
@@ -122,7 +141,7 @@ public class HorseSpeedManager {
         if(serverMiddleware(horse)) {
             getSpeedAttribute(horse).removeModifier(HORSE_SPEED_BOOST_ID);
             getSpeedAttribute(horse).addTransientModifier(new AttributeModifier(HORSE_SPEED_BOOST_ID, speedMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-            horsesMultiplier.put(horse.getUUID(), speedMultiplier);
+            cacheManager.putHorseMultiplier(horse.getUUID(), speedMultiplier);
         }
     }
 

@@ -23,14 +23,15 @@ public enum ShoeType {
 
     public final String name;
     @Getter
-    public double speedModifier;
+    private double speedModifier;
     @Getter
-    public double jumpModifier;
+    private double jumpModifier;
     @Getter
-    public double armorModifier;
+    private double armorModifier;
     @Getter
     private ArmorMaterial material;
-
+    @Getter
+    private double stepHeightModifier;
 
     ShoeType(String name, ArmorMaterial material) {
         this.name = name;
@@ -55,6 +56,7 @@ public enum ShoeType {
             type.speedModifier = config.getModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.valueOf(type.name().toUpperCase())));
             type.jumpModifier = config.getModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.valueOf(type.name().toUpperCase())));
             type.armorModifier = config.getModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.valueOf(type.name().toUpperCase())));
+            type.stepHeightModifier = config.getModifier(Pair.of(ConfigDataType.STEP_HEIGHT, ConfigMaterialType.valueOf(type.name().toUpperCase())));
         }
     }
 

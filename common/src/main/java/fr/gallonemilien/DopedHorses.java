@@ -44,6 +44,7 @@ public final class DopedHorses {
         DopedHorsesItems.getAll(); //Pour enclencher le register
         DopedHorsesItems.ITEM.register();
         ItemLoot.register();
+        //Neoforge register items later and it throws an error if we try to register them here
         if(isFabric)
             ShoeType.refreshValues(config);
     }

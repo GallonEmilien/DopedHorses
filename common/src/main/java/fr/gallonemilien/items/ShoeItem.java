@@ -25,6 +25,10 @@ public class ShoeItem extends Item{
         return type.getJumpModifier();
     }
 
+    public double getStepHeightModifier() {
+        return type.getStepHeightModifier();
+    }
+
     public String getShoeName() {
         return this.name;
     }

@@ -44,5 +44,11 @@
   "dopedhorses.midnightconfig.explainComment1": "The server config will only work in a self hosted world. In order to get it working on your server, what you can do is going in solo world and finding the best settings. Then, you go in your .minecraft/config and you copy paste the doped_horses.json file into your server config file ",
   "dopedhorses.midnightconfig.explainComment2": "",
   "dopedhorses.midnightconfig.explainComment3": "",
-  "dopedhorses.midnightconfig.explainComment4": ""
+  "dopedhorses.midnightconfig.explainComment4": "",
+
+  "dopedhorses.midnightconfig.stepHeightModifierComment": "Increase the step height. Default in mc is 1. if you put 1, then your horse will step 2 blocks high",
+  "dopedhorses.midnightconfig.ironShoeStepHeightModifier": "Iron Shoe Step Height Modifier",
+  "dopedhorses.midnightconfig.goldShoeStepHeightModifier": "Gold Shoe Step Height Modifier",
+  "dopedhorses.midnightconfig.diamondShoeStepHeightModifier": "Diamond Shoe Step Height Modifier",
+  "dopedhorses.midnightconfig.netheriteShoeStepHeightModifier": "Netherite Shoe Step Height Modifier"
 }
