@@ -2,13 +2,16 @@ package fr.gallonemilien.fabric;
 
 import eu.midnightdust.lib.config.MidnightConfig;
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.fabric.config.FabricConfig;
 import fr.gallonemilien.fabric.config.ModConfigImpl;
 import fr.gallonemilien.fabric.network.SpeedPacketHandlerFabric;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
+import fr.gallonemilien.speed.BlockSpeed;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 
 
@@ -21,6 +24,12 @@ public final class DopedHorsesFabric implements ModInitializer {
                 new SpeedPacketHandlerFabric(),
                 config
         );
+
+        ServerLifecycleEvents.SERVER_STOPPED.register((server) -> {
+            CacheManager.getInstance().reset();
+            BlockSpeed.getInstance().reset();
+        });
+
         PayloadTypeRegistry.playS2C().register(SpeedPayload.TYPE, SpeedPayload.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(RideHorsePayload.TYPE, RideHorsePayload.STREAM_CODEC);
     }

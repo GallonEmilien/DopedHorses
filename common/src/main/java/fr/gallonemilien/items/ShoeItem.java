@@ -17,6 +17,10 @@ public class ShoeItem extends Item{
         return type.getSpeedModifier();
     }
 
+    public double getStepHeightModifier() {
+        return type.getStepHeightModifier();
+    }
+
     public double getArmorModifier() {
         return type.getArmorModifier();
     }

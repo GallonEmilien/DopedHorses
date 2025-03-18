@@ -3,6 +3,7 @@ package fr.gallonemilien.neoforge;
 import com.mojang.blaze3d.platform.InputConstants;
 import eu.midnightdust.lib.config.MidnightConfig;
 import fr.gallonemilien.DopedHorses;
+import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.neoforge.client.NeoForgeSpeedHud;
 import fr.gallonemilien.neoforge.config.ModConfigImpl;
@@ -12,6 +13,7 @@ import fr.gallonemilien.neoforge.network.SpeedPacketHandlerNeoForge;
 import fr.gallonemilien.neoforge.network.server.ServerNeoForgePayloadHandler;
 import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
+import fr.gallonemilien.speed.BlockSpeed;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -24,6 +26,7 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -46,6 +49,7 @@ public final class DopedHorsesNeoForge {
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
         EVENT_BUS = modBus;
         modBus.addListener(DopedHorsesNeoForge::registerPayload);
+
         DopedHorses.init(
                 new SpeedPacketHandlerNeoForge(),
                 config
