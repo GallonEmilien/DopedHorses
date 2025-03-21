@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
+
+
     @Inject(method = "isEnchantable", at=@At("HEAD"), cancellable = true)
     private void isEnchantable(CallbackInfoReturnable<Boolean> cir) {
         ItemStack itemStack = (ItemStack)(Object)this;

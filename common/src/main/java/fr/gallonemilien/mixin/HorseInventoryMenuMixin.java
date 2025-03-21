@@ -5,12 +5,14 @@ import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.persistence.ShoeContainer;
 import fr.gallonemilien.speed.HorseSpeedManager;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +41,14 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
                         return true;
                     }
                     return false;
+                }
+
+                @Override
+                public boolean mayPickup(Player player) {
+                    if(!shoeContainer.canPickUp()) {
+                        player.displayClientMessage(Component.translatable("dopedhorses.soulsand_error"),false);
+                    }
+                    return shoeContainer.canPickUp();
                 }
 
                 @Override

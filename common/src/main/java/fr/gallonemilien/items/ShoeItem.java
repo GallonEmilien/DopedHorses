@@ -1,8 +1,9 @@
 package fr.gallonemilien.items;
 
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
-public class ShoeItem extends Item{
+public class ShoeItem extends Item {
 
     private final String name;
     private final ShoeType type;
@@ -11,6 +12,16 @@ public class ShoeItem extends Item{
         super(properties);
         this.name = name;
         this.type = type;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 1;
     }
 
     public double getSpeedModifier() {

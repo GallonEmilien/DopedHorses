@@ -1,0 +1,55 @@
+{
+  "key.category.dopedhorses.horses" : "Chevaux Dopés",
+  "key.dopedhorses.hud"  : "Basculer l'interface de vitesse",
+  "item.dopedhorses.diamond_horse_shoes" : "Souliers en diamant pour cheval",
+  "item.dopedhorses.gold_horse_shoes" : "Souliers en or pour cheval",
+  "item.dopedhorses.netherite_horse_shoes" : "Souliers en netherrite pour cheval",
+  "item.dopedhorses.iron_horse_shoes" : "Souliers en fer pour cheval",
+  "itemGroup.dopedhorses.tab" : "Chevaux Dopés",
+  "dopedhorses.soulsand_error" : "[DOPED HORSES] Erreur : Vous ne pouvez pas enlever les souliers en étant sur du sable des âmes, ce bug sera corrigé dans une future mise à jour !",
+
+  "dopedhorses.midnightconfig.userUnitComment" : "0=km/h, 1=bloc/s, 2=mph",
+  "dopedhorses.midnightconfig.userUnit": "Choisissez votre unité de vitesse",
+
+  "dopedhorses.midnightconfig.title": "Configuration des Chevaux Dopés",
+  "dopedhorses.midnightconfig.shoeModifierComment": "La vitesse d'un cheval est ~0.2, donc si vous mettez 0.2, la vitesse du cheval sera de 0.4, soit 2x plus rapide.",
+  "dopedhorses.midnightconfig.ironShoeSpeedModifier": "Modificateur de vitesse des souliers en fer",
+  "dopedhorses.midnightconfig.goldShoeSpeedModifier": "Modificateur de vitesse des souliers en or",
+  "dopedhorses.midnightconfig.diamondShoeSpeedModifier": "Modificateur de vitesse des souliers en diamant",
+  "dopedhorses.midnightconfig.netheriteShoeSpeedModifier": "Modificateur de vitesse des souliers en netherrite",
+
+  "dopedhorses.midnightconfig.armorModifierComment": "Arrondir la valeur à .5",
+  "dopedhorses.midnightconfig.ironShoeArmorModifier": "Modificateur d'armure des souliers en fer",
+  "dopedhorses.midnightconfig.goldShoeArmorModifier": "Modificateur d'armure des souliers en or",
+  "dopedhorses.midnightconfig.diamondShoeArmorModifier": "Modificateur d'armure des souliers en diamant",
+  "dopedhorses.midnightconfig.netheriteShoeArmorModifier": "Modificateur d'armure des souliers en netherrite",
+
+  "dopedhorses.midnightconfig.jumpModifierComment": "La force de saut des chevaux varie entre 0.4–1.0, avec une moyenne de 0.7. Une force de saut de 0.5 suffit pour franchir 1 9⁄16 blocs, tandis qu'une force de 1.0 permet de franchir 5 1⁄4 blocs.",
+  "dopedhorses.midnightconfig.ironShoeJumpModifier": "Modificateur de saut des souliers en fer",
+  "dopedhorses.midnightconfig.goldShoeJumpModifier": "Modificateur de saut des souliers en or",
+  "dopedhorses.midnightconfig.diamondShoeJumpModifier": "Modificateur de saut des souliers en diamant",
+  "dopedhorses.midnightconfig.netheriteShoeJumpModifier": "Modificateur de saut des souliers en netherrite",
+
+  "dopedhorses.midnightconfig.shoeLootComment": "[Nécessite un redémarrage] Une valeur entre 0 et 1 (0.1 = 10%, 0.2=20% etc....), ces objets seront lootés dans des coffres dans le Nether / ruines des portails",
+  "dopedhorses.midnightconfig.ironShoeLootChance": "Chance de loot des souliers en fer",
+  "dopedhorses.midnightconfig.goldShoeLootChance": "Chance de loot des souliers en or",
+  "dopedhorses.midnightconfig.diamondShoeLootChance": "Chance de loot des souliers en diamant",
+  "dopedhorses.midnightconfig.netheriteShoeLootChance": "Chance de loot des souliers en netherrite",
+
+  "dopedhorses.midnightconfig.fasterBlocks": "Blocs plus rapides",
+  "dopedhorses.midnightconfig.fasterBlocks.tooltip": "Format des blocs plus rapides : <regex bloc>=<multiplicateur>. Regardez les exemples par défaut :) il n'est pas obligatoire d'inclure une regex. Vous pouvez simplement écrire le bloc que vous voulez comme : sable=0.2",
+
+  "dopedhorses.midnightconfig.category.Client": "Configuration Client",
+  "dopedhorses.midnightconfig.category.Server": "Configuration Serveur",
+
+  "dopedhorses.midnightconfig.explainComment1": "La configuration du serveur ne fonctionnera que dans un monde auto-hébergé. Pour la faire fonctionner sur votre serveur, vous pouvez aller dans un monde solo, trouver les meilleurs paramètres, puis aller dans votre dossier .minecraft/config et copier-coller le fichier doped_horses.json dans le fichier de configuration de votre serveur.",
+  "dopedhorses.midnightconfig.explainComment2": "",
+  "dopedhorses.midnightconfig.explainComment3": "",
+  "dopedhorses.midnightconfig.explainComment4": "",
+
+  "dopedhorses.midnightconfig.stepHeightModifierComment": "Augmentez la hauteur des étapes. Par défaut dans MC, c'est 1. Si vous mettez 1, votre cheval pourra monter 2 blocs de hauteur.",
+  "dopedhorses.midnightconfig.ironShoeStepHeightModifier": "Modificateur de hauteur de marche des souliers en fer",
+  "dopedhorses.midnightconfig.goldShoeStepHeightModifier": "Modificateur de hauteur de marche des souliers en or",
+  "dopedhorses.midnightconfig.diamondShoeStepHeightModifier": "Modificateur de hauteur de marche des souliers en diamant",
+  "dopedhorses.midnightconfig.netheriteShoeStepHeightModifier": "Modificateur de hauteur de marche des souliers en netherrite"
+}

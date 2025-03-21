@@ -9,6 +9,7 @@
 
   "dopedhorses.midnightconfig.userUnitComment" : "0=km/h, 1=block/s, 2=mph",
   "dopedhorses.midnightconfig.userUnit": "Choose your speed unit",
+  "dopedhorses.soulsand_error" : "[DOPED HORSES] Error : You can't remove the shoes while standing on soulsand, this bug will be fix in a future relase !",
 
   "dopedhorses.midnightconfig.title": "Doped Horses Configuration",
   "dopedhorses.midnightconfig.shoeModifierComment": "A horse speed is ~0.2, so if you put 0.2, the speed of the horse will be 0.4 so 2x faster.",

@@ -5,20 +5,18 @@ import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.config.ConfigMaterialType;
 import fr.gallonemilien.config.ModConfig;
 import lombok.Getter;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.ArmorMaterials;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import org.apache.commons.lang3.tuple.Pair;
 
 public enum ShoeType {
 
-    IRON("iron_horse_shoes", ArmorMaterials.IRON.value()),
-    GOLD("gold_horse_shoes", ArmorMaterials.GOLD.value()),
-    DIAMOND("diamond_horse_shoes", ArmorMaterials.DIAMOND.value()),
-    NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE.value());
+    IRON("iron_horse_shoes", ArmorMaterials.IRON),
+    GOLD("gold_horse_shoes", ArmorMaterials.GOLD),
+    DIAMOND("diamond_horse_shoes", ArmorMaterials.DIAMOND),
+    NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE);
 
     public final String name;
     @Getter
@@ -28,21 +26,27 @@ public enum ShoeType {
     @Getter
     private double armorModifier;
     @Getter
-    private ArmorMaterial material;
+    private Holder<ArmorMaterial> material;
     @Getter
     private double stepHeightModifier;
 
-    ShoeType(String name, ArmorMaterial material) {
+    ShoeType(String name, Holder<ArmorMaterial> material) {
         this.name = name;
         this.material = material;
     }
 
+    private Item.Properties getItemProperties() {
+        Item.Properties prop = new Item.Properties()
+                .stacksTo(1)
+                .arch$tab(DopedHorses.TAB);
+        if(material == ArmorMaterials.NETHERITE)
+            prop.fireResistant();
+        return prop;
+    }
+
     public ShoeItem getItem() {
         return new ShoeItem(
-            new Item.Properties()
-                .stacksTo(1)
-                .arch$tab(CreativeModeTabs.COMBAT)
-                .arch$tab(DopedHorses.TAB),
+        getItemProperties(),
         this,
              this.name
         );

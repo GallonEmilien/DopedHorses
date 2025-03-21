@@ -3,6 +3,7 @@ package fr.gallonemilien.mixin;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,6 +39,25 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
 
     public Container getShoeContainer() {
         return shoe_container;
+    }
+
+
+    private boolean isOnSoulSand = false;
+
+
+    /**
+     * TODO : Find a prettier solution in a next update.
+     * This is a fix to the bug that make horse speed not resetting in the soulsand when we
+     * remove a shoe with soulspeed. Maybe due to the default minecraft behavior, need to have a look
+     */
+    @Override
+    public boolean canPickUp() {
+        return !isOnSoulSand;
+    }
+
+    @Override
+    public void setBlockUnder(Block block) {
+        isOnSoulSand = block.defaultBlockState().is(BlockTags.SOUL_SPEED_BLOCKS);
     }
 
     @Shadow public abstract boolean isSaddleable();
