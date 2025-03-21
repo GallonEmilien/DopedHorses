@@ -39,6 +39,8 @@ public enum ShoeType {
     private Item.Properties getItemProperties() {
         Item.Properties prop = new Item.Properties()
                 .stacksTo(1)
+                .setId(getResourceKey(this))
+                .enchantable(1)
                 .arch$tab(DopedHorses.TAB);
         if(material == ArmorMaterials.NETHERITE)
             prop.fireResistant();
