@@ -100,6 +100,9 @@ public class HorseSpeedManager {
             }
             BlockPos horsePosition = horse.getOnPos();
             Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
+            if(horse instanceof ShoeContainer shoeContainer)
+                shoeContainer.setBlockUnder(blockBeneathHorse);
+
 
             //Check if the last computed block was the same... So we don't compute another time
             if (!isLastBlockComputedTheSame(horse, blockBeneathHorse)) {

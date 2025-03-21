@@ -6,6 +6,7 @@
   "item.dopedhorses.netherite_horse_shoes" : "Netherite horse shoes",
   "item.dopedhorses.iron_horse_shoes" : "Iron horse shoes",
   "itemGroup.dopedhorses.tab" : "Doped Horses",
+  "dopedhorses.soulsand_error" : "[DOPED HORSES] Error : You can't remove the shoes while standing on soulsand, this bug will be fix in a future relase !",
 
   "dopedhorses.midnightconfig.userUnitComment" : "0=km/h, 1=block/s, 2=mph",
   "dopedhorses.midnightconfig.userUnit": "Choose your speed unit",
