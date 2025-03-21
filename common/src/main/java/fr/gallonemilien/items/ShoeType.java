@@ -1,6 +1,5 @@
 package fr.gallonemilien.items;
 
-import dev.architectury.platform.Mod;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.config.ConfigDataType;
 import fr.gallonemilien.config.ConfigMaterialType;
@@ -8,7 +7,6 @@ import fr.gallonemilien.config.ModConfig;
 import lombok.Getter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorMaterials;
@@ -29,7 +27,7 @@ public enum ShoeType {
     @Getter
     private double armorModifier;
     @Getter
-    private ArmorMaterial material;
+    private final ArmorMaterial material;
     @Getter
     private double stepHeightModifier;
 
@@ -38,16 +36,20 @@ public enum ShoeType {
         this.material = material;
     }
 
+    private Item.Properties getItemProperties() {
+        Item.Properties prop = new Item.Properties()
+                .stacksTo(1)
+                .arch$tab(DopedHorses.TAB);
+        if(material == ArmorMaterials.NETHERITE)
+            prop.fireResistant();
+        return prop;
+    }
+
     public ShoeItem getItem() {
         return new ShoeItem(
-            new Item.Properties()
-                .stacksTo(1)
-                .setId(getResourceKey(this))
-                .enchantable(1)
-                .arch$tab(CreativeModeTabs.COMBAT)
-                .arch$tab(DopedHorses.TAB),
-        this,
-             this.name
+                getItemProperties(),
+                this,
+                this.name
         );
     }
 
@@ -64,3 +66,4 @@ public enum ShoeType {
         return ResourceKey.create(Registries.ITEM, DopedHorses.id(type.name));
     }
 }
+
