@@ -2,7 +2,6 @@ package fr.gallonemilien.mixin;
 
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.speed.HorseSpeedManager;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,6 +41,7 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         return shoe_container;
     }
 
+    @Unique
     private boolean isOnSoulSand = false;
 
 
@@ -61,12 +60,11 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         isOnSoulSand = block.defaultBlockState().is(BlockTags.SOUL_SPEED_BLOCKS);
     }
 
-    @Shadow public abstract boolean isSaddleable();
-
     protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
     }
 
+    @Unique
     protected boolean hasShoes() {
         return !shoe_container.isEmpty()
                 && !this.shoe_container.getItem(0).isEmpty()
@@ -82,14 +80,14 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         }
     }
 
-    @Inject(method = "readAdditionalSaveData", at= @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;contains(Ljava/lang/String;I)Z"))
+    @Inject(method = "readAdditionalSaveData", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/horse/AbstractHorse;setEating(Z)V"))
     public void readData(CompoundTag compoundTag, CallbackInfo ci) {
-        if (compoundTag.contains("ShoeItem", 10)) {
-            ItemStack itemStack = ItemStack.parse(this.registryAccess(), compoundTag.getCompound("ShoeItem")).orElse(ItemStack.EMPTY);
-            if (itemStack.getItem() instanceof ShoeItem) {
-                this.shoe_container.setItem(0, itemStack);
-            }
-        }
+        compoundTag.getCompound("ShoeItem")
+            .ifPresent(tag -> {
+                ItemStack itemStack = ItemStack.parse(this.registryAccess(), tag).orElse(ItemStack.EMPTY);
+                if(itemStack.getItem() instanceof ShoeItem)
+                    this.shoe_container.setItem(0, itemStack);
+            });
     }
 
     /**
