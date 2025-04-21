@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#i#",
+    "i i",
+    "i i"
+  ],
+  "key": {
+    "#": {
+      "item": "dopedhorses:diamond_nail"
+    },
+    "i": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "id": "dopedhorses:diamond_horse_shoes",
+    "count": 1
+  }
+}

@@ -23,10 +23,14 @@ public class DopedHorsesItems {
     public static final RegistrySupplier<ShoeItem> DIAMOND_HORSE_SHOES = registerItem(ShoeType.DIAMOND);
     public static final RegistrySupplier<ShoeItem> NETHERITE_HORSE_SHOES = registerItem(ShoeType.NETHERITE);
 
+    private static final RegistrySupplier<NailItem> IRON_NAIL = registerItem(NailType.IRON);
+    private static final RegistrySupplier<NailItem> GOLD_NAIL = registerItem(NailType.GOLD);
+    private static final RegistrySupplier<NailItem> DIAMOND_NAIL = registerItem(NailType.DIAMOND);
 
-    public static RegistrySupplier<ShoeItem> registerItem(ShoeType type) {
-           return registerImpl(type.name, type::getItem);
+    public static <T extends Item> RegistrySupplier<T> registerItem(DopedHorsesTypes<T> type) {
+        return registerImpl(type.getName(), type::getItem);
     }
+
     private static Map<String, RegistrySupplier<? extends Item>> ALL;
     public static DeferredRegister<CreativeModeTab> TABS;
     public static DeferredRegister<Item> ITEM;

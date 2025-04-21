@@ -1,10 +1,13 @@
 {
   "key.category.dopedhorses.horses" : "Chevaux Dopés",
   "key.dopedhorses.hud"  : "Basculer l'interface de vitesse",
-  "item.dopedhorses.diamond_horse_shoes" : "Souliers en diamant pour cheval",
-  "item.dopedhorses.gold_horse_shoes" : "Souliers en or pour cheval",
-  "item.dopedhorses.netherite_horse_shoes" : "Souliers en netherrite pour cheval",
-  "item.dopedhorses.iron_horse_shoes" : "Souliers en fer pour cheval",
+  "item.dopedhorses.diamond_horse_shoes" : "Fers à cheval en diamant",
+  "item.dopedhorses.gold_horse_shoes" : "Fers à cheval en or",
+  "item.dopedhorses.netherite_horse_shoes" : "Fers à cheval en netherite",
+  "item.dopedhorses.iron_horse_shoes" : "Fers à cheval en fer",
+  "item.dopedhorses.diamond_nail" : "Clou en diamant",
+  "item.dopedhorses.gold_nail" : "Clou en or",
+  "item.dopedhorses.iron_nail" : "Clou en fer",
   "itemGroup.dopedhorses.tab" : "Chevaux Dopés",
   "dopedhorses.soulsand_error" : "[DOPED HORSES] Erreur : Vous ne pouvez pas enlever les souliers en étant sur du sable des âmes, ce bug sera corrigé dans une future mise à jour !",
 

@@ -5,12 +5,10 @@ import net.minecraft.world.item.ItemStack;
 
 public class ShoeItem extends Item {
 
-    private final String name;
     private final ShoeType type;
 
-    public ShoeItem(Properties properties, ShoeType type, String name) {
+    public ShoeItem(Properties properties, ShoeType type) {
         super(properties);
-        this.name = name;
         this.type = type;
     }
 
@@ -28,10 +26,6 @@ public class ShoeItem extends Item {
         return type.getSpeedModifier();
     }
 
-    public double getStepHeightModifier() {
-        return type.getStepHeightModifier();
-    }
-
     public double getArmorModifier() {
         return type.getArmorModifier();
     }
@@ -40,7 +34,7 @@ public class ShoeItem extends Item {
         return type.getJumpModifier();
     }
 
-    public String getShoeName() {
-        return this.name;
+    public double getStepHeightModifier() {
+        return type.getStepHeightModifier();
     }
 }

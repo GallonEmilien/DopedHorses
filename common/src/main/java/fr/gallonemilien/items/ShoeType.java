@@ -6,62 +6,49 @@ import fr.gallonemilien.config.ConfigMaterialType;
 import fr.gallonemilien.config.ModConfig;
 import lombok.Getter;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
 import org.apache.commons.lang3.tuple.Pair;
 
-public enum ShoeType {
-
+@Getter
+public enum ShoeType implements DopedHorsesTypes<ShoeItem> {
     IRON("iron_horse_shoes", ArmorMaterials.IRON),
     GOLD("gold_horse_shoes", ArmorMaterials.GOLD),
     DIAMOND("diamond_horse_shoes", ArmorMaterials.DIAMOND),
     NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE);
 
-    public final String name;
-    @Getter
-    private double speedModifier;
-    @Getter
-    private double jumpModifier;
-    @Getter
-    private double armorModifier;
-    @Getter
-    private Holder<ArmorMaterial> material;
-    @Getter
-    private double stepHeightModifier;
+    private final String name;
+    private final Holder<ArmorMaterial> material;
+    private double speedModifier, jumpModifier, armorModifier, stepHeightModifier;
 
     ShoeType(String name, Holder<ArmorMaterial> material) {
         this.name = name;
         this.material = material;
     }
 
-    private Item.Properties getItemProperties() {
+    @Override
+    public ShoeItem getItem() {
+        return new ShoeItem(getItemProperties(), this);
+    }
+
+    @Override
+    public Item.Properties getItemProperties() {
         Item.Properties prop = new Item.Properties()
                 .stacksTo(1)
                 .arch$tab(DopedHorses.TAB);
-        if(material == ArmorMaterials.NETHERITE)
+        if (material == ArmorMaterials.NETHERITE)
             prop.fireResistant();
         return prop;
     }
 
-    public ShoeItem getItem() {
-        return new ShoeItem(
-        getItemProperties(),
-        this,
-             this.name
-        );
-    }
-
     public static void refreshValues(ModConfig config) {
         for (ShoeType type : values()) {
-            type.speedModifier = config.getModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.valueOf(type.name().toUpperCase())));
-            type.jumpModifier = config.getModifier(Pair.of(ConfigDataType.JUMP, ConfigMaterialType.valueOf(type.name().toUpperCase())));
-            type.armorModifier = config.getModifier(Pair.of(ConfigDataType.ARMOR, ConfigMaterialType.valueOf(type.name().toUpperCase())));
-            type.stepHeightModifier = config.getModifier(Pair.of(ConfigDataType.STEP_HEIGHT, ConfigMaterialType.valueOf(type.name().toUpperCase())));
+            ConfigMaterialType matType = ConfigMaterialType.valueOf(type.name().toUpperCase());
+            type.speedModifier = config.getModifier(Pair.of(ConfigDataType.SHOE, matType));
+            type.jumpModifier = config.getModifier(Pair.of(ConfigDataType.JUMP, matType));
+            type.armorModifier = config.getModifier(Pair.of(ConfigDataType.ARMOR, matType));
+            type.stepHeightModifier = config.getModifier(Pair.of(ConfigDataType.STEP_HEIGHT, matType));
         }
     }
-
-    public static ResourceKey getResourceKey(ShoeType type) {
-        return ResourceKey.create(Registries.ITEM, DopedHorses.id(type.name));
-    }
 }
+
