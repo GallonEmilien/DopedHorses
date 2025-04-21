@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#i#",
+    "i i",
+    "i i"
+  ],
+  "key": {
+    "#": "dopedhorses:iron_nail",
+    "i": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "dopedhorses:iron_horse_shoes",
+    "count": 1
+  }
+}
