@@ -5,9 +5,8 @@ import dev.architectury.registry.level.entity.trade.TradeRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.config.ModConfig;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -77,7 +76,7 @@ public class ItemLoot {
         });
     }
 
-    private static void registerVillager(VillagerProfession profession, int lvl, int price,
+    private static void registerVillager(ResourceKey<VillagerProfession> profession, int lvl, int price,
                                          RegistrySupplier<ShoeItem> item, int maxUses, int experience, float multiplier) {
         TradeRegistry.registerVillagerTrade(
                 profession,

@@ -5,6 +5,9 @@
   "item.dopedhorses.gold_horse_shoes" : "Gold horse shoes",
   "item.dopedhorses.netherite_horse_shoes" : "Netherite horse shoes",
   "item.dopedhorses.iron_horse_shoes" : "Iron horse shoes",
+  "item.dopedhorses.diamond_nail" : "Diamond nail",
+  "item.dopedhorses.gold_nail" : "Gold nail",
+  "item.dopedhorses.iron_nail" : "Iron nail",
   "itemGroup.dopedhorses.tab" : "Doped Horses",
   "dopedhorses.soulsand_error" : "[DOPED HORSES] Error : You can't remove the shoes while standing on soulsand, this bug will be fix in a future relase !",
 
