@@ -4,58 +4,62 @@ package fr.gallonemilien.speed;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.cache.Resetable;
 import net.minecraft.world.level.block.Block;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import static fr.gallonemilien.speed.HorseSpeedManager.DEFAULT_SPEED_MODIFIER;
 
 public class BlockSpeed implements Resetable {
 
-    private final Map<String, Double> blockSpeedCache = new HashMap<>();
-    private static BlockSpeed INSTANCE;
-    private BlockSpeed() {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BlockSpeed.class);
 
-    }
+    private final Map<String, Double> blockSpeedCache = new ConcurrentHashMap<>();
+
+    private BlockSpeed() {}
+
     public static BlockSpeed getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new BlockSpeed();
-        }
-        return INSTANCE;
+        return Holder.INSTANCE;
     }
 
-    public Double getBlockSpeed(Block block) {
-        String descriptionId = block.getDescriptionId();
-        // Using a cache in order to compute only one time the regex
-        blockSpeedCache.computeIfAbsent(descriptionId, id -> {
-            String[] split = id.split("\\.");
-            //Set the default speed modifier so the blocks that are non specified in the configuration file will have the default speed
-            AtomicReference<Double> speedModifier = new AtomicReference<>(DEFAULT_SPEED_MODIFIER);
-            DopedHorses.getConfig().getFasterBlocks().forEach((key, value) -> {
-                if(matchesWithRegex(key, split[split.length - 1])) { //split[split.length-1] return for example dirt instead of net.minecraft.dirt
-                    speedModifier.set(value);
-                }
-            });
-            //return the corresponding speed modifier
-            return speedModifier.get();
-        });
-        return blockSpeedCache.get(descriptionId);
-    }
-
-    private boolean matchesWithRegex(String key, String blockValue) {
-        try {
-            return Pattern.compile(key, Pattern.CASE_INSENSITIVE).matcher(blockValue).find();
-        } catch (Exception e) {
-            System.out.println("REGEX ERROR ! Please read the doc ! You need to fix the configuration file where you set the blocks, you can be helped with ChatGPT :)");
-            e.printStackTrace();
-            return false;
-        }
+    private static class Holder {
+        private static final BlockSpeed INSTANCE = new BlockSpeed();
     }
 
     @Override
     public void reset() {
-        this.blockSpeedCache.clear();
+        LOGGER.debug("Resetting block speed cache.");
+        blockSpeedCache.clear();
+    }
+
+    public double getBlockSpeed(Block block) {
+        String descriptionId = block.getDescriptionId();
+        return blockSpeedCache.computeIfAbsent(descriptionId, this::computeSpeedForBlock);
+    }
+
+    private double computeSpeedForBlock(String blockId) {
+        String blockName = extractBlockName(blockId);
+        return DopedHorses.getConfig().getFasterBlocks().entrySet().stream()
+                .filter(entry -> matchesWithRegex(entry.getKey(), blockName))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(DEFAULT_SPEED_MODIFIER);
+    }
+
+    private String extractBlockName(String fullId) {
+        String[] parts = fullId.split("\\.");
+        return parts[parts.length - 1];
+    }
+
+    private boolean matchesWithRegex(String regex, String blockValue) {
+        try {
+            return Pattern.compile(regex, Pattern.CASE_INSENSITIVE).matcher(blockValue).find();
+        } catch (Exception e) {
+            LOGGER.error("REGEX ERROR in configuration: \"{}\" is invalid.", regex, e);
+            return false;
+        }
     }
 }

@@ -4,23 +4,16 @@ import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.items.ShoeType;
-import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.persistence.ShoeContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-
-import java.util.*;
-
-import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
 
 /**
  * Manages the speed modifications of horses based on the block they are standing on.
@@ -88,13 +81,11 @@ public class HorseSpeedManager {
      */
     public static void updateHorseSpeed(AbstractHorse horse) {
         if (serverMiddleware(horse)) {
-            updateHudSpeed(horse);
             // Check if the horse has been initialized since the last server startup
             // This cache prevents having to manually remove and reapply shoes to update them
             // Cache access is O(1)
             // First condition checks the cache manager first, as the instance check is expensive
-            if (!cacheManager.getInitializedHorse(horse.getUUID()) && horse instanceof ShoeContainer container) {
-                cacheManager.putInitializedHorse(horse.getUUID(), true);
+            if (horse instanceof ShoeContainer container) {
                 if (container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem item)
                     updateHorseShoes(horse, item);
             }
@@ -112,7 +103,6 @@ public class HorseSpeedManager {
                     applySpeedModifier(horse, blockSpeed);
                 }
             }
-        } else {
         }
     }
 
@@ -136,7 +126,6 @@ public class HorseSpeedManager {
         }
     }
 
-
     /**
      * Applies a speed modifier to the horse.
      */
@@ -145,29 +134,6 @@ public class HorseSpeedManager {
             getSpeedAttribute(horse).removeModifier(HORSE_SPEED_BOOST_ID);
             getSpeedAttribute(horse).addTransientModifier(new AttributeModifier(HORSE_SPEED_BOOST_ID, speedMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
             cacheManager.putHorseMultiplier(horse.getUUID(), speedMultiplier);
-        }
-    }
-
-
-    /**
-     * Sends a packet to indicate the player is riding a horse.
-     */
-    public static void playerRiding(Player player) {
-        if(serverMiddleware(player)) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(true));
-            }
-        }
-    }
-
-    /**
-     * Sends a packet to indicate the player has dismounted a horse.
-     */
-    public static void playerDismount(Player player) {
-        if(serverMiddleware(player)) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(false));
-            }
         }
     }
 }

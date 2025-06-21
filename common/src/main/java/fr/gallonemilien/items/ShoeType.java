@@ -12,19 +12,21 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @Getter
 public enum ShoeType implements DopedHorsesTypes<ShoeItem> {
-    IRON("iron_horse_shoes", ArmorMaterials.IRON),
-    GOLD("gold_horse_shoes", ArmorMaterials.GOLD),
-    DIAMOND("diamond_horse_shoes", ArmorMaterials.DIAMOND),
-    NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE);
+    IRON("iron_horse_shoes", ArmorMaterials.IRON,0),
+    GOLD("gold_horse_shoes", ArmorMaterials.GOLD,1),
+    DIAMOND("diamond_horse_shoes", ArmorMaterials.DIAMOND,2),
+    NETHERITE("netherite_horse_shoes", ArmorMaterials.NETHERITE,3);
 
     private final String name;
     private final ArmorMaterial material;
+    private final int identifier;
 
     private double speedModifier, jumpModifier, armorModifier, stepHeightModifier;
 
-    ShoeType(String name, ArmorMaterial material) {
+    ShoeType(String name, ArmorMaterial material, int identifier) {
         this.name = name;
         this.material = material;
+        this.identifier = identifier;
     }
 
     @Override

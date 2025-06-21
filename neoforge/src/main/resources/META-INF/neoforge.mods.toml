@@ -16,21 +16,21 @@ logoFile = "logo.png"
 [[dependencies.dopedhorses]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.5,)"
+versionRange = "[21.6,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dopedhorses]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.5,)"
+versionRange = "[1.21.6,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dopedhorses]]
 modId = "architectury"
 type = "required"
-versionRange = "[16.0.3,)"
+versionRange = "[17.0.6,)"
 ordering = "AFTER"
 side = "BOTH"
 

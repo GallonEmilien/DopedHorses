@@ -6,7 +6,6 @@ import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.items.DopedHorsesItems;
 import fr.gallonemilien.items.ItemLoot;
 import fr.gallonemilien.items.ShoeType;
-import fr.gallonemilien.network.CommonPacketHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -18,7 +17,6 @@ public final class DopedHorses {
     public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
-    public static CommonPacketHandler PACKET_HANDLER;
     private static ModConfig MOD_CONFIG;
     public static final RegistrySupplier<CreativeModeTab> TAB = DopedHorsesItems.TABS.register(
             "tab",
@@ -34,11 +32,9 @@ public final class DopedHorses {
     }
 
     public static void init(
-            @NotNull CommonPacketHandler packetHandler,
             @NotNull ModConfig config,
             boolean isFabric
     ) {
-        DopedHorses.PACKET_HANDLER = packetHandler;
         DopedHorses.MOD_CONFIG = config;
         DopedHorsesItems.TABS.register();
         DopedHorsesItems.getAll(); //Pour enclencher le register
