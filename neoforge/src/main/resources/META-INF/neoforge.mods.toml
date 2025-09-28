@@ -23,7 +23,7 @@ side = "BOTH"
 [[dependencies.dopedhorses]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.6,)"
+versionRange = "[1.21.6,1.21.9)"
 ordering = "NONE"
 side = "BOTH"
 
