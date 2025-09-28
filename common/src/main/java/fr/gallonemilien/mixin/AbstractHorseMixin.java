@@ -11,6 +11,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -75,6 +76,22 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
                 && this.shoe_container.getItem(0).getItem() instanceof ShoeItem)
             return Optional.of(this.shoe_container.getItem(0));
         return Optional.empty();
+    }
+
+    //drop the loot when dying
+    @Inject(method = "dropEquipment", at = @At("TAIL"))
+    private void dropShoeContainer(CallbackInfo ci) {
+        if (!this.shoe_container.isEmpty()) {
+            Level world = this.level();
+            for (int i = 0; i < shoe_container.getContainerSize(); i++) {
+                ItemStack stack = shoe_container.getItem(i);
+                if (!stack.isEmpty()) {
+                    ItemEntity entity = new ItemEntity(world, this.getX(), this.getY(), this.getZ(), stack);
+                    world.addFreshEntity(entity);
+                }
+            }
+            shoe_container.clearContent();
+        }
     }
 
 
