@@ -4,7 +4,7 @@ import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.items.ShoeType;
-import fr.gallonemilien.persistence.ShoeContainer;
+import fr.gallonemilien.persistence.DopedHorseEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +26,7 @@ public class HorseSpeedManager {
     private static final ResourceLocation HORSE_SHOES_ARMOR_ID = DopedHorses.id("horse_shoes_armor_modifier");
     private static final ResourceLocation HORSE_SHOES_JUMP_ID = DopedHorses.id("horse_shoes_jump_modifier");
     private static final ResourceLocation HORSE_SHOES_STEP_HEIGHT_ID = DopedHorses.id("horse_shoes_step_height_modifier");
+    private static final ResourceLocation HORSE_SHOES_SAFE_FALL_ID = DopedHorses.id("horse_shoes_safe_fall_modifier");
 
     private static final CacheManager cacheManager = CacheManager.getInstance(); //Call to get the instance only one time
     private static final BlockSpeed blockSpeedManager = BlockSpeed.getInstance();
@@ -63,6 +64,13 @@ public class HorseSpeedManager {
     }
 
     /**
+     * Retrieves the safe fall distance attribute of the horse (depending on the jump strength).
+     */
+    public static AttributeInstance getSafeFallAttribute(AbstractHorse horse) {
+        return horse.getAttribute(Attributes.SAFE_FALL_DISTANCE);
+    }
+
+    /**
      * Updates the horse's attributes based on equipped shoes.
      */
     public static void updateHorseShoes(AbstractHorse horse, Item item) {
@@ -72,6 +80,7 @@ public class HorseSpeedManager {
             applyShoeModifier(horse, item, getStepHeight(horse), HORSE_SHOES_STEP_HEIGHT_ID, ShoeItem::getStepHeightModifier);
             applyShoeModifier(horse, item, getJumpAttribute(horse), HORSE_SHOES_JUMP_ID, ShoeItem::getJumpModifier);
             applyShoeModifier(horse, item, getArmorAttribute(horse), HORSE_SHOES_ARMOR_ID, ShoeItem::getArmorModifier);
+            applyShoeModifier(horse, item, getSafeFallAttribute(horse), HORSE_SHOES_SAFE_FALL_ID, ShoeItem::calculateSafeFallBonus);
         }
     }
 
@@ -85,20 +94,20 @@ public class HorseSpeedManager {
             // This cache prevents having to manually remove and reapply shoes to update them
             // Cache access is O(1)
             // First condition checks the cache manager first, as the instance check is expensive
-            if (horse instanceof ShoeContainer container) {
+            if (horse instanceof DopedHorseEntity container) {
                 if (container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem item)
                     updateHorseShoes(horse, item);
             }
             BlockPos horsePosition = horse.getOnPos();
             Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
-            if(horse instanceof ShoeContainer shoeContainer)
-                shoeContainer.setBlockUnder(blockBeneathHorse);
+            if(horse instanceof DopedHorseEntity dopedHorseEntity)
+                dopedHorseEntity.setBlockUnder(blockBeneathHorse);
 
 
             //Check if the last computed block was the same... So we don't compute another time
             if (!isLastBlockComputedTheSame(horse, blockBeneathHorse)) {
                 cacheManager.putLastWalkedOnBlockId(horse.getUUID(),blockBeneathHorse.getDescriptionId());
-                Double blockSpeed = blockSpeedManager.getBlockSpeed(blockBeneathHorse);
+                double blockSpeed = blockSpeedManager.getBlockSpeed(blockBeneathHorse);
                 if(cacheManager.getHorseMultiplier(horse.getUUID()) != blockSpeed) {
                     applySpeedModifier(horse, blockSpeed);
                 }
@@ -122,7 +131,7 @@ public class HorseSpeedManager {
             attribute.removeModifier(modifierId);
             if (item instanceof ShoeItem shoes) {
                 attribute.addTransientModifier(new AttributeModifier(modifierId, modifierFunction.apply(shoes), AttributeModifier.Operation.ADD_VALUE));
-            };
+            }
         }
     }
 

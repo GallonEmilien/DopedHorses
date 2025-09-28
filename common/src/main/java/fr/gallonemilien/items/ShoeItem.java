@@ -23,6 +23,16 @@ public class ShoeItem extends Item{
         return type.getJumpModifier();
     }
 
+    public static Double calculateSafeFallBonus(ShoeItem shoeItem) {
+        double jumpModifier = shoeItem.getJumpModifier();
+        // No fall-damage if the jump modifier is OP
+        if (jumpModifier > 1.4) {
+            return Double.MAX_VALUE;
+        } else {
+            return jumpModifier * 5.0;
+        }
+    }
+
     public double getStepHeightModifier() {
         return type.getStepHeightModifier();
     }

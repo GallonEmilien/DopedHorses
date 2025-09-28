@@ -3,6 +3,7 @@
   "compatibilityLevel": "JAVA_21",
   "package": "fr.gallonemilien.mixin",
   "mixins": [
+    "LivingEntityMixin",
     "AbstractHorseMixin",
     "HorseInventoryMenuMixin",
     "ItemStackMixin",

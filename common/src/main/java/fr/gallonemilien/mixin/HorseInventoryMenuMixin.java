@@ -2,7 +2,7 @@ package fr.gallonemilien.mixin;
 
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.items.ShoeItem;
-import fr.gallonemilien.persistence.ShoeContainer;
+import fr.gallonemilien.persistence.DopedHorseEntity;
 import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -34,11 +34,11 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
 
     @Inject(method = "<init>", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/HorseInventoryMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;"))
     public void constructor(int i, Inventory inventory, Container container, AbstractHorse abstractHorse, int j, CallbackInfo ci) {
-        if(abstractHorse instanceof ShoeContainer shoeContainer) {
-            this.addSlot(new Slot(shoeContainer.getShoeContainer(),0, 8, 54) {
+        if(abstractHorse instanceof DopedHorseEntity dopedHorseEntity) {
+            this.addSlot(new Slot(dopedHorseEntity.getShoeContainer(),0, 8, 54) {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
-                    if(itemStack.getItem() instanceof ShoeItem && shoeContainer.getShoeContainer().isEmpty()) {
+                    if(itemStack.getItem() instanceof ShoeItem && dopedHorseEntity.getShoeContainer().isEmpty()) {
                         abstractHorse.playSound(SoundEvents.HORSE_ARMOR.value(), 0.5F, 1.0F);
                         return true;
                     }
@@ -47,16 +47,16 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
 
                 @Override
                 public boolean mayPickup(Player player) {
-                    if(!shoeContainer.canPickUp()) {
+                    if(!dopedHorseEntity.canPickUp()) {
                         player.displayClientMessage(Component.translatable("dopedhorses.soulsand_error"),false);
                     }
-                    return shoeContainer.canPickUp();
+                    return dopedHorseEntity.canPickUp();
                 }
 
                 @Override
                 public void setChanged() {
                     super.container.setChanged();
-                    HorseSpeedManager.updateHorseShoes(abstractHorse, shoeContainer.getShoeContainer().getItem(0).getItem());
+                    HorseSpeedManager.updateHorseShoes(abstractHorse, dopedHorseEntity.getShoeContainer().getItem(0).getItem());
                 }
 
                 @Override

@@ -1,6 +1,6 @@
 package fr.gallonemilien.mixin;
 
-import fr.gallonemilien.persistence.ShoeContainer;
+import fr.gallonemilien.persistence.DopedHorseEntity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,8 +23,8 @@ public abstract class EnchantmentHelperMixin {
     ) {}
     @Inject(method="runIterationOnEquipment", at=@At("HEAD"))
     private static void runIterationOnEquipment(LivingEntity livingEntity, EnchantmentHelper.EnchantmentInSlotVisitor enchantmentInSlotVisitor, CallbackInfo ci) {
-        if(livingEntity instanceof ShoeContainer shoeContainer) {
-            runIterationOnItem(shoeContainer.getShoeContainer().getItem(0), EquipmentSlot.FEET, livingEntity, enchantmentInSlotVisitor);
+        if(livingEntity instanceof DopedHorseEntity dopedHorseEntity) {
+            runIterationOnItem(dopedHorseEntity.getShoeContainer().getItem(0), EquipmentSlot.FEET, livingEntity, enchantmentInSlotVisitor);
         }
     }
 }

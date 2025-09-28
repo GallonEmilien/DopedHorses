@@ -25,13 +25,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import fr.gallonemilien.persistence.ShoeContainer;
+import fr.gallonemilien.persistence.DopedHorseEntity;
 
 import java.util.Optional;
 
 
 @Mixin(AbstractHorse.class)
-public abstract class AbstractHorseMixin extends Animal implements ShoeContainer {
+public abstract class AbstractHorseMixin extends Animal implements DopedHorseEntity {
 
     protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
