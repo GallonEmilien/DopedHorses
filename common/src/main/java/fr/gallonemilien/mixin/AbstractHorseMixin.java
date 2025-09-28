@@ -60,8 +60,6 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         isOnSoulSand = block.defaultBlockState().is(BlockTags.SOUL_SPEED_BLOCKS);
     }
 
-    @Shadow public abstract boolean isSaddleable();
-
     protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
         super(entityType, level);
     }
@@ -95,12 +93,21 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
      * SPEED MODIFIER, BLOCK ETC LOGIC
      */
 
+    @Shadow
+    protected abstract void doPlayerRide(Player player);
+
     //Instant tame
     @Inject(method ="mobInteract", at=@At("HEAD"), cancellable = true)
     private void mobInteract(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
         if(!horse.isTamed() && player.isCreative()) {
             horse.tameWithName(player);
+            cir.setReturnValue(InteractionResult.SUCCESS);
+        }
+
+        if(horse.isVehicle()) {
+            doPlayerRide(player);
+            player.startRiding(horse, true);
             cir.setReturnValue(InteractionResult.SUCCESS);
         }
     }

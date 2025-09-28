@@ -33,6 +33,7 @@ public class HorseSpeedManager {
     private static final ResourceLocation HORSE_SHOES_ARMOR_ID = DopedHorses.id("horse_shoes_armor_modifier");
     private static final ResourceLocation HORSE_SHOES_JUMP_ID = DopedHorses.id("horse_shoes_jump_modifier");
     private static final ResourceLocation HORSE_SHOES_STEP_HEIGHT_ID = DopedHorses.id("horse_shoes_step_height_modifier");
+    private static final ResourceLocation HORSE_SHOES_SAFE_FALL_ID = DopedHorses.id("horse_shoes_safe_fall_modifier");
 
     private static final CacheManager cacheManager = CacheManager.getInstance(); //Call to get the instance only one time
     private static final BlockSpeed blockSpeedManager = BlockSpeed.getInstance();
@@ -69,6 +70,10 @@ public class HorseSpeedManager {
         return horse.getAttribute(Attributes.JUMP_STRENGTH);
     }
 
+    public static AttributeInstance getSafeFallAttribute(AbstractHorse horse) {
+        return horse.getAttribute(Attributes.SAFE_FALL_DISTANCE);
+    }
+
     /**
      * Updates the horse's attributes based on equipped shoes.
      */
@@ -79,6 +84,7 @@ public class HorseSpeedManager {
             applyShoeModifier(horse, item, getStepHeight(horse), HORSE_SHOES_STEP_HEIGHT_ID, ShoeItem::getStepHeightModifier);
             applyShoeModifier(horse, item, getJumpAttribute(horse), HORSE_SHOES_JUMP_ID, ShoeItem::getJumpModifier);
             applyShoeModifier(horse, item, getArmorAttribute(horse), HORSE_SHOES_ARMOR_ID, ShoeItem::getArmorModifier);
+            applyShoeModifier(horse, item, getSafeFallAttribute(horse), HORSE_SHOES_SAFE_FALL_ID, ShoeItem::calculateSafeFallBonus);
         }
     }
 
