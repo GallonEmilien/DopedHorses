@@ -1,6 +1,9 @@
 package fr.gallonemilien.cache;
 
+import net.minecraft.resources.ResourceLocation;
+
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,11 +13,28 @@ public class CacheManager implements Resetable {
 
     private final ConcurrentHashMap<UUID, Double> horsesMultiplierCache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, String> lastWalkedOnBlockId = new ConcurrentHashMap<>();
+    private final Map<UUID, Map<ResourceLocation, Double>> horseShoeAttributes = new ConcurrentHashMap<>();
 
     private CacheManager() {}
 
     private static class Holder {
         private static final CacheManager INSTANCE = new CacheManager();
+    }
+
+    public Double getHorseShoeAttribute(UUID horseId, ResourceLocation modifierId) {
+        Map<ResourceLocation, Double> attrMap = this.horseShoeAttributes.get(horseId);
+        if (attrMap == null) return null;
+        return attrMap.get(modifierId);
+    }
+
+    public void putHorseShoeAttribute(UUID horseId, ResourceLocation modifierId, double value) {
+        this.horseShoeAttributes
+            .computeIfAbsent(horseId, uuid -> new HashMap<>())
+            .put(modifierId, value);
+    }
+
+    public void removeHorseShoeAttribute(UUID horseId) {
+        this.horseShoeAttributes.remove(horseId);
     }
 
     public static CacheManager getInstance() {
@@ -41,5 +61,6 @@ public class CacheManager implements Resetable {
     public void reset() {
         this.horsesMultiplierCache.clear();
         this.lastWalkedOnBlockId.clear();
+        this.horseShoeAttributes.clear();
     }
 }

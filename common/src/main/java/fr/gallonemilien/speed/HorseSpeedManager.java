@@ -128,9 +128,17 @@ public class HorseSpeedManager {
                                           ResourceLocation modifierId,
                                           java.util.function.Function<ShoeItem, Double> modifierFunction) {
         if(serverMiddleware(horse)) {
-            attribute.removeModifier(modifierId);
-            if (item instanceof ShoeItem shoes) {
-                attribute.addTransientModifier(new AttributeModifier(modifierId, modifierFunction.apply(shoes), AttributeModifier.Operation.ADD_VALUE));
+            if(item instanceof ShoeItem shoes) {
+                Double lastValue = cacheManager.getHorseShoeAttribute(horse.getUUID(), modifierId);
+                double newValue = modifierFunction.apply(shoes);
+                if (lastValue == null || lastValue != newValue) {
+                    attribute.removeModifier(modifierId);
+                    attribute.addTransientModifier(new AttributeModifier(modifierId, newValue, AttributeModifier.Operation.ADD_VALUE));
+                    cacheManager.putHorseShoeAttribute(horse.getUUID(), modifierId, newValue);
+                }
+            } else {
+                attribute.removeModifier(modifierId);
+                cacheManager.removeHorseShoeAttribute(horse.getUUID());
             }
         }
     }
