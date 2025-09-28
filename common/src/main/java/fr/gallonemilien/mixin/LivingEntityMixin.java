@@ -16,11 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
 
     //Avoid from moving when the horse is saddled
-    @Inject(method = "travel", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "travel", at=@At("HEAD"))
     private void travel(Vec3 vec3, CallbackInfo ci) {
         if(((Object) this) instanceof AbstractHorse horse) {
             if (!horse.isVehicle() && horse.isSaddled()) {
-                ci.cancel();
+                Vec3 motion = horse.getDeltaMovement();
+                horse.setDeltaMovement(0, motion.y, 0);
             }
         }
     }
