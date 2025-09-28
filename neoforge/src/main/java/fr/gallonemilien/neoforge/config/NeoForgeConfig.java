@@ -29,9 +29,9 @@ public class NeoForgeConfig extends MidnightConfig {
 
     @Comment(category = SERVER) public static Comment shoeModifierComment;
     @Entry(category=SERVER) public static double ironShoeSpeedModifier = 0.04;
-    @Entry(category=SERVER) public static double goldShoeSpeedModifier = 0.08;
-    @Entry(category=SERVER) public static double diamondShoeSpeedModifier = 0.12;
-    @Entry(category=SERVER) public static double netheriteShoeSpeedModifier = 0.16;
+    @Entry(category=SERVER) public static double goldShoeSpeedModifier = 0.06;
+    @Entry(category=SERVER) public static double diamondShoeSpeedModifier = 0.8;
+    @Entry(category=SERVER) public static double netheriteShoeSpeedModifier = 0.12;
 
     @Comment(category = SERVER) public static Comment stepHeightModifierComment;
     @Entry(category=SERVER)public static double ironShoeStepHeightModifier = 0.5;
@@ -40,10 +40,10 @@ public class NeoForgeConfig extends MidnightConfig {
     @Entry(category=SERVER)public static double netheriteShoeStepHeightModifier = 2.0;
 
     @Comment(category = SERVER) public static Comment jumpModifierComment;
-    @Entry(category=SERVER)public static double ironShoeJumpModifier = 0.2;
-    @Entry(category=SERVER)public static double goldShoeJumpModifier = 0.4;
-    @Entry(category=SERVER)public static double diamondShoeJumpModifier = 0.6;
-    @Entry(category=SERVER)public static double netheriteShoeJumpModifier = 0.8;
+    @Entry(category=SERVER)public static double ironShoeJumpModifier = 0.1;
+    @Entry(category=SERVER)public static double goldShoeJumpModifier = 0.2;
+    @Entry(category=SERVER)public static double diamondShoeJumpModifier = 0.3;
+    @Entry(category=SERVER)public static double netheriteShoeJumpModifier = 0.6;
 
     @Comment(category = SERVER) public static Comment armorModifierComment;
     @Entry(category=SERVER)public static double ironShoeArmorModifier = 5.0;
