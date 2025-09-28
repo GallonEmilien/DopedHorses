@@ -11,7 +11,6 @@ public class ModConfigImpl extends ModConfig {
     @Override
     public void refresh() {
         this.setFasterBlocks(FabricConfig.fasterBlocks);
-        this.setUserUnit(FabricConfig.userUnit);
 
         this.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.IRON), FabricConfig.ironShoeSpeedModifier);
         this.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.GOLD), FabricConfig.goldShoeSpeedModifier);

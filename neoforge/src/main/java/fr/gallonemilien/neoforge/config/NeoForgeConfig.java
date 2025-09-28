@@ -10,13 +10,7 @@ import java.util.List;
 
 
 public class NeoForgeConfig extends MidnightConfig {
-    public static final String CLIENT = "Client";
     public static final String SERVER = "Server";
-
-
-
-    @Comment(category = CLIENT) public static Comment userUnitComment;
-    @Entry(category = CLIENT, min = 0, max = 2) public static int userUnit = 0;
 
     @Comment(category = SERVER) public static Comment explainComment1;
     @Comment(category = SERVER) public static Comment explainComment2;

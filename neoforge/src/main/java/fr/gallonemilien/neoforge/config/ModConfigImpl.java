@@ -11,7 +11,6 @@ public class ModConfigImpl extends ModConfig {
     @Override
     public void refresh() {
         this.setFasterBlocks(NeoForgeConfig.fasterBlocks);
-        this.setUserUnit(NeoForgeConfig.userUnit);
 
         this.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.IRON), NeoForgeConfig.ironShoeSpeedModifier);
         this.setModifier(Pair.of(ConfigDataType.SHOE, ConfigMaterialType.GOLD), NeoForgeConfig.goldShoeSpeedModifier);

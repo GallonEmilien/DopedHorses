@@ -28,7 +28,6 @@ public final class DopedHorsesFabric implements ModInitializer {
         });
     }
 
-
     public static ModConfig register() {
         ModConfig config = new ModConfigImpl();
         config.refresh();

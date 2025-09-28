@@ -14,12 +14,6 @@ import java.util.stream.Collectors;
 public abstract class ModConfig implements ModConfigLoader {
     private @NotNull Map<String, Double> fasterBlocks = new HashMap<>();
     private final Map<Pair<ConfigDataType, ConfigMaterialType>, Double> modifiers = new HashMap<>();
-    @Getter
-    private int userUnit = 0;
-
-    public void setUserUnit(int userUnit) {
-        this.userUnit = (userUnit >= 0 && userUnit <= 2) ? userUnit : 0;
-    }
 
     private final Map<ShoeType, Double> shoeLoot = new HashMap<>();
 
