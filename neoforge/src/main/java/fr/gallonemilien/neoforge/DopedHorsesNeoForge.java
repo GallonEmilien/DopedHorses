@@ -18,15 +18,13 @@ public final class DopedHorsesNeoForge {
 
     public static IEventBus EVENT_BUS = null;
 
+
     public DopedHorsesNeoForge(ModContainer container) {
         MidnightConfig.init(DopedHorses.MOD_ID, NeoForgeConfig.class);
         ModConfig config = register();
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
         EVENT_BUS = modBus;
-        DopedHorses.init(
-                config,
-                false
-        );
+        DopedHorses.init(config);
     }
 
     public static ModConfig register() {

@@ -2,6 +2,7 @@ package fr.gallonemilien.fabric.config;
 
 import eu.midnightdust.lib.config.MidnightConfig;
 import fr.gallonemilien.cache.CacheManager;
+import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.speed.BlockSpeed;
 
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class FabricConfig extends MidnightConfig {
         }
         if(isShoeCacheDifferent()) {
             CacheManager.getInstance().reset();
+            ShoeType.refreshValues();
         }
         super.writeChanges(modid);
     }

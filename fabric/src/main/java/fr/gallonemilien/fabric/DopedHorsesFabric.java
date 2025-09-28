@@ -11,16 +11,14 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 public final class DopedHorsesFabric implements ModInitializer {
+
     @Override
     public void onInitialize() {
 
         MidnightConfig.init(DopedHorses.MOD_ID, FabricConfig.class);
 
         ModConfig config = register();
-        DopedHorses.init(
-                config,
-                true
-        );
+        DopedHorses.init(config);
         //Register the cache reset event
         ServerLifecycleEvents.SERVER_STOPPED.register((server) -> {
             CacheManager.getInstance().reset();

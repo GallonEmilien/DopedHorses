@@ -2,11 +2,14 @@ package fr.gallonemilien.neoforge.config;
 
 import eu.midnightdust.lib.config.MidnightConfig;
 import fr.gallonemilien.cache.CacheManager;
+import fr.gallonemilien.items.ShoeType;
+import fr.gallonemilien.neoforge.DopedHorsesNeoForge;
 import fr.gallonemilien.speed.BlockSpeed;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 
 
 public class NeoForgeConfig extends MidnightConfig {
@@ -64,6 +67,7 @@ public class NeoForgeConfig extends MidnightConfig {
         }
         if(isShoeCacheDifferent()) {
             CacheManager.getInstance().reset();
+            ShoeType.refreshValues();
         }
         super.writeChanges(modid);
     }

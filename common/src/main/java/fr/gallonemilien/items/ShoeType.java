@@ -46,7 +46,8 @@ public enum ShoeType implements DopedHorsesTypes<ShoeItem> {
         return prop;
     }
 
-    public static void refreshValues(ModConfig config) {
+    public static void refreshValues() {
+        ModConfig config = DopedHorses.getConfig();
         for (ShoeType type : values()) {
             ConfigMaterialType matType = ConfigMaterialType.valueOf(type.name().toUpperCase());
             type.speedModifier = config.getModifier(Pair.of(ConfigDataType.SHOE, matType));

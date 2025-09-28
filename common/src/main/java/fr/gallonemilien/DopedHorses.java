@@ -32,16 +32,13 @@ public final class DopedHorses {
     }
 
     public static void init(
-            @NotNull ModConfig config,
-            boolean isFabric
+            @NotNull ModConfig config
     ) {
         DopedHorses.MOD_CONFIG = config;
         DopedHorsesItems.TABS.register();
-        DopedHorsesItems.getAll(); //Pour enclencher le register
+        DopedHorsesItems.getAll();
         DopedHorsesItems.ITEM.register();
         ItemLoot.register();
-        //Neoforge register items later and it throws an error if we try to register them here
-        if(isFabric)
-            ShoeType.refreshValues(config);
+        ShoeType.refreshValues();
     }
 }

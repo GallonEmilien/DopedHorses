@@ -3,7 +3,6 @@ package fr.gallonemilien.speed;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.items.ShoeItem;
-import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.persistence.DopedHorseEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -75,7 +74,6 @@ public class HorseSpeedManager {
      */
     public static void updateHorseShoes(AbstractHorse horse, Item item) {
         if(serverMiddleware(horse)) {
-            ShoeType.refreshValues(DopedHorses.getConfig());
             applyShoeModifier(horse, item, getSpeedAttribute(horse), HORSE_SHOES_BOOST_ID, ShoeItem::getSpeedModifier);
             applyShoeModifier(horse, item, getStepHeight(horse), HORSE_SHOES_STEP_HEIGHT_ID, ShoeItem::getStepHeightModifier);
             applyShoeModifier(horse, item, getJumpAttribute(horse), HORSE_SHOES_JUMP_ID, ShoeItem::getJumpModifier);
