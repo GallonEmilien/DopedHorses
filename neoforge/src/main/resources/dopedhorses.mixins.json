@@ -6,7 +6,8 @@
     "AbstractHorseMixin",
     "HorseInventoryMenuMixin",
     "ItemStackMixin",
-    "EnchantmentHelperMixin"
+    "EnchantmentHelperMixin",
+    "EntityMixin"
   ],
   "client": [
     "HorseInventoryScreenMixin"

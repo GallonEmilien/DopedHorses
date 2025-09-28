@@ -9,7 +9,6 @@ import net.minecraft.world.InteractionResult;
 
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +19,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,6 +32,11 @@ import java.util.Optional;
 
 @Mixin(AbstractHorse.class)
 public abstract class AbstractHorseMixin extends Animal implements ShoeContainer {
+
+    protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
+        super(entityType, level);
+    }
+
 
     /**
      * HORSE SHOES LOGIC
@@ -63,15 +68,11 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         isOnSoulSand = block.defaultBlockState().is(BlockTags.SOUL_SPEED_BLOCKS);
     }
 
-    protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
-        super(entityType, level);
-    }
-
     @Unique
     protected Optional<ItemStack> getShoes() {
         if(!shoe_container.isEmpty()
                 && !this.shoe_container.getItem(0).isEmpty()
-                && this.shoe_container.getItem(0).getItem() instanceof ShoeItem shoeItem)
+                && this.shoe_container.getItem(0).getItem() instanceof ShoeItem)
             return Optional.of(this.shoe_container.getItem(0));
         return Optional.empty();
     }
@@ -79,9 +80,7 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
 
     @Inject(method = "addAdditionalSaveData", at=@At("TAIL"))
     public void saveData(ValueOutput valueOutput, CallbackInfo ci) {
-        getShoes().ifPresent(stack -> {
-            valueOutput.store("ShoeItem", ItemStack.CODEC, stack);
-        });
+        getShoes().ifPresent(stack -> valueOutput.store("ShoeItem", ItemStack.CODEC, stack));
     }
 
     @Inject(method = "readAdditionalSaveData", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/horse/AbstractHorse;setEating(Z)V"))
@@ -96,24 +95,34 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
             });
     }
 
-    /**
-     * SPEED MODIFIER, BLOCK ETC LOGIC
-     */
-
-    //Instant tame
-    @Inject(method ="mobInteract", at=@At("HEAD"), cancellable = true)
-    private void mobInteract(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
-        final AbstractHorse horse = (AbstractHorse)(Object) this;
-        if(!horse.isTamed() && player.isCreative()) {
-            horse.tameWithName(player);
-            cir.setReturnValue(InteractionResult.SUCCESS);
-        }
-    }
-
     //Update speed when a player is riding
     @Inject(method="tickRidden", at=@At("HEAD"))
     private void tickRidden(Player arg, Vec3 arg2, CallbackInfo ci) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.updateHorseSpeed(horse);
+    }
+
+    /**
+     * HORSE INTERACTION LOGIC
+     */
+
+    @Shadow
+    protected abstract void doPlayerRide(Player player);
+
+    //Instant tame && 2 players ride
+    @Inject(method ="mobInteract", at=@At("HEAD"), cancellable = true)
+    private void mobInteract(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
+        //Instant tame if player is in creative mode
+        final AbstractHorse horse = (AbstractHorse)(Object) this;
+        if(!horse.isTamed() && player.isCreative()) {
+            horse.tameWithName(player);
+            cir.setReturnValue(InteractionResult.SUCCESS);
+        }
+
+        if(horse.isVehicle()) {
+            doPlayerRide(player);
+            player.startRiding(horse, true);
+            cir.setReturnValue(InteractionResult.SUCCESS);
+        }
     }
 }
