@@ -24,7 +24,7 @@ public abstract class EnchantmentHelperMixin {
     @Inject(method="runIterationOnEquipment", at=@At("HEAD"))
     private static void runIterationOnEquipment(LivingEntity livingEntity, EnchantmentHelper.EnchantmentInSlotVisitor enchantmentInSlotVisitor, CallbackInfo ci) {
         if(livingEntity instanceof DopedHorseEntity dopedHorseEntity) {
-            runIterationOnItem(dopedHorseEntity.getShoeContainer().getItem(0), EquipmentSlot.FEET, livingEntity, enchantmentInSlotVisitor);
+            runIterationOnItem(dopedHorseEntity.dopedhorses$getShoeContainer().getItem(0), EquipmentSlot.FEET, livingEntity, enchantmentInSlotVisitor);
         }
     }
 }

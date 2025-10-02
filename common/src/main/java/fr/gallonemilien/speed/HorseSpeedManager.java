@@ -93,13 +93,13 @@ public class HorseSpeedManager {
             // Cache access is O(1)
             // First condition checks the cache manager first, as the instance check is expensive
             if (horse instanceof DopedHorseEntity container) {
-                if (container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem item)
+                if (container.dopedhorses$getShoeContainer().getItem(0).getItem() instanceof ShoeItem item)
                     updateHorseShoes(horse, item);
             }
             BlockPos horsePosition = horse.getOnPos();
             Block blockBeneathHorse = horse.level().getBlockState(horsePosition).getBlock();
             if(horse instanceof DopedHorseEntity dopedHorseEntity)
-                dopedHorseEntity.setBlockUnder(blockBeneathHorse);
+                dopedHorseEntity.dopedhorses$setBlockUnder(blockBeneathHorse);
 
 
             //Check if the last computed block was the same... So we don't compute another time

@@ -3,6 +3,7 @@ package fr.gallonemilien;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.config.ModConfig;
+import fr.gallonemilien.helper.GuiPosHelper;
 import fr.gallonemilien.items.DopedHorsesItems;
 import fr.gallonemilien.items.ItemLoot;
 import fr.gallonemilien.items.ShoeType;
@@ -40,5 +41,6 @@ public final class DopedHorses {
         DopedHorsesItems.ITEM.register();
         ItemLoot.register();
         ShoeType.refreshValues();
+        GuiPosHelper.init();
     }
 }

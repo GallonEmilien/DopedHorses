@@ -46,12 +46,12 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
     SimpleContainer shoe_container = new SimpleContainer(1);
 
     @Override
-    public Container getShoeContainer() {
+    public Container dopedhorses$getShoeContainer() {
         return shoe_container;
     }
 
     @Unique
-    private boolean isOnSoulSand = false;
+    private boolean dopedhorses$isOnSoulSand = false;
 
 
     /**
@@ -60,17 +60,17 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
      * remove a shoe with soulspeed. Maybe due to the default minecraft behavior, need to have a look
      */
     @Override
-    public boolean canPickUp() {
-        return !isOnSoulSand;
+    public boolean dopedhorses$canPickUp() {
+        return !dopedhorses$isOnSoulSand;
     }
 
     @Override
-    public void setBlockUnder(Block block) {
-        isOnSoulSand = block.defaultBlockState().is(BlockTags.SOUL_SPEED_BLOCKS);
+    public void dopedhorses$setBlockUnder(Block block) {
+        dopedhorses$isOnSoulSand = block.defaultBlockState().is(BlockTags.SOUL_SPEED_BLOCKS);
     }
 
     @Unique
-    protected Optional<ItemStack> getShoes() {
+    protected Optional<ItemStack> dopedhorses$getShoes() {
         if(!shoe_container.isEmpty()
                 && !this.shoe_container.getItem(0).isEmpty()
                 && this.shoe_container.getItem(0).getItem() instanceof ShoeItem)
@@ -97,7 +97,7 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
 
     @Inject(method = "addAdditionalSaveData", at=@At("TAIL"))
     public void saveData(ValueOutput valueOutput, CallbackInfo ci) {
-        getShoes().ifPresent(stack -> valueOutput.store("ShoeItem", ItemStack.CODEC, stack));
+        dopedhorses$getShoes().ifPresent(stack -> valueOutput.store("ShoeItem", ItemStack.CODEC, stack));
     }
 
     @Inject(method = "readAdditionalSaveData", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/horse/AbstractHorse;setEating(Z)V"))
@@ -112,9 +112,9 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
             });
     }
 
-    //Update speed when a player is riding
+    //Update speed when a player is riding && horse swim
     @Inject(method="tickRidden", at=@At("HEAD"))
-    private void tickRidden(Player arg, Vec3 arg2, CallbackInfo ci) {
+    private void tickRidden(Player player, Vec3 arg2, CallbackInfo ci) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
         HorseSpeedManager.updateHorseSpeed(horse);
     }
