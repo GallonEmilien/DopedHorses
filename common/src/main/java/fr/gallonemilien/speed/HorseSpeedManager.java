@@ -31,7 +31,7 @@ public class HorseSpeedManager {
     private static final BlockSpeed blockSpeedManager = BlockSpeed.getInstance();
 
     private static boolean serverMiddleware(LivingEntity entity) {
-        return !entity.level().isClientSide;
+        return !entity.level().isClientSide();
     }
 
     /**

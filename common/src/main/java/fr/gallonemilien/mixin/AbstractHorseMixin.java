@@ -138,7 +138,7 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
 
         if(horse.isVehicle()) {
             doPlayerRide(player);
-            player.startRiding(horse, true);
+            player.startRiding(horse, true, false);
             cir.setReturnValue(InteractionResult.SUCCESS);
         }
     }
