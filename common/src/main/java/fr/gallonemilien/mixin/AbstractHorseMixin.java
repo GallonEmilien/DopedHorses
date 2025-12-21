@@ -10,7 +10,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -100,7 +100,11 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
         dopedhorses$getShoes().ifPresent(stack -> valueOutput.store("ShoeItem", ItemStack.CODEC, stack));
     }
 
-    @Inject(method = "readAdditionalSaveData", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/horse/AbstractHorse;setEating(Z)V"))
+    @Inject(
+        method = "readAdditionalSaveData",
+        at = @At(value = "INVOKE",
+                target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;setEating(Z)V")
+    )
     public void readData(ValueInput valueInput, CallbackInfo ci) {
         valueInput.read("ShoeItem", ItemStack.CODEC)
             .ifPresent(itemStack -> {

@@ -5,12 +5,12 @@ import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.persistence.DopedHorseEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -20,12 +20,12 @@ import net.minecraft.world.level.block.Block;
 public class HorseSpeedManager {
     public static final double DEFAULT_SPEED_MODIFIER = 0.0; //It's used to get horses faster or slower or no modif
                                                             // Default_Horse_Speed + DEFAULT_SPEED_MODIFIER * Default_speed
-    private static final ResourceLocation HORSE_SPEED_BOOST_ID = DopedHorses.id("horse_speed_boost_modifier");
-    private static final ResourceLocation HORSE_SHOES_BOOST_ID = DopedHorses.id("horse_shoes_boost_modifier");
-    private static final ResourceLocation HORSE_SHOES_ARMOR_ID = DopedHorses.id("horse_shoes_armor_modifier");
-    private static final ResourceLocation HORSE_SHOES_JUMP_ID = DopedHorses.id("horse_shoes_jump_modifier");
-    private static final ResourceLocation HORSE_SHOES_STEP_HEIGHT_ID = DopedHorses.id("horse_shoes_step_height_modifier");
-    private static final ResourceLocation HORSE_SHOES_SAFE_FALL_ID = DopedHorses.id("horse_shoes_safe_fall_modifier");
+    private static final Identifier HORSE_SPEED_BOOST_ID = DopedHorses.id("horse_speed_boost_modifier");
+    private static final Identifier HORSE_SHOES_BOOST_ID = DopedHorses.id("horse_shoes_boost_modifier");
+    private static final Identifier HORSE_SHOES_ARMOR_ID = DopedHorses.id("horse_shoes_armor_modifier");
+    private static final Identifier HORSE_SHOES_JUMP_ID = DopedHorses.id("horse_shoes_jump_modifier");
+    private static final Identifier HORSE_SHOES_STEP_HEIGHT_ID = DopedHorses.id("horse_shoes_step_height_modifier");
+    private static final Identifier HORSE_SHOES_SAFE_FALL_ID = DopedHorses.id("horse_shoes_safe_fall_modifier");
 
     private static final CacheManager cacheManager = CacheManager.getInstance(); //Call to get the instance only one time
     private static final BlockSpeed blockSpeedManager = BlockSpeed.getInstance();
@@ -123,7 +123,7 @@ public class HorseSpeedManager {
     private static void applyShoeModifier(AbstractHorse horse,
                                           Item item,
                                           AttributeInstance attribute,
-                                          ResourceLocation modifierId,
+                                          Identifier modifierId,
                                           java.util.function.Function<ShoeItem, Double> modifierFunction) {
         if(serverMiddleware(horse)) {
             if(item instanceof ShoeItem shoes) {

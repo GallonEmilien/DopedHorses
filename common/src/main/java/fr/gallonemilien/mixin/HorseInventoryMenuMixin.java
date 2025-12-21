@@ -7,11 +7,11 @@ import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.persistence.DopedHorseEntity;
 import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -32,7 +32,7 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
     }
 
     @Unique
-    private static final ResourceLocation SHOE_LOCATION = DopedHorses.id("horse_shoe");
+    private static final Identifier SHOE_LOCATION = DopedHorses.id("horse_shoe");
 
     @Inject(method = "<init>", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/HorseInventoryMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;"))
     public void constructor(int i, Inventory inventory, Container container, AbstractHorse abstractHorse, int j, CallbackInfo ci) {
@@ -68,7 +68,7 @@ public abstract class HorseInventoryMenuMixin extends AbstractContainerMenu {
                 }
 
                 @Override
-                public ResourceLocation getNoItemIcon() {
+                public Identifier getNoItemIcon() {
                     return SHOE_LOCATION;
                 }
             });

@@ -8,15 +8,15 @@ import fr.gallonemilien.items.DopedHorsesItems;
 import fr.gallonemilien.items.ItemLoot;
 import fr.gallonemilien.items.ShoeType;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import org.jetbrains.annotations.NotNull;
 
 public final class DopedHorses {
     public static final String MOD_ID = "dopedhorses";
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
     private static ModConfig MOD_CONFIG;
     public static final RegistrySupplier<CreativeModeTab> TAB = DopedHorsesItems.TABS.register(

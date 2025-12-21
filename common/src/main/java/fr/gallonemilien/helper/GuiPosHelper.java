@@ -1,9 +1,9 @@
 package fr.gallonemilien.helper;
 
 import dev.architectury.platform.Platform;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.animal.horse.Donkey;
-import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.Donkey;
+import net.minecraft.world.entity.animal.equine.Llama;
 
 public class GuiPosHelper {
 
