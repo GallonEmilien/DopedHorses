@@ -27,7 +27,7 @@ public class NeoForgeConfig extends MidnightConfig {
     @Comment(category = SERVER) public static Comment shoeModifierComment;
     @Entry(category=SERVER) public static double ironShoeSpeedModifier = 0.04;
     @Entry(category=SERVER) public static double goldShoeSpeedModifier = 0.06;
-    @Entry(category=SERVER) public static double diamondShoeSpeedModifier = 0.8;
+    @Entry(category=SERVER) public static double diamondShoeSpeedModifier = 0.08;
     @Entry(category=SERVER) public static double netheriteShoeSpeedModifier = 0.12;
 
     @Comment(category = SERVER) public static Comment stepHeightModifierComment;
