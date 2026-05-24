@@ -79,14 +79,19 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         }
     }
 
-    @Inject(method = "readAdditionalSaveData", at= @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;contains(Ljava/lang/String;I)Z"))
+    @Inject(method = "readAdditionalSaveData", at= @At("TAIL"))
     public void readData(CompoundTag compoundTag, CallbackInfo ci) {
         if (compoundTag.contains("ShoeItem", 10)) {
             ItemStack itemStack = ItemStack.parse(this.registryAccess(), compoundTag.getCompound("ShoeItem")).orElse(ItemStack.EMPTY);
             if (itemStack.getItem() instanceof ShoeItem) {
                 this.shoe_container.setItem(0, itemStack);
+            } else {
+                this.shoe_container.setItem(0, ItemStack.EMPTY);
             }
+        } else {
+            this.shoe_container.setItem(0, ItemStack.EMPTY);
         }
+        HorseSpeedManager.updateHorseShoes((AbstractHorse)(Object) this, this.shoe_container.getItem(0).getItem());
     }
 
     /**
