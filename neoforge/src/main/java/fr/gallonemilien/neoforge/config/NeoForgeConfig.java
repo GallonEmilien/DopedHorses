@@ -1,8 +1,8 @@
 package fr.gallonemilien.neoforge.config;
 
 import eu.midnightdust.lib.config.MidnightConfig;
-import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.speed.BlockSpeed;
+import fr.gallonemilien.speed.HorseSpeedManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,11 +65,11 @@ public class NeoForgeConfig extends MidnightConfig {
     public void writeChanges(String modid) {
         if(!fasterBlocksCache.equals(fasterBlocks)) {
             BlockSpeed.getInstance().reset();
-            CacheManager.getInstance().reset();
+            HorseSpeedManager.invalidateGlobalCache();
             fasterBlocksCache = cloneList(fasterBlocks);
         }
         if(isShoeCacheDifferent()) {
-            CacheManager.getInstance().reset();
+            HorseSpeedManager.invalidateGlobalCache();
         }
         super.writeChanges(modid);
     }

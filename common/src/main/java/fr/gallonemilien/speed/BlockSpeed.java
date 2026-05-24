@@ -5,8 +5,8 @@ import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.cache.Resetable;
 import net.minecraft.world.level.block.Block;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
@@ -14,7 +14,7 @@ import static fr.gallonemilien.speed.HorseSpeedManager.DEFAULT_SPEED_MODIFIER;
 
 public class BlockSpeed implements Resetable {
 
-    private final Map<String, Double> blockSpeedCache = new HashMap<>();
+    private final Map<String, Double> blockSpeedCache = new ConcurrentHashMap<>();
     private static BlockSpeed INSTANCE;
     private BlockSpeed() {
 

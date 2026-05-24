@@ -1,24 +1,19 @@
 package fr.gallonemilien.speed;
 
 import fr.gallonemilien.DopedHorses;
-import fr.gallonemilien.cache.CacheManager;
+import fr.gallonemilien.cache.HorseCache;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.items.ShoeType;
-import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.persistence.ShoeContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-
-import java.util.*;
 
 import static fr.gallonemilien.utils.SpeedUtils.updateHudSpeed;
 
@@ -35,8 +30,14 @@ public class HorseSpeedManager {
     private static final ResourceLocation HORSE_SHOES_STEP_HEIGHT_ID = DopedHorses.id("horse_shoes_step_height_modifier");
     private static final ResourceLocation HORSE_SHOES_SAFE_FALL_ID = DopedHorses.id("horse_shoes_safe_fall_modifier");
 
-    private static final CacheManager cacheManager = CacheManager.getInstance(); //Call to get the instance only one time
     private static final BlockSpeed blockSpeedManager = BlockSpeed.getInstance();
+    
+    // Global version counter for cache invalidation
+    public static int CACHE_VERSION = 0;
+
+    public static void invalidateGlobalCache() {
+        CACHE_VERSION++;
+    }
 
     private static boolean serverMiddleware(LivingEntity entity) {
         return !entity.level().isClientSide;
@@ -95,12 +96,19 @@ public class HorseSpeedManager {
     public static void updateHorseSpeed(AbstractHorse horse) {
         if (serverMiddleware(horse)) {
             updateHudSpeed(horse);
+            HorseCache horseCache = (HorseCache) horse;
+            
+            // Invalidate local cache if global version has changed
+            if (horseCache.getDopedHorseCacheVersion() < CACHE_VERSION) {
+                horseCache.setDopedHorseInitialized(false);
+                horseCache.setDopedHorseLastWalkedOnBlockId("");
+                horseCache.setDopedHorseCacheVersion(CACHE_VERSION);
+            }
+
             // Check if the horse has been initialized since the last server startup
             // This cache prevents having to manually remove and reapply shoes to update them
-            // Cache access is O(1)
-            // First condition checks the cache manager first, as the instance check is expensive
-            if (!cacheManager.getInitializedHorse(horse.getUUID()) && horse instanceof ShoeContainer container) {
-                cacheManager.putInitializedHorse(horse.getUUID(), true);
+            if (!horseCache.isDopedHorseInitialized() && horse instanceof ShoeContainer container) {
+                horseCache.setDopedHorseInitialized(true);
                 if (container.getShoeContainer().getItem(0).getItem() instanceof ShoeItem item)
                     updateHorseShoes(horse, item);
             }
@@ -111,18 +119,17 @@ public class HorseSpeedManager {
 
             //Check if the last computed block was the same... So we don't compute another time
             if (!isLastBlockComputedTheSame(horse, blockBeneathHorse)) {
-                cacheManager.putLastWalkedOnBlockId(horse.getUUID(),blockBeneathHorse.getDescriptionId());
+                horseCache.setDopedHorseLastWalkedOnBlockId(blockBeneathHorse.getDescriptionId());
                 Double blockSpeed = blockSpeedManager.getBlockSpeed(blockBeneathHorse);
-                if(cacheManager.getHorseMultiplier(horse.getUUID()) != blockSpeed) {
+                if(horseCache.getDopedHorseMultiplier() != blockSpeed) {
                     applySpeedModifier(horse, blockSpeed);
                 }
             }
-        } else {
         }
     }
 
     private static boolean isLastBlockComputedTheSame(AbstractHorse horse, Block block) {
-        return cacheManager.getLastWalkedOnBlockId(horse.getUUID()).equals(block.getDescriptionId());
+        return ((HorseCache) horse).getDopedHorseLastWalkedOnBlockId().equals(block.getDescriptionId());
     }
 
     /**
@@ -147,32 +154,10 @@ public class HorseSpeedManager {
      */
     private static void applySpeedModifier(AbstractHorse horse, double speedMultiplier) {
         if(serverMiddleware(horse)) {
+            HorseCache horseCache = (HorseCache) horse;
             getSpeedAttribute(horse).removeModifier(HORSE_SPEED_BOOST_ID);
             getSpeedAttribute(horse).addTransientModifier(new AttributeModifier(HORSE_SPEED_BOOST_ID, speedMultiplier, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-            cacheManager.putHorseMultiplier(horse.getUUID(), speedMultiplier);
-        }
-    }
-
-
-    /**
-     * Sends a packet to indicate the player is riding a horse.
-     */
-    public static void playerRiding(Player player) {
-        if(serverMiddleware(player)) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(true));
-            }
-        }
-    }
-
-    /**
-     * Sends a packet to indicate the player has dismounted a horse.
-     */
-    public static void playerDismount(Player player) {
-        if(serverMiddleware(player)) {
-            if (player instanceof ServerPlayer serverPlayer) {
-                DopedHorses.PACKET_HANDLER.sendToPlayer(serverPlayer, new RideHorsePayload(false));
-            }
+            horseCache.setDopedHorseMultiplier(speedMultiplier);
         }
     }
 }

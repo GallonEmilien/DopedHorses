@@ -1,5 +1,6 @@
 package fr.gallonemilien.mixin;
 
+import fr.gallonemilien.cache.HorseCache;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.nbt.CompoundTag;
@@ -27,15 +28,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import fr.gallonemilien.persistence.ShoeContainer;
 
+import java.util.Optional;
+
+import static fr.gallonemilien.speed.HorseSpeedManager.DEFAULT_SPEED_MODIFIER;
+
 
 @Mixin(AbstractHorse.class)
-public abstract class AbstractHorseMixin extends Animal implements ShoeContainer {
+public abstract class AbstractHorseMixin extends Animal implements ShoeContainer, HorseCache {
 
     /**
      * HORSE SHOES LOGIC
      */
     @Unique
     SimpleContainer shoe_container = new SimpleContainer(1);
+
+    @Unique
+    private double dopedHorseMultiplier = DEFAULT_SPEED_MODIFIER;
+
+    @Unique
+    private boolean dopedHorseInitialized = false;
+
+    @Unique
+    private String dopedHorseLastWalkedOnBlockId = "";
+    
+    @Unique
+    private int dopedHorseCacheVersion = -1;
+
 
     public Container getShoeContainer() {
         return shoe_container;
@@ -81,17 +99,13 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
 
     @Inject(method = "readAdditionalSaveData", at= @At("TAIL"))
     public void readData(CompoundTag compoundTag, CallbackInfo ci) {
-        if (compoundTag.contains("ShoeItem", 10)) {
-            ItemStack itemStack = ItemStack.parse(this.registryAccess(), compoundTag.getCompound("ShoeItem")).orElse(ItemStack.EMPTY);
-            if (itemStack.getItem() instanceof ShoeItem) {
-                this.shoe_container.setItem(0, itemStack);
-            } else {
-                this.shoe_container.setItem(0, ItemStack.EMPTY);
-            }
-        } else {
-            this.shoe_container.setItem(0, ItemStack.EMPTY);
-        }
-        HorseSpeedManager.updateHorseShoes((AbstractHorse)(Object) this, this.shoe_container.getItem(0).getItem());
+        ItemStack itemStack = Optional.ofNullable(compoundTag.getCompound("ShoeItem"))
+                .flatMap(tag -> ItemStack.parse(this.registryAccess(), tag))
+                .filter(stack -> stack.getItem() instanceof ShoeItem)
+                .orElse(ItemStack.EMPTY);
+
+        this.shoe_container.setItem(0, itemStack);
+        HorseSpeedManager.updateHorseShoes((AbstractHorse) (Object) this, itemStack.getItem());
     }
 
     /**
@@ -124,17 +138,50 @@ public abstract class AbstractHorseMixin extends Animal implements ShoeContainer
         HorseSpeedManager.updateHorseSpeed(horse);
     }
 
-    @Inject(method="doPlayerRide", at=@At("HEAD"))
-    private void doPlayerRide(Player arg, CallbackInfo ci) {
-        HorseSpeedManager.playerRiding(arg);
-    }
-
     //Reverting the horse speed when nobody is riding
     @Inject(method="getDismountLocationForPassenger", at=@At("HEAD"))
     private void getDismountLocationForPassenger(LivingEntity livingEntity, CallbackInfoReturnable<Vec3> cir) {
         final AbstractHorse horse = (AbstractHorse)(Object) this;
-        if(livingEntity instanceof Player player)
-            HorseSpeedManager.playerDismount(player);
         HorseSpeedManager.updateHorseSpeed(horse);
+    }
+
+    @Override
+    public double getDopedHorseMultiplier() {
+        return dopedHorseMultiplier;
+    }
+
+    @Override
+    public void setDopedHorseMultiplier(double multiplier) {
+        this.dopedHorseMultiplier = multiplier;
+    }
+
+    @Override
+    public boolean isDopedHorseInitialized() {
+        return dopedHorseInitialized;
+    }
+
+    @Override
+    public void setDopedHorseInitialized(boolean initialized) {
+        this.dopedHorseInitialized = initialized;
+    }
+
+    @Override
+    public String getDopedHorseLastWalkedOnBlockId() {
+        return dopedHorseLastWalkedOnBlockId;
+    }
+
+    @Override
+    public void setDopedHorseLastWalkedOnBlockId(String blockId) {
+        this.dopedHorseLastWalkedOnBlockId = blockId;
+    }
+
+    @Override
+    public int getDopedHorseCacheVersion() {
+        return dopedHorseCacheVersion;
+    }
+
+    @Override
+    public void setDopedHorseCacheVersion(int version) {
+        this.dopedHorseCacheVersion = version;
     }
 }

@@ -1,7 +1,6 @@
 package fr.gallonemilien.fabric.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import fr.gallonemilien.network.RideHorsePayload;
 import fr.gallonemilien.network.SpeedPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -39,10 +38,6 @@ public final class DopedHorsesFabricClient implements ClientModInitializer {
 
     private static void registerPayloads() {
         ClientPlayNetworking.registerGlobalReceiver(SpeedPayload.TYPE, (payload, ctx) -> {
-            FabricSpeedHud.getInstance().networkEntry(payload);
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(RideHorsePayload.TYPE, (payload, ctx) -> {
             FabricSpeedHud.getInstance().networkEntry(payload);
         });
     }
