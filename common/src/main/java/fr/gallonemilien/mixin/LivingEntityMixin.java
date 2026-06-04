@@ -15,44 +15,49 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Mixin for {@link LivingEntity} to apply custom behaviors to horses.
+ */
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
     @Shadow
     protected abstract Vec3 handleRelativeFrictionAndCalculateMovement(Vec3 vec3, float f);
 
-    //Avoid from moving when the horse is saddled
+    /**
+     * Injects logic to prevent a saddled horse from moving on its own when not being ridden.
+     * This overrides the default travel behavior to only apply gravity and friction,
+     * effectively "parking" the horse.
+     */
     @Inject(method = "travel", at = @At("HEAD"), cancellable = true)
-    private void travel(Vec3 vec3, CallbackInfo ci) {
+    private void dopedhorses$onTravel(Vec3 vec3, CallbackInfo ci) {
         if ((Object) this instanceof AbstractHorse horse) {
+            // Check if the horse is saddled, not ridden, and not in a special state (like in water or powder snow)
             if (!horse.isVehicle() && horse.isSaddled() && !horse.isInPowderSnow && !horse.isInLiquid()) {
                 double gravity = horse.getGravity();
-                boolean falling = horse.getDeltaMovement().y <= 0.0;
+                boolean isFalling = horse.getDeltaMovement().y <= 0.0;
 
-                if (falling && horse.hasEffect(MobEffects.SLOW_FALLING)) {
+                if (isFalling && horse.hasEffect(MobEffects.SLOW_FALLING)) {
                     gravity = Math.min(gravity, 0.01);
                 }
 
                 BlockPos blockPos = horse.getBlockPosBelowThatAffectsMyMovement();
                 float friction = horse.level().getBlockState(blockPos).getBlock().getFriction();
 
-                Vec3 vec = this.handleRelativeFrictionAndCalculateMovement(Vec3.ZERO, friction);
+                // Calculate movement with zero input, only applying friction
+                Vec3 movement = this.handleRelativeFrictionAndCalculateMovement(Vec3.ZERO, friction);
 
-                double y = vec.y;
+                double yMovement = movement.y;
                 if (horse.hasEffect(MobEffects.LEVITATION)) {
-                    y += (0.05 * (horse.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - vec.y) * 0.2;
+                    yMovement += (0.05 * (horse.getEffect(MobEffects.LEVITATION).getAmplifier() + 1) - movement.y) * 0.2;
                 } else {
-                    y -= gravity;
+                    yMovement -= gravity;
                 }
 
                 if (horse.shouldDiscardFriction()) {
-                    horse.setDeltaMovement(0.0, y, 0.0);
+                    horse.setDeltaMovement(0.0, yMovement, 0.0);
                 } else {
-                    horse.setDeltaMovement(
-                            0.0,
-                            y * 0.98F,
-                            0.0
-                    );
+                    horse.setDeltaMovement(0.0, yMovement * 0.98F, 0.0);
                 }
 
                 horse.calculateEntityAnimation(false);
@@ -61,17 +66,23 @@ public abstract class LivingEntityMixin {
         }
     }
 
+    /**
+     * Injects logic to reduce fall damage for horses wearing shoes.
+     * The damage reduction is proportional to the shoe's jump modifier.
+     */
     @Inject(method = "causeFallDamage", at = @At("HEAD"), cancellable = true)
-    private void reduceHorseFallDamage(double distance, float multiplier, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        if ((Object) this instanceof DopedHorseEntity dopedHorseEntity) {
-            if (!dopedHorseEntity.dopedhorses$getShoeContainer().getItem(0).isEmpty() &&
-                    dopedHorseEntity.dopedhorses$getShoeContainer().getItem(0).getItem() instanceof ShoeItem shoeItem) {
+    private void dopedhorses$onCauseFallDamage(double distance, float multiplier, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this instanceof DopedHorseEntity dopedHorse) {
+            var shoeStack = dopedHorse.dopedhorses$getShoeContainer().getItem(0);
+            if (!shoeStack.isEmpty() && shoeStack.getItem() instanceof ShoeItem shoeItem) {
                 double jumpBonus = shoeItem.getJumpModifier();
-                float newMultiplier = Math.max(0f, multiplier - (float)jumpBonus);
-                boolean result = ((LivingEntity)(Object) this).causeFallDamage(distance, newMultiplier, source);
+                // Reduce the fall damage multiplier based on the jump bonus
+                float newMultiplier = Math.max(0f, multiplier - (float) jumpBonus);
+                
+                // Re-invoke the original method with the new multiplier
+                boolean result = ((LivingEntity) (Object) this).causeFallDamage(distance, newMultiplier, source);
                 cir.setReturnValue(result);
             }
         }
     }
 }
-

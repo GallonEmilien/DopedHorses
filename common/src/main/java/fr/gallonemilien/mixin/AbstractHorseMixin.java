@@ -1,12 +1,12 @@
 package fr.gallonemilien.mixin;
 
+import fr.gallonemilien.cache.HorseCache;
 import fr.gallonemilien.items.ShoeItem;
 import fr.gallonemilien.speed.HorseSpeedManager;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
@@ -30,29 +30,55 @@ import fr.gallonemilien.persistence.DopedHorseEntity;
 
 import java.util.Optional;
 
+import static fr.gallonemilien.speed.HorseSpeedManager.DEFAULT_SPEED_MODIFIER;
 
+/**
+ * Mixin for {@link AbstractHorse} to add custom features like horse shoes,
+ * caching, and interaction modifications.
+ * <p>
+ * This class implements {@link DopedHorseEntity} and {@link HorseCache} to provide
+ * custom data storage directly on the horse entity.
+ */
 @Mixin(AbstractHorse.class)
-public abstract class AbstractHorseMixin extends Animal implements DopedHorseEntity {
+public abstract class AbstractHorseMixin extends Animal implements DopedHorseEntity, HorseCache {
 
-    protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
-        super(entityType, level);
-    }
-
-
+    //region Unique Fields
     /**
-     * HORSE SHOES LOGIC
+     * The inventory container for the horse's shoes.
+     * Marked as {@code @Unique} to ensure it doesn't conflict with other mods or vanilla code.
      */
     @Unique
-    SimpleContainer shoe_container = new SimpleContainer(1);
+    private final SimpleContainer dopedhorses$shoeContainer = new SimpleContainer(1);
 
-    @Override
-    public Container dopedhorses$getShoeContainer() {
-        return shoe_container;
-    }
+    /**
+     * The cached speed multiplier for the horse, determined by the block it's standing on.
+     */
+    @Unique
+    private double dopedhorses$horseMultiplier = DEFAULT_SPEED_MODIFIER;
+
+    /**
+     * A flag indicating whether the horse's properties (like shoes) have been initialized
+     * since the last server start or cache invalidation.
+     */
+    @Unique
+    private boolean dopedhorses$isInitialized = false;
+
+    /**
+     * The description ID of the last block the horse walked on, used for caching speed calculations.
+     */
+    @Unique
+    private String dopedhorses$lastWalkedOnBlockId = "";
+
+    /**
+     * The local cache version for this horse instance. Used to check against the global
+     * cache version in {@link HorseSpeedManager} for invalidation.
+     */
+    @Unique
+    private int dopedhorses$cacheVersion = -1;
+    //endregion
 
     @Unique
     private boolean dopedhorses$isOnSoulSand = false;
-
 
     /**
      * TODO : Find a prettier solution in a next update.
@@ -64,86 +90,160 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
         return !dopedhorses$isOnSoulSand;
     }
 
+    protected AbstractHorseMixin(EntityType<? extends Animal> entityType, Level level) {
+        super(entityType, level);
+    }
+
+    //region DopedHorseEntity Implementation
+    @Override
+    public Container dopedhorses$getShoeContainer() {
+        return this.dopedhorses$shoeContainer;
+    }
+    //endregion
+
+    //region HorseCache Implementation
+    @Override
+    public double getDopedHorseMultiplier() {
+        return this.dopedhorses$horseMultiplier;
+    }
+
+    @Override
+    public void setDopedHorseMultiplier(double multiplier) {
+        this.dopedhorses$horseMultiplier = multiplier;
+    }
+
+    @Override
+    public boolean isDopedHorseInitialized() {
+        return this.dopedhorses$isInitialized;
+    }
+
+    @Override
+    public void setDopedHorseInitialized(boolean initialized) {
+        this.dopedhorses$isInitialized = initialized;
+    }
+
+    @Override
+    public String getDopedHorseLastWalkedOnBlockId() {
+        return this.dopedhorses$lastWalkedOnBlockId;
+    }
+
+    @Override
+    public void setDopedHorseLastWalkedOnBlockId(String blockId) {
+        this.dopedhorses$lastWalkedOnBlockId = blockId;
+    }
+
+    @Override
+    public int getDopedHorseCacheVersion() {
+        return this.dopedhorses$cacheVersion;
+    }
+
+    @Override
+    public void setDopedHorseCacheVersion(int version) {
+        this.dopedhorses$cacheVersion = version;
+    }
+    //endregion
+
+    //region Unique Methods
+    /**
+     * Safely retrieves the equipped horse shoe as an {@link ItemStack}.
+     *
+     * @return An {@link Optional} containing the shoe {@link ItemStack}, or empty if not equipped or invalid.
+     */
+    @Unique
+    private Optional<ItemStack> dopedhorses$getShoes() {
+        if (!this.dopedhorses$shoeContainer.isEmpty()) {
+            var stack = this.dopedhorses$shoeContainer.getItem(0);
+            if (stack.getItem() instanceof ShoeItem) {
+                return Optional.of(stack);
+            }
+        }
+        return Optional.empty();
+    }
+    //endregion
+
     @Override
     public void dopedhorses$setBlockUnder(Block block) {
         dopedhorses$isOnSoulSand = block.defaultBlockState().is(BlockTags.SOUL_SPEED_BLOCKS);
     }
 
-    @Unique
-    protected Optional<ItemStack> dopedhorses$getShoes() {
-        if(!shoe_container.isEmpty()
-                && !this.shoe_container.getItem(0).isEmpty()
-                && this.shoe_container.getItem(0).getItem() instanceof ShoeItem)
-            return Optional.of(this.shoe_container.getItem(0));
-        return Optional.empty();
-    }
-
-    //drop the loot when dying
+    //region Injected Methods (Mixins)
+    /**
+     * Injects logic to drop the horse shoe container's content when the horse's equipment is dropped.
+     */
     @Inject(method = "dropEquipment", at = @At("TAIL"))
-    private void dropShoeContainer(CallbackInfo ci) {
-        if (!this.shoe_container.isEmpty()) {
-            Level world = this.level();
-            for (int i = 0; i < shoe_container.getContainerSize(); i++) {
-                ItemStack stack = shoe_container.getItem(i);
+    private void dopedhorses$onDropEquipment(CallbackInfo ci) {
+        if (!this.dopedhorses$shoeContainer.isEmpty()) {
+            var world = this.level();
+            for (int i = 0; i < this.dopedhorses$shoeContainer.getContainerSize(); i++) {
+                var stack = this.dopedhorses$shoeContainer.getItem(i);
                 if (!stack.isEmpty()) {
-                    ItemEntity entity = new ItemEntity(world, this.getX(), this.getY(), this.getZ(), stack);
-                    world.addFreshEntity(entity);
+                    world.addFreshEntity(new ItemEntity(world, this.getX(), this.getY(), this.getZ(), stack));
                 }
             }
-            shoe_container.clearContent();
+            this.dopedhorses$shoeContainer.clearContent();
         }
     }
 
-
-    @Inject(method = "addAdditionalSaveData", at=@At("TAIL"))
-    public void saveData(ValueOutput valueOutput, CallbackInfo ci) {
-        dopedhorses$getShoes().ifPresent(stack -> valueOutput.store("ShoeItem", ItemStack.CODEC, stack));
+    /**
+     * Injects logic to serialize the horse shoe item to the horse's save data.
+     */
+    @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+    public void dopedhorses$onSaveData(ValueOutput valueOutput, CallbackInfo ci) {
+        this.dopedhorses$getShoes().ifPresent(stack -> valueOutput.store("ShoeItem", ItemStack.CODEC, stack));
     }
 
+    /**
+     * Injects logic to deserialize the horse shoe item from save data and apply it to the horse.
+     */
     @Inject(
         method = "readAdditionalSaveData",
-        at = @At(value = "INVOKE",
-                target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;setEating(Z)V")
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;setEating(Z)V")
     )
-    public void readData(ValueInput valueInput, CallbackInfo ci) {
+    public void dopedhorses$onReadData(ValueInput valueInput, CallbackInfo ci) {
         valueInput.read("ShoeItem", ItemStack.CODEC)
             .ifPresent(itemStack -> {
-                if(itemStack.getItem() instanceof ShoeItem) {
-                    this.shoe_container.setItem(0, itemStack);
+                if (itemStack.getItem() instanceof ShoeItem) {
+                    this.dopedhorses$shoeContainer.setItem(0, itemStack);
                 } else {
-                    this.shoe_container.setItem(0, ItemStack.EMPTY);
+                    this.dopedhorses$shoeContainer.setItem(0, ItemStack.EMPTY);
                 }
             });
     }
 
-    //Update speed when a player is riding && horse swim
-    @Inject(method="tickRidden", at=@At("HEAD"))
-    private void tickRidden(Player player, Vec3 arg2, CallbackInfo ci) {
-        final AbstractHorse horse = (AbstractHorse)(Object) this;
-        HorseSpeedManager.updateHorseSpeed(horse);
-    }
-
     /**
-     * HORSE INTERACTION LOGIC
+     * Injects a call to update the horse's speed on every tick while being ridden.
+     * This ensures speed modifiers from blocks and shoes are applied continuously.
      */
+    @Inject(method = "tickRidden", at = @At("HEAD"))
+    private void dopedhorses$onTickRidden(Player player, Vec3 travel, CallbackInfo ci) {
+        // The cast to AbstractHorse is necessary because 'this' is a proxy object in the mixin context.
+        HorseSpeedManager.updateHorseSpeed((AbstractHorse) (Object) this);
+    }
 
     @Shadow
     protected abstract void doPlayerRide(Player player);
 
-    //Instant tame && 2 players ride
-    @Inject(method ="mobInteract", at=@At("HEAD"), cancellable = true)
-    private void mobInteract(Player player, InteractionHand interactionHand, CallbackInfoReturnable<InteractionResult> cir) {
-        //Instant tame if player is in creative mode
-        final AbstractHorse horse = (AbstractHorse)(Object) this;
-        if(!horse.isTamed() && player.isCreative()) {
+    /**
+     * Injects custom interaction logic.
+     * - Allows creative mode players to instantly tame horses.
+     * - Allows a second player to ride a horse that is already being ridden.
+     */
+    @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
+    private void dopedhorses$onMobInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        var horse = (AbstractHorse) (Object) this;
+
+        // Instant tame for creative players
+        if (!horse.isTamed() && player.isCreative()) {
             horse.tameWithName(player);
             cir.setReturnValue(InteractionResult.SUCCESS);
         }
 
-        if(horse.isVehicle()) {
+        // Allow a second player to ride
+        if (horse.isVehicle()) {
             doPlayerRide(player);
             player.startRiding(horse, true, false);
             cir.setReturnValue(InteractionResult.SUCCESS);
         }
     }
+    //endregion
 }

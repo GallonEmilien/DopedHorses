@@ -7,7 +7,7 @@
   "authors": [
     "GallonEmilien"
   ],
-  "accessWidener" : "dopedhorses.accesswidener",
+  "accessWidener" : "dopedhorses.classtweaker",
   "contact": {
     "homepage": "https://github.com/GallonEmilien/",
     "sources": "https://github.com/GallonEmilien/DopedHorses"
@@ -25,9 +25,9 @@
   ],
   "depends": {
     "fabricloader": ">=0.16.13",
-    "minecraft": ">=1.21.11",
+    "minecraft": ">=26.1",
     "java": ">=21",
-    "architectury": ">=19.0.1",
+    "architectury": ">=20.0.4",
     "fabric-api": "*"
   },
   "suggests": {

@@ -8,6 +8,7 @@ import fr.gallonemilien.neoforge.config.NeoForgeConfig;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -17,20 +18,25 @@ import static fr.gallonemilien.DopedHorses.MOD_ID;
 public final class DopedHorsesNeoForge {
 
     public static IEventBus EVENT_BUS = null;
-
+    private final ModConfig configWrapper;
 
     public DopedHorsesNeoForge(ModContainer container) {
-        MidnightConfig.init(DopedHorses.MOD_ID, NeoForgeConfig.class);
-        ModConfig config = register();
         @NotNull IEventBus modBus = Objects.requireNonNull(container.getEventBus());
         EVENT_BUS = modBus;
-        DopedHorses.init(config);
+        this.configWrapper = new ModConfigImpl();
+        DopedHorses.init(this.configWrapper);
+        modBus.addListener(this::commonSetup);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            MidnightConfig.init(DopedHorses.MOD_ID, NeoForgeConfig.class);
+            this.configWrapper.refresh();
+            fr.gallonemilien.items.ShoeType.refreshValues();
+        });
     }
 
     public static ModConfig register() {
-        ModConfig config = new ModConfigImpl();
-        config.refresh();
-        return config;
+        return new ModConfigImpl();
     }
 }
-

@@ -1,15 +1,16 @@
 package fr.gallonemilien.fabric.config;
 
 import eu.midnightdust.lib.config.MidnightConfig;
-import fr.gallonemilien.cache.CacheManager;
+import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.items.ShoeType;
 import fr.gallonemilien.speed.BlockSpeed;
+import fr.gallonemilien.speed.HorseSpeedManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * Fabric-specific implementation of the mod's configuration using MidnightConfig.
+ */
 public class FabricConfig extends MidnightConfig {
 
     public static final String SERVER = "Server";
@@ -53,57 +54,24 @@ public class FabricConfig extends MidnightConfig {
     @Entry(category=SERVER, min = 0, max = 1, isSlider = true) public static double diamondShoeLootChance = 0.06;
     @Entry(category=SERVER, min = 0, max = 1, isSlider = true)public static double netheriteShoeLootChance = 0.03;
 
-
-
-    private static List<String> fasterBlocksCache = cloneList(fasterBlocks);
-
+    /**
+     * This method is called by MidnightConfig when changes are written to the config file.
+     * To avoid concurrency issues, we unconditionally reset the caches.
+     */
     @Override
     public void writeChanges(String modid) {
-        if(!fasterBlocksCache.equals(fasterBlocks)) {
-            BlockSpeed.getInstance().reset();
-            CacheManager.getInstance().reset();
-            fasterBlocksCache = cloneList(fasterBlocks);
-        }
-        if(isShoeCacheDifferent()) {
-            CacheManager.getInstance().reset();
-            ShoeType.refreshValues();
-        }
         super.writeChanges(modid);
-    }
 
-    private static double[] shoeCache = setShoeCache();
+        // Ensure the central config instance is updated with the new static field values
+        if (DopedHorses.getConfig() != null) {
+            DopedHorses.getConfig().refresh();
+        }
 
-    private static boolean isShoeCacheDifferent() {
-        return !Arrays.equals(shoeCache, setShoeCache());
-    }
-
-    private static double[] setShoeCache() {
-         shoeCache = new double[]{
-                ironShoeSpeedModifier,
-                goldShoeSpeedModifier,
-                diamondShoeSpeedModifier,
-                netheriteShoeSpeedModifier,
-                ironShoeArmorModifier,
-                goldShoeArmorModifier,
-                diamondShoeArmorModifier,
-                netheriteShoeArmorModifier,
-                ironShoeJumpModifier,
-                goldShoeJumpModifier,
-                diamondShoeJumpModifier,
-                netheriteShoeJumpModifier,
-                ironShoeLootChance,
-                goldShoeLootChance,
-                diamondShoeLootChance,
-                netheriteShoeLootChance,
-                ironShoeStepHeightModifier,
-                goldShoeStepHeightModifier,
-                diamondShoeStepHeightModifier,
-                netheriteShoeStepHeightModifier
-        };
-         return shoeCache;
-    }
-
-    private static List<String> cloneList(List<String> list) {
-        return new ArrayList<>(list);
+        // Unconditionally reset caches to ensure all changes are applied safely.
+        BlockSpeed.getInstance().reset();
+        HorseSpeedManager.invalidateGlobalCache();
+        
+        // Refresh ShoeType values now that the central config has the updated values
+        ShoeType.refreshValues();
     }
 }
