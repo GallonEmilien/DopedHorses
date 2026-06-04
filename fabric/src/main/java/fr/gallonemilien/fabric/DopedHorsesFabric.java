@@ -2,7 +2,6 @@ package fr.gallonemilien.fabric;
 
 import eu.midnightdust.lib.config.MidnightConfig;
 import fr.gallonemilien.DopedHorses;
-import fr.gallonemilien.cache.CacheManager;
 import fr.gallonemilien.config.ModConfig;
 import fr.gallonemilien.fabric.config.FabricConfig;
 import fr.gallonemilien.fabric.config.ModConfigImpl;
@@ -25,7 +24,6 @@ public final class DopedHorsesFabric implements ModInitializer {
         );
 
         ServerLifecycleEvents.SERVER_STOPPED.register((server) -> {
-            CacheManager.getInstance().reset();
             BlockSpeed.getInstance().reset();
         });
 
