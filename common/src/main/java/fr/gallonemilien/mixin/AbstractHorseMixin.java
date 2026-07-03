@@ -239,7 +239,7 @@ public abstract class AbstractHorseMixin extends Animal implements DopedHorseEnt
         }
 
         // Allow a second player to ride
-        if (horse.isVehicle()) {
+        if (horse.isVehicle() && horse.getPassengers().size() == 1) {
             doPlayerRide(player);
             player.startRiding(horse, true, false);
             cir.setReturnValue(InteractionResult.SUCCESS);
