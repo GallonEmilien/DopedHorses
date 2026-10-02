@@ -4,12 +4,14 @@ import dev.architectury.event.events.common.LootEvent;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.gallonemilien.DopedHorses;
 import fr.gallonemilien.config.ModConfig;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.List;
 
@@ -42,15 +44,16 @@ public class ItemLoot {
     }
 
     private static void registerNetherite() {
-        // Currently no villager trade for Netherite shoes.
     }
 
     /**
      * Registers a listener to modify vanilla loot tables, adding horse shoes to various Nether chests.
      */
     private static void registerLootTable() {
-        LootEvent.MODIFY_LOOT_TABLE.register((lootTableId, context, builtin) -> {
-            // A list of Nether chest loot tables to target.
+        LootEvent.MODIFY_LOOT_TABLE.register((provider, lootTableKey, context, builtin) -> {
+
+            Identifier lootTableId = lootTableKey.identifier();
+
             List<String> netherLootTables = List.of(
                     "minecraft:chests/nether_bridge",
                     "minecraft:chests/bastion_treasure",
@@ -59,8 +62,9 @@ public class ItemLoot {
                     "minecraft:chests/ruined_portal"
             );
 
-            if (builtin && netherLootTables.stream().anyMatch(id -> lootTableId.toString().equals(id))) {
+            if (netherLootTables.stream().anyMatch(id -> lootTableId.toString().equals(id))) {
                 ModConfig config = DopedHorses.getConfig();
+
                 LootPool.Builder pool = LootPool.lootPool()
                         .add(LootItem.lootTableItem(DopedHorsesItems.IRON_HORSE_SHOES.get())
                                 .when(LootItemRandomChanceCondition.randomChance(config.getShoeLoot(ShoeType.IRON))))
@@ -70,8 +74,8 @@ public class ItemLoot {
                                 .when(LootItemRandomChanceCondition.randomChance(config.getShoeLoot(ShoeType.DIAMOND))))
                         .add(LootItem.lootTableItem(DopedHorsesItems.NETHERITE_HORSE_SHOES.get())
                                 .when(LootItemRandomChanceCondition.randomChance(config.getShoeLoot(ShoeType.NETHERITE))))
-                        .setRolls(ConstantValue.exactly(1))
-                        .setBonusRolls(ConstantValue.exactly(0));
+                        .setRolls(ContextIntProviders.exactly(1))
+                        .setBonusRolls(ContextFloatProviders.exactly(0.0F));
 
                 context.addPool(pool);
             }
